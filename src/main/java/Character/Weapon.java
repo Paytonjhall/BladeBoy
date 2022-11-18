@@ -4,6 +4,22 @@ public class Weapon implements ItemInterface {
     String name;
     int value;
     String description;
+    int weaponDamage;
+
+    public Weapon(String name, int value, String description, int weaponDamage) {
+        this.name = name;
+        this.value = value;
+        this.description = description;
+        this.weaponDamage = weaponDamage;
+    }
+
+    public int getWeaponDamage() {
+        return weaponDamage;
+    }
+
+    public void setWeaponDamage(int weaponDamage) {
+        this.weaponDamage = weaponDamage;
+    }
 
     @Override
     public void setName(String name) {
