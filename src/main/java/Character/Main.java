@@ -2,6 +2,8 @@ package Character;
 
 import Game.UserInput;
 
+import java.util.Scanner;
+
 public class Main {
 
 

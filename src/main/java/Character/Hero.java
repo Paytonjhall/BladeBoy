@@ -1,26 +1,31 @@
 package Character;
-
-import javax.sound.midi.SysexMessage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hero {
     Armor armor;
     Weapon weapon;
     Artifact artifact;
     int health;
+    int maxHealth;
     int xp;
     int level;
     int nextLevelXp;
     int gold;
+    List<Mystic> mystics = new ArrayList<Mystic>();
+    PotionBag potionBag = new PotionBag();
 
-    public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold) {
+    public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
         this.armor = armor;
         this.weapon = weapon;
         this.health = health;
+        this.maxHealth = health;
         this.artifact = artifact;
         this.xp = xp;
         this.level = level;
         this.nextLevelXp = nextLevelXp;
         this.gold = gold;
+        this.mystics = mystics;
     }
 
 
@@ -45,9 +50,14 @@ public class Hero {
             this.xp = 0;
             addXp(tempXp);
         }
-
     }
 
+    public void heal(int health){
+        this.health += health;
+        if(this.health > this.maxHealth){
+            this.health = this.maxHealth;
+        }
+    }
 
     public void levelUp(){
         level++;
@@ -58,6 +68,13 @@ public class Hero {
 
 
     //GETTERS AND SETTERS
+    public List<Mystic> getMystics() {
+        return mystics;
+    }
+
+    public void setMystics(List<Mystic> mystics) {
+        this.mystics = mystics;
+    }
 
 
     public int getGold() {

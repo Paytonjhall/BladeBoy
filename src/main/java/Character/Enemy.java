@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Enemy {
     int health;
+    int maxHealth;
     int damage;
     double armorRating;
     String name;
@@ -13,6 +14,7 @@ public class Enemy {
 
     public Enemy(String name, int health, int damage, double armorRating, int xp, List<ItemInterface> drops, int gold) {
         this.health = health;
+        this.maxHealth = health;
         this.damage = damage;
         this.armorRating = armorRating;
         this.name = name;
@@ -25,6 +27,13 @@ public class Enemy {
         health -= damage;
         if(health<=0){
             System.out.println(name + " has died");
+        }
+    }
+
+    public void heal(int health){
+        this.health += health;
+        if(this.health > this.maxHealth){
+            this.health = this.maxHealth;
         }
     }
 
