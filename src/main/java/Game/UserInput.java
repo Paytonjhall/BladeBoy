@@ -12,11 +12,12 @@ public class UserInput {
 
 
     public int getNumberInput() {
+        scanner.reset();
         return scanner.nextInt();
     }
 
     public void clear(){
-        System.console().flush();
+        System.out.flush();
     }
 
     public void sleep(int sleep) {
@@ -43,5 +44,14 @@ public class UserInput {
 //            e.printStackTrace();
 //        }
 //    }
+    }
+
+    public void confirmation() {
+        System.out.println("Press enter to continue");
+        try {
+            reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

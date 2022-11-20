@@ -36,8 +36,8 @@ public class Combat {
             }
         }
         awardItems(hero, enemy);
-        System.out.println(hero.getGold() + " Gold");
-
+        System.out.println("You take a moment to gather your self, after combat:\n");
+        hero.heroOptions();
         return hero;
     }
 
@@ -70,4 +70,5 @@ public class Combat {
         }
         return hero;
     }
+
 }

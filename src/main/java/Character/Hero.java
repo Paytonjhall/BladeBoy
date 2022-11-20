@@ -1,4 +1,6 @@
 package Character;
+import Game.UserInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class Hero {
     int gold;
     List<Mystic> mystics = new ArrayList<Mystic>();
     PotionBag potionBag = new PotionBag();
+    UserInput input = new UserInput();
 
     public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
         this.armor = armor;
@@ -28,11 +31,67 @@ public class Hero {
         this.mystics = mystics;
     }
 
+    public void heroOptions(){
+        boolean check = true;
+        while(check){
+            System.out.println("  [1]   Continue");
+            System.out.println("  [2]   Hero Status");
+            System.out.println("  [3]   Inventory");
+            System.out.println("  [4]   Potion Bag");
+            System.out.println("  [5]   Save Game");
+            System.out.println("  [6]   Exit Game");
+
+            int choice = input.getNumberInput();
+            switch (choice){
+                case 1:
+                    check = false;
+                    input.clear();
+                    break;
+                case 2:
+                    heroStatus();
+                    break;
+                case 3:
+                    System.out.println("Inventory: needs to be implemented");
+                    break;
+                case 4:
+                    System.out.println("Potion Bag: needs to be implemented");
+                    break;
+                case 5:
+                    System.out.println("Saving game...");
+                    break;
+                case 6:
+                    System.out.println("Exiting game...");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid input. Try again.");
+                    input.clear();
+                    break;
+            }
+        }
+
+    }
+
+
+
+    public void heroStatus() {
+        input.clear();
+        System.out.println("Hero Status");
+        System.out.println("Health: " + health + "/" + maxHealth);
+        System.out.println("Level: " + level);
+        System.out.println("XP: " + xp + "/" + nextLevelXp);
+        System.out.println("Gold: " + gold);
+        System.out.println("Weapon: " + weapon.getName());
+        System.out.println("Armor: " + armor.getName());
+        System.out.println("Artifact: " + artifact.getName());
+        System.out.println("Mystics: ");
+    }
+
 
     public void takeDamage(int damage){
         health -= damage;
         if(health<=0){
             System.out.println("You have died");
+            System.exit(0);
         }
     }
 
