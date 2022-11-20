@@ -35,7 +35,7 @@ public class Combat {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //award items
+        awardItems(hero, enemy);
 
         return hero;
     }
@@ -52,5 +52,21 @@ public class Combat {
         int damageRange =(int)(enemy.damage/2) +random.nextInt(enemy.damage);
         int damage =(int) (damageRange * (1-hero.getArmor().getArmorRating()));
         return damage;
+    }
+
+    private Hero awardItems(Hero hero, Enemy enemy){
+        hero.addXp(enemy.getXp());
+        if(enemy.getDrops() != null) {
+            System.out.println("The " + enemy.name + " dropped some items! *Make item drop system*");
+        } else {
+            System.out.println("The " + enemy.name + " dropped no items.");
+        }
+        if(enemy.getGold()>0){
+            hero.addGold(enemy.getGold());
+            System.out.println("The " + enemy.name + " dropped " + enemy.getGold() + " gold!");
+        } else {
+            System.out.println("The " + enemy.name + " dropped no gold.");
+        }
+        return hero;
     }
 }
