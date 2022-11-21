@@ -8,12 +8,14 @@ public class Hero {
     Armor armor;
     Weapon weapon;
     Artifact artifact;
+    List<ItemInterface> Bag;
     int health;
     int maxHealth;
     int xp;
     int level;
     int nextLevelXp;
     int gold;
+    int skillPoints=0;
     List<Mystic> mystics = new ArrayList<Mystic>();
     PotionBag potionBag = new PotionBag();
     UserInput input = new UserInput();
@@ -42,30 +44,23 @@ public class Hero {
             System.out.println("  [6]   Exit Game");
 
             int choice = input.getNumberInput();
-            switch (choice){
-                case 1:
-                    check = false;
+            switch (choice) {
+                case 1 -> {
+                    check=false;
                     input.clear();
-                    break;
-                case 2:
-                    heroStatus();
-                    break;
-                case 3:
-                    System.out.println("Inventory: needs to be implemented");
-                    break;
-                case 4:
-                    System.out.println("Potion Bag: needs to be implemented");
-                    break;
-                case 5:
-                    System.out.println("Saving game...");
-                    break;
-                case 6:
+                }
+                case 2 -> heroStatus();
+                case 3 -> System.out.println("Inventory: needs to be implemented");
+                case 4 -> System.out.println("Potion Bag: needs to be implemented");
+                case 5 -> System.out.println("Saving game...");
+                case 6 -> {
                     System.out.println("Exiting game...");
                     System.exit(0);
-                default:
+                }
+                default -> {
                     System.out.println("Invalid input. Try again.");
                     input.clear();
-                    break;
+                }
             }
         }
 
@@ -104,9 +99,9 @@ public class Hero {
         this.xp += xp;
         System.out.println("Xp:" + this.xp + "/" + this.nextLevelXp);
         if(this.xp >= nextLevelXp){
-            levelUp();
             int tempXp = this.xp - nextLevelXp;
             this.xp = 0;
+            levelUp();
             addXp(tempXp);
         }
     }
@@ -121,8 +116,19 @@ public class Hero {
     public void levelUp(){
         level++;
         nextLevelXp = (int) (nextLevelXp * 1.25);
-        System.out.println("You have leveled up to level " + level);
-        System.out.println("Make level up system.");
+        System.out.println("You leveled up: " + level);
+        System.out.println("You heal 25% of your health on level up, gain 3 hp, and are given a skill point!");
+        maxHealth += 3;
+        heal((int)maxHealth/4);
+        skillPoints += 1;
+    }
+
+    public void addToBag(ItemInterface item){
+
+        if(Bag == null){
+            Bag = new ArrayList<ItemInterface>();
+        }
+        Bag.add(item);
     }
 
 
@@ -161,6 +167,9 @@ public class Hero {
     }
 
     public Artifact getArtifact() {
+        if(artifact == null) {
+            return null;
+        }
         return artifact;
     }
 

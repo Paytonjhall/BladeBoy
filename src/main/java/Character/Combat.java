@@ -58,17 +58,24 @@ public class Combat {
     private Hero awardItems(Hero hero, Enemy enemy){
         hero.addXp(enemy.getXp());
         if(enemy.getDrops() != null) {
-            System.out.println("The " + enemy.name + " dropped some items! *Make item drop system*");
+            System.out.println("Items Found:");
+            for (ItemInterface item : enemy.getDrops()) {
+                System.out.println(item.getName() + ": Desc -" + item.getDescription() + " | Value - " + item.getValue());
+                hero.addToBag(item);
+            }
         } else {
             System.out.println("The " + enemy.name + " dropped no items.");
         }
-        if(enemy.getGold()>0){
+        if(enemy.getGold()>0 && hero.getArtifact() != null && hero.getArtifact().getType().equals("Fortune")){
+            int extraGold = hero.getArtifact().artifactAmplify(enemy.getGold());
+            System.out.println("The " + enemy.name + " dropped " + enemy.getGold() + " (" + hero.getArtifact().getName() + ") gold, but your artifact amplifies it to " + extraGold + " gold!");
+            hero.addGold(extraGold);
+        } else if (enemy.getGold()>0) {
             hero.addGold(enemy.getGold());
             System.out.println("The " + enemy.name + " dropped " + enemy.getGold() + " gold!");
         } else {
-            System.out.println("The " + enemy.name + " dropped no gold.");
-        }
+                System.out.println("The " + enemy.name + " dropped no gold.");
+            }
         return hero;
     }
-
 }
