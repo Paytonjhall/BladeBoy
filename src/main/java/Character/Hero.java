@@ -1,4 +1,5 @@
 package Character;
+import Game.Output;
 import Game.UserInput;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class Hero {
     List<Mystic> mystics = new ArrayList<Mystic>();
     PotionBag potionBag = new PotionBag();
     UserInput input = new UserInput();
+
+    Output output = new Output();
 
     public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
         this.armor = armor;
@@ -41,7 +44,8 @@ public class Hero {
             System.out.println("  [3]   Inventory");
             System.out.println("  [4]   Potion Bag");
             System.out.println("  [5]   Save Game");
-            System.out.println("  [6]   Exit Game");
+            System.out.println("  [6]   Exit Game\n");
+            System.out.print("Hero: ");
 
             int choice = input.getNumberInput();
             switch (choice) {
@@ -69,16 +73,21 @@ public class Hero {
 
 
     public void heroStatus() {
-        input.clear();
-        System.out.println("Hero Status");
-        System.out.println("Health: " + health + "/" + maxHealth);
-        System.out.println("Level: " + level);
-        System.out.println("XP: " + xp + "/" + nextLevelXp);
-        System.out.println("Gold: " + gold);
+        input.clearScreen();
+        output.printCyan("Hero Status\n");
+        output.printRed("Health: ");
+        System.out.println(health + "/" + maxHealth);
+        output.printBlue("Level: ");
+        System.out.println(level);
+        output.printPurple("XP: ");
+        System.out.println(xp + "/" + nextLevelXp);
+        output.printYellow("Gold: ");
+        System.out.println(gold);
         System.out.println("Weapon: " + weapon.getName());
         System.out.println("Armor: " + armor.getName());
         System.out.println("Artifact: " + artifact.getName());
         System.out.println("Mystics: ");
+        System.out.println();
     }
 
 

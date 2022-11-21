@@ -26,7 +26,7 @@ public class Main {
                     check = false;
                     break;
                 case 2:
-                    System.out.println("Loading game...");
+                    System.out.println("Loading game... Not implemented yet");
                     check = false;
                     break;
                 case 3:

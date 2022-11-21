@@ -1,35 +1,49 @@
 package Character;
 
+import Game.Output;
 import Game.UserInput;
 
 import java.util.Random;
 
 public class Combat {
+    Output output = new Output();
     public Hero fight (Hero hero, Enemy enemy)  {
         UserInput userInput = new UserInput();
         boolean fight = true;
         int damage;
         while (fight) {
-            System.out.println("Hero Turn:");
+            output.printBlue("Hero Turn: ");
             userInput.checkUser();
             System.out.println("Hero attacks " + enemy.name);
             damage = calculateDamage(hero, enemy);
             enemy.takeDamage(damage);
-            if (enemy.health > 0)
-                System.out.println("Enemy takes " + damage + " damage. The " + enemy.name + " has " + enemy.health + " health left.");
+            if (enemy.health > 0) {
+                {
+                    System.out.print(enemy.getName() + "takes ");
+                    output.printRed(damage + "");
+                    System.out.print(" damage. The "+enemy.getName()+ " has ");
+                    output.printGreen(enemy.getHealth() + "");
+                    System.out.println(" health left.\n");
+                }
+            }
             else {
                 System.out.println("The " + enemy.name + " has been defeated!");
                 fight = false;
                 continue;
             }
 
-            System.out.println("Enemies Turn:");
+            output.printRed("Enemies Turn: ");
             userInput.sleep(1000);
             System.out.println("Enemy attacks Hero");
             damage = calculateDamage(enemy, hero);
             hero.takeDamage(damage);
-            if (hero.health > 0)
-                System.out.println("Hero takes " + damage + " damage. The Hero has " + hero.health + " health left.");
+            if (hero.health > 0) {
+                System.out.print("Hero takes ");
+                output.printRed(damage + "");
+                System.out.print(" damage. The Hero has ");
+                output.printGreen(hero.health+"");
+                System.out.println(" health left \n");
+            }
             else {
                 System.out.println("The Hero has been defeated!");
                 fight = false;
@@ -60,7 +74,7 @@ public class Combat {
         if(enemy.getDrops() != null) {
             System.out.println("Items Found:");
             for (ItemInterface item : enemy.getDrops()) {
-                System.out.println(item.getName() + ": Desc -" + item.getDescription() + " | Value - " + item.getValue());
+                System.out.println(item.getName() + ": Description - " + item.getDescription() + " | Value - " + item.getValue());
                 hero.addToBag(item);
             }
         } else {
@@ -68,11 +82,17 @@ public class Combat {
         }
         if(enemy.getGold()>0 && hero.getArtifact() != null && hero.getArtifact().getType().equals("Fortune")){
             int extraGold = hero.getArtifact().artifactAmplify(enemy.getGold());
-            System.out.println("The " + enemy.name + " dropped " + enemy.getGold() + " (" + hero.getArtifact().getName() + ") gold, but your artifact amplifies it to " + extraGold + " gold!");
+            System.out.print("The " + enemy.name + " dropped ");
+            output.printYellow(enemy.getGold() + "");
+            System.out.print(" gold, but your artifact amplifies it to ");
+            output.printYellow(extraGold + "");
+            System.out.println(" gold."+ " (" + hero.getArtifact().getName() + ")");
             hero.addGold(extraGold);
         } else if (enemy.getGold()>0) {
             hero.addGold(enemy.getGold());
-            System.out.println("The " + enemy.name + " dropped " + enemy.getGold() + " gold!");
+            System.out.print("The " + enemy.name + " dropped ");
+            output.printYellow(enemy.getGold() + "");
+            System.out.println(" gold!");
         } else {
                 System.out.println("The " + enemy.name + " dropped no gold.");
             }
