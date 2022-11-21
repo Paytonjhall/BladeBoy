@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BladeBoy:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/BladeBoy_jar2</output-path>
+    <root id="archive" name="BladeBoy.jar">
+      <element id="module-output" name="BladeBoy" />
+    </root>
+  </artifact>
+</component>
