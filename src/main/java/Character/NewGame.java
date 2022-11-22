@@ -4,6 +4,7 @@ import Game.UserInput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class NewGame {
     UserInput input = new UserInput();
@@ -46,6 +47,7 @@ public class NewGame {
         System.out.println("You have completed the tutorial. You can now rest and heal up.");
         System.out.println("Explore the town and see how you can get stronger and defeat enemies!");
         System.out.println("Be careful, if you die, you are dead forever!");
+        hero.heroOptions();
 
     }
 }

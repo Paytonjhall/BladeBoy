@@ -54,7 +54,10 @@ public class Hero {
                     input.clear();
                 }
                 case 2 -> heroStatus();
-                case 3 -> System.out.println("Inventory: needs to be implemented");
+                case 3 ->{
+                    System.out.println("Inventory: needs to be implemented");
+                    equipWeapon((Weapon)Bag.get(0));
+                }
                 case 4 -> System.out.println("Potion Bag: needs to be implemented");
                 case 5 -> System.out.println("Saving game...");
                 case 6 -> {
@@ -138,6 +141,13 @@ public class Hero {
             Bag = new ArrayList<ItemInterface>();
         }
         Bag.add(item);
+    }
+
+    public void equipWeapon(Weapon weapon){
+        if (this.weapon != null){
+            addToBag(this.weapon);
+        }
+        this.weapon = weapon;
     }
 
 

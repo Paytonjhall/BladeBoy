@@ -8,10 +8,12 @@ import java.util.Random;
 public class Combat {
     Output output = new Output();
     public Hero fight (Hero hero, Enemy enemy)  {
+        int round = 0;
         UserInput userInput = new UserInput();
         boolean fight = true;
         int damage;
         while (fight) {
+            round++;
             output.printBlue("Hero Turn: ");
             userInput.checkUser();
             System.out.println("Hero attacks " + enemy.name);
