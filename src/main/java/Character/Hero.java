@@ -17,6 +17,7 @@ public class Hero {
     int nextLevelXp;
     int gold;
     int skillPoints=0;
+    int dungeonCount = 0;
     List<Mystic> mystics = new ArrayList<Mystic>();
     PotionBag potionBag = new PotionBag();
     UserInput input = new UserInput();
@@ -226,5 +227,13 @@ public class Hero {
 
     public void setNextLevelXp(int nextLevelXp) {
         this.nextLevelXp = nextLevelXp;
+    }
+
+    public int getDungeonCount() {
+        return dungeonCount;
+    }
+
+    public void setDungeonCount(int dungeonCount) {
+        this.dungeonCount = dungeonCount;
     }
 }
