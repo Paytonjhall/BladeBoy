@@ -5,6 +5,11 @@ public class Weapon implements ItemInterface {
     int value;
     String description;
     int weaponDamage;
+    String ability;
+
+    public Weapon(String name) {
+        this.name = name;
+    }
 
     public Weapon(String name, int value, String description, int weaponDamage) {
         this.name = name;
@@ -49,5 +54,10 @@ public class Weapon implements ItemInterface {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String toString(){
+        return "Name: " + name + " Value: " + value + " Description: " + description + " Weapon Damage: " + weaponDamage;
     }
 }
