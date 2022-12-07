@@ -16,7 +16,7 @@ public class Hero {
     int level;
     int nextLevelXp;
     int gold;
-    int skillPoints=0;
+    public int skillPoints=0;
     int dungeonCount = 0;
     List<Mystic> mystics = new ArrayList<Mystic>();
     PotionBag potionBag = new PotionBag();

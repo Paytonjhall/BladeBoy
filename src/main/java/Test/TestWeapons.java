@@ -16,6 +16,12 @@ public class TestWeapons {
         for (Weapon w : weapons){
             System.out.println(w.toString());
         }
+
+        weapons = wg.generateWeapons(3,10);
+        System.out.println("\n\n");
+        for (Weapon w : weapons){
+            System.out.println(w.toString());
+        }
     }
 }
 

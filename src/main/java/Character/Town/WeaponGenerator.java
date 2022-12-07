@@ -29,10 +29,10 @@ public class WeaponGenerator {
         for(int i = 0; i < count; i++){
             Weapon weapon = new Weapon(generateWeaponName());
             int wRank = calculateWeaponRank(rank);
-            int damage = getRnd().nextInt(10)-4;
-            weapon.setWeaponDamage(damage + (wRank * 5));
+            int damage = (getRnd().nextInt(4)+1) * (wRank+1);
+            weapon.setWeaponDamage(damage + (wRank * getRnd().nextInt(wRank+1)));
             weapon.setDescription("A weapon of rank " + wRank + " made at the blacksmith's shop.");
-            weapon.setValue((int)Math.abs(wRank * (getRnd().nextInt(15)+(Math.pow(15, wRank))) + (damage * (getRnd().nextInt(6)+23))));
+            weapon.setValue((int)Math.abs(wRank * wRank * (wRank + wRank)* (getRnd().nextInt(15))) + (damage * (getRnd().nextInt(6)+14)));
             weapons.add(weapon);
         }
 
@@ -59,7 +59,7 @@ public class WeaponGenerator {
     }
 
     public int calculateWeaponRank(int rank){
-        int rankCheck = getRnd().nextInt(10) +1;
+        int rankCheck = getRnd().nextInt(10) +  1;
         if(rankCheck < 2){
             return --rank;
     } else if(rankCheck >= 9){
