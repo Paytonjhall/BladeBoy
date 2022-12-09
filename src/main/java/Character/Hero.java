@@ -108,7 +108,7 @@ public class Hero {
         health -= damage;
         if(health<=0){
             System.out.println("You have died");
-            System.exit(0);
+            heroDeath();
         }
     }
 
@@ -160,6 +160,35 @@ public class Hero {
         this.weapon = weapon;
     }
 
+    public void heroDeath(){
+        System.out.println("You have died");
+        input.sleep(1000);
+        System.out.println("Game Over");
+        input.sleep(1000);
+        System.out.println("Your save file has been deleted.");
+        input.sleep(1000);
+        System.out.println("This is how life is. I'm sorry.");
+        input.sleep(1000);
+        System.out.println("We will print your stats for you to see how you did.");
+        input.sleep(1000);
+        System.out.println(toString());
+        // TODO: Delete save file
+        System.exit(0);
+    }
+
+    public String toString(){
+        String heroString = "";
+        heroString += "Hero: " + "\n";
+        heroString += "Health: " + maxHealth + "\n";
+        heroString += "XP: " + xp + "\n";
+        heroString += "Level: " + level + "\n";
+        heroString += "Gold: " + gold + "\n";
+        heroString += "Weapon: " + weapon.getName() + "\n";
+        heroString += "Armor: " + armor.getName() + "\n";
+        heroString += "Artifact: " + artifact.getName() + "\n";
+        heroString += "Mystics: " + mystics.toString() + "\n";
+        return heroString;
+    }
 
     //GETTERS AND SETTERS
     public List<Mystic> getMystics() {
@@ -173,7 +202,6 @@ public class Hero {
     public void addMystic (Mystic mystic){
         mystics.add(mystic);
     }
-
 
     public int getGold() {
         return gold;

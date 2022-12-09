@@ -5,6 +5,7 @@ import Game.*;
 public class Town {
 
     Blacksmith blacksmith = new Blacksmith();
+    Oracle oracle = new Oracle();
     Output output = new Output();
     UserInput userInput = new UserInput();
     Hero hero;
@@ -16,13 +17,18 @@ public class Town {
         userInput.sleep(2000);
         printOptions();
         System.out.print("Where would you like to go: ");
+        getAction();
     }
 
-    public Hero visitBlacksmith(Hero hero) {
+    public Hero visitBlacksmith (Hero hero) {
         return blacksmith.visitBlacksmith(hero);
     }
 
-    public void printOptions() {
+    public Hero visitOracle (Hero hero) {
+        return oracle.visitOracle(hero);
+    }
+
+    public void printOptions () {
         System.out.print("[1]: ");
         output.printRed("Blacksmith\n");
         System.out.print("[2]: ");
@@ -37,14 +43,14 @@ public class Town {
         output.printYellow("Next Adventure\n");
     }
 
-    public void getAction() {
+    public void getAction () {
         int choice = -1;
         while (choice != 6) {
             choice = userInput.getNumberInput();
             switch (choice) {
                 case 1 -> hero = visitBlacksmith(hero);
                 case 2 -> System.out.println("Store");
-                case 3 -> System.out.println("Oracle");
+                case 3 -> hero = visitOracle(hero);
                 case 4 -> System.out.println("Equipment");
                 case 5 -> System.out.println("Character Stats");
                 case 6 -> System.out.println("Next Adventure");

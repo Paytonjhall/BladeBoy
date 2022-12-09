@@ -12,7 +12,7 @@ public class Oracle {
     public Oracle() {
     }
     Hero hero;
-    public Hero visitOracle(Hero hero) throws InterruptedException {
+    public Hero visitOracle(Hero hero)  {
         this.hero = hero;
         System.out.print("Welcome to the "); output.printPurple("Oracle"); System.out.println("!");
         if(hero.skillPoints.size() < 1) {
@@ -27,7 +27,7 @@ public class Oracle {
             if(!hero.skillPoints.get(i).isUsed()) {
                 loadLevelUpgrades(hero.skillPoints.get(i).getLevel());
                 hero.skillPoints.get(i).setUsed(true);
-                //output.wait(2500);
+                userInput.sleep(2500);
             }
         }
         System.out.println("Thank you for visiting the oracle!");
