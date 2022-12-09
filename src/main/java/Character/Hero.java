@@ -16,9 +16,10 @@ public class Hero {
     int level;
     int nextLevelXp;
     int gold;
-    public int skillPoints=0;
+    // public int skillPoints=0;
     int dungeonCount = 0;
-    List<Mystic> mystics = new ArrayList<Mystic>();
+    public List<SkillPoints> skillPoints = new ArrayList<>();
+    List<Mystic> mystics = new ArrayList<>();
     PotionBag potionBag = new PotionBag();
     UserInput input = new UserInput();
 
@@ -35,6 +36,14 @@ public class Hero {
         this.nextLevelXp = nextLevelXp;
         this.gold = gold;
         this.mystics = mystics;
+
+    }
+
+    //For testing purposes
+    public Hero(int skillpoints){
+        for(int i = 0; i < skillpoints; i++){
+            skillPoints.add(new SkillPoints(i, false));
+        }
     }
 
     public void heroOptions(){
@@ -127,13 +136,13 @@ public class Hero {
     }
 
     public void levelUp(){
+        skillPoints.add(new SkillPoints(level, false));
         level++;
         nextLevelXp = (int) (nextLevelXp * 1.25);
         System.out.println("You leveled up: " + level);
         System.out.println("You heal 25% of your health on level up, gain 3 hp, and are given a skill point!");
         maxHealth += 3;
         heal((int)maxHealth/4);
-        skillPoints += 1;
     }
 
     public void addToBag(ItemInterface item){
@@ -159,6 +168,10 @@ public class Hero {
 
     public void setMystics(List<Mystic> mystics) {
         this.mystics = mystics;
+    }
+
+    public void addMystic (Mystic mystic){
+        mystics.add(mystic);
     }
 
 
@@ -235,5 +248,32 @@ public class Hero {
 
     public void setDungeonCount(int dungeonCount) {
         this.dungeonCount = dungeonCount;
+    }
+
+
+    public class SkillPoints {
+        int level;
+        boolean used;
+
+        public SkillPoints(int level, boolean used) {
+            this.level = level;
+            this.used = used;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public void setLevel(int level) {
+            this.level = level;
+        }
+
+        public boolean isUsed() {
+            return used;
+        }
+
+        public void setUsed(boolean used) {
+            this.used = used;
+        }
     }
 }
