@@ -18,24 +18,25 @@ public class Main {
         boolean check = true;
         while (check) {
             switch (choice) {
-                case 1:
+                case 1 -> {
                     System.out.println("Starting new game...");
                     Thread.sleep(2000);
                     NewGame newGame = new NewGame();
                     newGame.start();
                     check = false;
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.println("Loading game... Not implemented yet");
                     check = false;
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     System.out.println("Exiting game...");
                     System.exit(0);
-                default:
+                }
+                default -> {
                     System.out.println("Invalid input. Try again.");
                     choice = input.getNumberInput();
-                    break;
+                }
             }
 
         }

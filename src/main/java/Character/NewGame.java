@@ -1,5 +1,6 @@
 package Character;
 
+import Character.Town.Town;
 import Game.UserInput;
 
 import java.util.ArrayList;
@@ -48,6 +49,9 @@ public class NewGame {
         System.out.println("Explore the town and see how you can get stronger and defeat enemies!");
         System.out.println("Be careful, if you die, you are dead forever!");
         hero.heroOptions();
+        Town town = new Town(hero);
+
+
 
     }
 }

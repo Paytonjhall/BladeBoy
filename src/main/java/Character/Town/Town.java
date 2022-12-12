@@ -1,5 +1,6 @@
 package Character.Town;
 import Character.*;
+import Dungeon.Adventure;
 import Game.*;
 
 public class Town {
@@ -9,9 +10,11 @@ public class Town {
     Output output = new Output();
     UserInput userInput = new UserInput();
     Hero hero;
+    Adventure adventure = new Adventure();
 
     public Town(Hero hero) {
         this.hero = hero;
+        hero.heal(10000);
         System.out.println("You arrive at the town");
         System.out.println("You rest for the day, in the morning you get ready for your next adventure");
         userInput.sleep(2000);
@@ -24,9 +27,12 @@ public class Town {
         return blacksmith.visitBlacksmith(hero);
     }
 
-    public Hero visitOracle (Hero hero) {
-        return oracle.visitOracle(hero);
+    public Hero visitOracle (Hero hero) {return oracle.visitOracle(hero);}
+
+    public Hero startAdventure (Hero hero) {
+        return adventure.startAdventure(hero);
     }
+
 
     public void printOptions () {
         System.out.print("[1]: ");
@@ -53,7 +59,7 @@ public class Town {
                 case 3 -> hero = visitOracle(hero);
                 case 4 -> System.out.println("Equipment");
                 case 5 -> System.out.println("Character Stats");
-                case 6 -> System.out.println("Next Adventure");
+                case 6 -> hero = startAdventure(hero);
                 default -> System.out.println("Invalid input");
             }
 

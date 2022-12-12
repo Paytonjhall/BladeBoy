@@ -92,4 +92,14 @@ public class Enemy {
     public void setXp(int xp) {
         this.xp=xp;
     }
+
+    public String toString(){
+        String string = "Name: " + name + "\nHealth: " + health + "\nDamage: " + damage + "\nArmor Rating: " + armorRating + "\nXP: " + xp + "\nGold: " + gold;
+        if(drops != null){
+            for(ItemInterface item : drops){
+                string += "\n\t\t" + item.toString();
+            }
+        }
+        return string;
+    }
 }
