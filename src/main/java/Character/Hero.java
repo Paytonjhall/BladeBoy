@@ -44,7 +44,7 @@ public class Hero {
 
     //For testing purposes
     public Hero(int skillpoints){
-        for(int i = 0; i < skillpoints; i++){
+        for(int i = 1; i < skillpoints + 1; i++){
             skillPoints.add(new SkillPoints(i, false));
         }
     }
@@ -100,7 +100,8 @@ public class Hero {
         System.out.println("Weapon: " + weapon.getName());
         System.out.println("Armor: " + armor.getName());
         System.out.println("Artifact: " + artifact.getName());
-        System.out.println("Mystics: ");
+        output.printPurple("Mystics: ");
+        for (Mystic mystic : mystics) {System.out.println(mystic.toString());}
         System.out.println();
     }
 

@@ -60,8 +60,8 @@ public class Town {
                 case 1 -> hero = visitBlacksmith(hero);
                 case 2 -> hero = visitStore(hero);
                 case 3 -> hero = visitOracle(hero);
-                case 4 -> System.out.println("Equipment");
-                case 5 -> System.out.println("Character Stats");
+                case 4 -> hero.organizeBag();
+                case 5 -> hero.heroStatus();
                 case 6 -> {
                     hero = startAdventure(hero);
                     returnToTown(hero);
