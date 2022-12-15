@@ -59,10 +59,30 @@ public class Town {
                 case 3 -> hero = visitOracle(hero);
                 case 4 -> System.out.println("Equipment");
                 case 5 -> System.out.println("Character Stats");
-                case 6 -> hero = startAdventure(hero);
+                case 6 -> {
+                    hero = startAdventure(hero);
+                    returnToTown(hero);
+                }
                 default -> System.out.println("Invalid input");
             }
 
         }
+    }
+
+    public void resetTown(){
+        this.blacksmith = new Blacksmith();
+        this.oracle = new Oracle();
+    }
+
+    public void returnToTown(Hero hero){
+        resetTown();
+        this.hero = hero;
+        hero.heal(10000);
+        System.out.println("You arrive at the town");
+        System.out.println("You rest for the day, in the morning you get ready for your next adventure");
+        userInput.sleep(2000);
+        printOptions();
+        System.out.print("Where would you like to go: ");
+        getAction();
     }
 }

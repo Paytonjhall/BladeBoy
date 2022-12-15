@@ -38,7 +38,8 @@ public class Combat {
             userInput.sleep(1000);
             System.out.println("Enemy attacks Hero");
             damage = calculateDamage(enemy, hero);
-            hero.takeDamage(damage);
+            if(!block(hero))hero.takeDamage(damage);
+            else System.out.println("Hero blocked the attack");
             if (hero.health > 0) {
                 System.out.print("Hero takes ");
                 output.printRed(damage + "");
@@ -51,16 +52,28 @@ public class Combat {
                 fight = false;
             }
         }
+
         awardItems(hero, enemy);
         System.out.println("You take a moment to gather your self, after combat:\n");
         hero.heroOptions();
         return hero;
     }
 
+    private void EnemyTurn(){
+
+    }
+
     private int calculateDamage(Hero hero, Enemy enemy){
         Random random = new Random();
         int damageRange =(int)(hero.weapon.getWeaponDamage()/2) +random.nextInt(hero.weapon.getWeaponDamage());
         int damage = (int) (damageRange * ((1- enemy.armorRating)));
+        damage *= strength(hero);
+        if(critCheck(hero)) damage *= 2.5;
+        double lifeSteal = lifeSteal(hero);
+        if(lifeSteal > 0) {
+            System.out.print("Hero life steals "); output.printRed((int)((lifeSteal * damage)/100) + ""); System.out.println(" health");
+            hero.heal((int)((lifeSteal * damage)/100));
+        }
         return damage;
     }
 
@@ -99,5 +112,64 @@ public class Combat {
                 System.out.println("The " + enemy.name + " dropped no gold.");
             }
         return hero;
+    }
+
+    private boolean critCheck(Hero hero){
+        Random random = new Random();
+        int baseCritChance = 5;
+        int critChance = random.nextInt(100);
+        for(Mystic mystic : hero.getMystics()){
+            if(mystic.getBuff().equals("Critical")){
+                baseCritChance *= mystic.amplifier;
+            }
+        }
+
+        if(critChance <= baseCritChance){
+            output.printPurple("Critical Hit!\n");
+            return true;
+        }
+        return false;
+    }
+
+    private double lifeSteal(Hero hero){
+        boolean check = false;
+        double lifeSteal = 0;
+        for(Mystic mystic : hero.getMystics()){
+            if(mystic.getBuff().equals("Vamperism")){
+                lifeSteal += mystic.amplifier;
+                check = true;
+            }
+        }
+        if(!check) return 1;
+        return lifeSteal;
+    }
+
+    private double strength(Hero hero){
+        boolean check = false;
+        double strength = 1;
+        for(Mystic mystic : hero.getMystics()){
+            if(mystic.getBuff().equals("Strength")){
+                strength *= mystic.amplifier;
+                check = true;
+            }
+        }
+        if(!check) return 1;
+        return strength;
+    }
+
+    private boolean block(Hero hero){
+        Random random = new Random();
+        int baseBlockChance = 5;
+        int blockChance = random.nextInt(100);
+        for(Mystic mystic : hero.getMystics()){
+            if(mystic.getBuff().equals("Block")){
+                baseBlockChance *= mystic.amplifier;
+            }
+        }
+
+        if(blockChance <= baseBlockChance){
+            return true;
+        }
+        return false;
     }
 }

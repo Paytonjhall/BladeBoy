@@ -11,9 +11,9 @@ public class Mystic {
     String type;
     int level;
 
-    String[] buffs = new String[]{"Strength", "Health", "Armor", "Vamperism", "Critical"};
+    String[] buffs = new String[]{"Strength", "Health", "Block", "Vamperism", "Critical"};
 
-    public Mystic(String buff, int amplifier, String type, int level) {
+    public Mystic(String buff, double amplifier, String type, int level) {
         this.buff = buff;
         this.amplifier = amplifier;
         this.type = type;
@@ -31,21 +31,22 @@ public class Mystic {
         buff = buffs[rand.nextInt(buffs.length)];
 
         switch (buff) {
-            case "Strength", "Armor":
+            case "Strength":
                 amplifier = (Math.floor((((Math.random() * 3) + 7) * level)) /100) + 1;
                 break;
             case "Health":
                 amplifier = Math.floor((Math.random() * 5) + 10 * level);
                 break;
             case "Vamperism":
-                amplifier = (Math.floor((((Math.random() * 2) + 3) * level)) /100) + 1;
+                amplifier = (Math.floor((((Math.random() * 2) + 3) * level))) + 1;
                 break;
             case "Critical":
                 amplifier = (Math.floor((((Math.random() * 5) + 9) * level)) /100) + 1;
                 break;
+            case "Block":
+                amplifier = (Math.floor((((Math.random() * 5) + 9) * level)) /100) + 1;
+                break;
         }
-
-
     }
 
 

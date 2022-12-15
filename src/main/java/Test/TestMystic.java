@@ -13,7 +13,7 @@ public class TestMystic {
     public static void testMystic(){
 
         Mystic mystic1 = new Mystic(1);
-        Mystic mystic2 = new Mystic(2);
+        Mystic mystic2 = new Mystic(1);
         Mystic mystic3 = new Mystic(3);
 
         mystic1.createMystic();

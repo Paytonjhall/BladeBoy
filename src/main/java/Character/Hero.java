@@ -35,8 +35,11 @@ public class Hero {
         this.level = level;
         this.nextLevelXp = nextLevelXp;
         this.gold = gold;
-        this.mystics = mystics;
-
+        if(mystics != null) {
+            this.mystics = mystics;
+        } else {
+            this.mystics = new ArrayList<>();
+        }
     }
 
     //For testing purposes
@@ -160,6 +163,20 @@ public class Hero {
         this.weapon = weapon;
     }
 
+    public void equipArtifact(Artifact artifact){
+        if (this.artifact != null){
+            addToBag(this.artifact);
+        }
+        this.artifact = artifact;
+    }
+
+    public void equipArmor(Armor armor){
+        if (this.armor != null){
+            addToBag(this.armor);
+        }
+        this.armor = armor;
+    }
+
     public void heroDeath(){
         System.out.println("You have died");
         input.sleep(1000);
@@ -188,6 +205,133 @@ public class Hero {
         heroString += "Artifact: " + artifact.getName() + "\n";
         heroString += "Mystics: " + mystics.toString() + "\n";
         return heroString;
+    }
+
+
+
+
+    public void organizeBag() {
+        List<Weapon> weapons = new ArrayList<>();
+        List<Armor> armors = new ArrayList<>();
+        List<Artifact> artifacts = new ArrayList<>();
+        if (Bag == null) {
+            System.out.println("Your bag is empty");
+            return;
+        }
+        for (ItemInterface itemInterface : Bag) {
+            if (itemInterface.getClass() == Weapon.class) {
+                weapons.add((Weapon) itemInterface);
+            } else if (itemInterface.getClass() == Armor.class) {
+                armors.add((Armor) itemInterface);
+            } else if (itemInterface.getClass() == Artifact.class) {
+                artifacts.add((Artifact) itemInterface);
+            }
+        }
+
+        System.out.println(("[0] Exit"));
+        System.out.println(("[1] Weapons"));
+        System.out.println(("[2] Armors"));
+        System.out.println(("[3] Artifacts"));
+        System.out.print("Hero: ");
+        int choice = input.getNumberInput();
+        switch (choice) {
+            case 1 -> {
+                System.out.println("Weapons: ");
+                System.out.print("Current Weapon: ");
+                if(weapon != null) {
+                    System.out.println(weapon.getName() + " - Damage: " + weapon.getWeaponDamage());
+                } else {
+                    System.out.println("None");
+                }
+                if (weapons.size() == 0 ){
+                    System.out.println("You have no weapons in your bag");
+                }
+                for (int i = 0; i < weapons.size(); i++) {
+                    System.out.println("[" + (i + 1) + "] " + weapons.get(i).getName() + " - Damage: " + weapons.get(i).getWeaponDamage());
+                }
+                System.out.println("[0] Exit");
+                System.out.print("Hero: ");
+                int weaponChoice = input.getNumberInput();
+                if (weaponChoice == 0) {
+                    organizeBag();
+                }
+                else if (weaponChoice > weapons.size()) {
+                    System.out.println("Invalid input. Try again.");
+                    input.clear();
+                    organizeBag();
+                }
+                else {
+                    equipWeapon(weapons.get(weaponChoice - 1));
+                    Bag.remove(weapons.get(weaponChoice - 1));
+                    System.out.println("You have equipped " + weapons.get(weaponChoice - 1).getName());
+                    organizeBag();
+                }
+
+            }
+            case 2 -> {
+                System.out.println("Armors: ");
+                System.out.print("Current Armor: ");
+                if(armor != null) {
+                    System.out.println(armor.getName() + " - Defense: " + armor.getArmorRating()*100 + "%");
+                } else {
+                    System.out.println("none");
+                }
+                if (armors.size() == 0) {
+                    System.out.println("You have no armors in your bag");
+                }
+                for (int i = 0; i < armors.size(); i++) {
+                    System.out.println("[" + (i + 1) + "] " + armors.get(i).getName() + " - Defense: " + armors.get(i).getArmorRating()*100 + "%" );
+                }
+                System.out.println("[0] Exit");
+                System.out.print("Hero: ");
+                int armorChoice = input.getNumberInput();
+                if (armorChoice == 0) {
+                    organizeBag();
+                } else if (armorChoice > armors.size()) {
+                    System.out.println("Invalid input. Try again.");
+                    input.clear();
+                    organizeBag();
+                } else {
+                    equipArmor(armors.get(armorChoice - 1));
+                    Bag.remove(armors.get(armorChoice - 1));
+                    System.out.println("You have equipped " + armors.get(armorChoice - 1).getName());
+                    organizeBag();
+                }
+            }
+            case 3 -> {
+                System.out.println("Artifacts: ");
+                System.out.print("Current Artifact: ");
+                if(artifact != null) {
+                    System.out.println(artifact.getName() + " - Effect: " + artifact.getType() + " : " + artifact.getAmplifier());
+                } else {
+                    System.out.println("none");
+                }
+                if (artifacts.size() == 0) {
+                    System.out.println("You have no artifacts");
+                }
+                for (int i = 0; i < artifacts.size(); i++) {
+                    System.out.println("[" + (i + 1) + "] " + artifacts.get(i).getName() + " - Effect: " + artifacts.get(i).getType() + " : " + artifacts.get(i).getAmplifier());
+                }
+                System.out.println("[0] Exit");
+                System.out.print("Hero: ");
+                int artifactChoice = input.getNumberInput();
+                if (artifactChoice == 0) {
+                    organizeBag();
+                } else if (artifactChoice > artifacts.size()) {
+                    System.out.println("Invalid input. Try again.");
+                    input.clear();
+                    organizeBag();
+                } else {
+                    equipArtifact(artifacts.get(artifactChoice - 1));
+                    Bag.remove(artifacts.get(artifactChoice - 1));
+                    System.out.println("You have equipped " + artifacts.get(artifactChoice - 1).getName());
+                    organizeBag();
+                }
+            }
+            case 0 -> {
+                return;
+            }
+        }
     }
 
     //GETTERS AND SETTERS
@@ -276,6 +420,11 @@ public class Hero {
 
     public void setDungeonCount(int dungeonCount) {
         this.dungeonCount = dungeonCount;
+    }
+
+
+    public void addSkillPoint(int level, boolean used){
+        skillPoints.add(new SkillPoints(level, used));
     }
 
 

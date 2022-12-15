@@ -21,6 +21,7 @@ public class Adventure {
             System.out.println("You encounter a " + enemy.getName());
             combat.fight(hero, enemy);
         }
+        hero.setDungeonCount(hero.getDungeonCount() + 1);
         return hero;
     }
 }
