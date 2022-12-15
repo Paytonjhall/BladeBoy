@@ -71,7 +71,7 @@ public class Hero {
                     System.out.println("Inventory: needs to be implemented");
                     equipWeapon((Weapon)Bag.get(0));
                 }
-                case 4 -> System.out.println("Potion Bag: needs to be implemented");
+                case 4 -> selectPotion();
                 case 5 -> System.out.println("Saving game...");
                 case 6 -> {
                     System.out.println("Exiting game...");
@@ -85,8 +85,6 @@ public class Hero {
         }
 
     }
-
-
 
     public void heroStatus() {
         input.clearScreen();
@@ -105,7 +103,6 @@ public class Hero {
         System.out.println("Mystics: ");
         System.out.println();
     }
-
 
     public void takeDamage(int damage){
         health -= damage;
@@ -207,8 +204,32 @@ public class Hero {
         return heroString;
     }
 
+    public void usePotion(Potion potion){
+        switch (potion.getType()) {
+            case "Heal Potion" -> heal(potion.getEffect());
+            case "Gods Strength Potion" -> System.out.println("Not implemented yet");
+            case "Defense Potion" -> System.out.println("Not implemented");
+            case "Survival Potion" -> System.out.println("Needs to be implemented");
+            case "Double Tap Potion" -> System.out.println("Need to add double tap potion");
+            case "Scavenge Potion" -> System.out.println("Need to add scavenge");
+        }
+    }
 
-
+    public void selectPotion(){
+        if (!potionBag.havePotions()){
+            System.out.println("You have no potions");
+            return;
+        }
+        System.out.println("Select a potion to use");
+        potionBag.printPotions();
+        int choice = input.getNumberInput();
+        if (choice == 0) return;
+        if (choice > 3 || choice < 1){
+            System.out.println("Invalid input");
+            return;
+        }
+        usePotion(potionBag.getPotion(choice));
+    }
 
     public void organizeBag() {
         List<Weapon> weapons = new ArrayList<>();
@@ -335,6 +356,10 @@ public class Hero {
     }
 
     //GETTERS AND SETTERS
+    public void addPotion(Potion potion){
+        potionBag.addPotion(potion);
+    }
+
     public List<Mystic> getMystics() {
         return mystics;
     }

@@ -1,9 +1,9 @@
-package Character;
+package Game;
 
 import Game.UserInput;
 
 import java.util.Scanner;
-
+import Character.*;
 public class Main {
 
 
