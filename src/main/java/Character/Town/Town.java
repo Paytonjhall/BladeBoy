@@ -7,6 +7,7 @@ public class Town {
 
     Blacksmith blacksmith = new Blacksmith();
     Oracle oracle = new Oracle();
+    Store store = new Store();
     Output output = new Output();
     UserInput userInput = new UserInput();
     Hero hero;
@@ -33,6 +34,8 @@ public class Town {
         return adventure.startAdventure(hero);
     }
 
+    public Hero visitStore (Hero hero) {return store.visitStore(hero);}
+
 
     public void printOptions () {
         System.out.print("[1]: ");
@@ -55,7 +58,7 @@ public class Town {
             choice = userInput.getNumberInput();
             switch (choice) {
                 case 1 -> hero = visitBlacksmith(hero);
-                case 2 -> System.out.println("Store");
+                case 2 -> hero = visitStore(hero);
                 case 3 -> hero = visitOracle(hero);
                 case 4 -> System.out.println("Equipment");
                 case 5 -> System.out.println("Character Stats");
@@ -72,6 +75,7 @@ public class Town {
     public void resetTown(){
         this.blacksmith = new Blacksmith();
         this.oracle = new Oracle();
+        this.store = new Store();
     }
 
     public void returnToTown(Hero hero){
