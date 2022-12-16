@@ -36,6 +36,11 @@ public class Town {
 
     public Hero visitStore (Hero hero) {return store.visitStore(hero);}
 
+    public void saveGame (Hero hero) {
+        Save save = new Save();
+        save.saveGame(hero);
+    }
+
 
     public void printOptions () {
         System.out.print("[1]: ");
@@ -50,6 +55,8 @@ public class Town {
         output.printCyan("Character Stats\n");
         System.out.print("[6]: ");
         output.printYellow("Next Adventure\n");
+        System.out.print("[7]: ");
+        output.printBold("Save Game\n");
     }
 
     public void getAction () {
@@ -66,11 +73,14 @@ public class Town {
                     hero = startAdventure(hero);
                     returnToTown(hero);
                 }
+                case 7 -> saveGame(hero);
                 default -> System.out.println("Invalid input");
             }
 
         }
     }
+
+
 
     public void resetTown(){
         this.blacksmith = new Blacksmith();

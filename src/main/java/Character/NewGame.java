@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class NewGame {
     UserInput input = new UserInput();
-    public void start() {
+    public void start(String name) {
         System.out.println("Welcome Hero!");
         input.sleep(1000);
         System.out.println("You wake up in a dark woods with little on you.");
@@ -22,6 +22,7 @@ public class NewGame {
                 new Weapon("Chipped Wood Sword", 10, "An old chipped sword made of wood.", 4),
                 new Artifact("Fortune Amulet", 10, "A old amulet from your mother", "Fortune", 1.125),
                 100, 100, 0, 1, 5, null);
+        hero.setUsername(name);
         Combat combat = new Combat();
         combat.fight(hero, slime);
         input.sleep(1000);

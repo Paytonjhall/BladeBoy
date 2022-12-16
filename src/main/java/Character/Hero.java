@@ -1,4 +1,5 @@
 package Character;
+import Game.HeroSaveAdapter;
 import Game.Output;
 import Game.UserInput;
 
@@ -18,6 +19,7 @@ public class Hero {
     int gold;
     // public int skillPoints=0;
     int dungeonCount = 0;
+    String username = " ";
     public List<SkillPoints> skillPoints = new ArrayList<>();
     List<Mystic> mystics = new ArrayList<>();
     PotionBag potionBag = new PotionBag();
@@ -49,6 +51,24 @@ public class Hero {
         }
     }
 
+    public Hero(HeroSaveAdapter newHero){
+        this.armor = newHero.armor;
+        this.weapon = newHero.weapon;
+        this.artifact = newHero.artifact;
+        this.Bag = newHero.Bag;
+        this.mystics = newHero.mystics;
+        this.health = newHero.health;
+        this.maxHealth = newHero.maxHealth;
+        this.xp = newHero.xp;
+        this.level = newHero.level;
+        this.nextLevelXp = newHero.nextLevelXp;
+        this.gold = newHero.gold;
+        this.dungeonCount = newHero.dungeonCount;
+        this.username = newHero.username;
+        this.skillPoints = newHero.skillPoints;
+        this.potionBag = newHero.potionBag;
+    }
+
     public void heroOptions(){
         boolean check = true;
         while(check){
@@ -56,8 +76,6 @@ public class Hero {
             System.out.println("  [2]   Hero Status");
             System.out.println("  [3]   Inventory");
             System.out.println("  [4]   Potion Bag");
-            System.out.println("  [5]   Save Game");
-            System.out.println("  [6]   Exit Game\n");
             System.out.print("Hero: ");
 
             int choice = input.getNumberInput();
@@ -67,16 +85,8 @@ public class Hero {
                     input.clear();
                 }
                 case 2 -> heroStatus();
-                case 3 ->{
-                    System.out.println("Inventory: needs to be implemented");
-                    equipWeapon((Weapon)Bag.get(0));
-                }
+                case 3 -> organizeBag();
                 case 4 -> selectPotion();
-                case 5 -> System.out.println("Saving game...");
-                case 6 -> {
-                    System.out.println("Exiting game...");
-                    System.exit(0);
-                }
                 default -> {
                     System.out.println("Invalid input. Try again.");
                     input.clear();
@@ -236,7 +246,7 @@ public class Hero {
         List<Weapon> weapons = new ArrayList<>();
         List<Armor> armors = new ArrayList<>();
         List<Artifact> artifacts = new ArrayList<>();
-        if (Bag == null) {
+        if (Bag == null || Bag.isEmpty()) {
             System.out.println("Your bag is empty");
             return;
         }
@@ -357,16 +367,49 @@ public class Hero {
     }
 
     //GETTERS AND SETTERS
+
+    public List<ItemInterface> getBag() {
+        return Bag;
+    }
+
+    public void setBag(List<ItemInterface> bag) {
+        Bag = bag;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public List<SkillPoints> getSkillPoints() {
+        return skillPoints;
+    }
+
+    public void setSkillPoints(List<SkillPoints> skillPoints) {
+        this.skillPoints = skillPoints;
+    }
+
+    public void setMystics(List<Mystic> mystics) {
+        this.mystics = mystics;
+    }
+
+    public PotionBag getPotionBag() {
+        return potionBag;
+    }
+
+    public void setPotionBag(PotionBag potionBag) {
+        this.potionBag = potionBag;
+    }
+
     public void addPotion(Potion potion){
         potionBag.addPotion(potion);
     }
 
     public List<Mystic> getMystics() {
         return mystics;
-    }
-
-    public void setMystics(List<Mystic> mystics) {
-        this.mystics = mystics;
     }
 
     public void addMystic (Mystic mystic){
@@ -448,6 +491,13 @@ public class Hero {
         this.dungeonCount = dungeonCount;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void addSkillPoint(int level, boolean used){
         skillPoints.add(new SkillPoints(level, used));

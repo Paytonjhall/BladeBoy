@@ -29,15 +29,17 @@ public class Blacksmith {
         System.out.println("[0]: Exit");
         for(Weapon weapon: weapons){
             System.out.println("["+count+"]: " + weapon.toString());
+            count++;
         }
-        int choice = -1;
-
-//        if(choice == 0){
-//            return hero;
-//        }
-        while(choice != 0) {
+        int choice;
+        System.out.print("Your Gold: " );
+        output.printYellow("" + hero.getGold() +"\n");
+        while(true) {
             System.out.print("What items would you to buy: ");
             choice = userInput.getNumberInput();
+            if(choice == 0){
+                return hero;
+            }
         if (choice > 0 && choice <= weapons.size()) {
                 if (hero.getGold() >= weapons.get(choice - 1).getValue()) {
                     hero.setGold(hero.getGold() - weapons.get(choice - 1).getValue());
@@ -53,8 +55,6 @@ public class Blacksmith {
                 userInput.sleep(2000);
             }
         }
-
-        return hero;
 
     }
 

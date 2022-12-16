@@ -27,14 +27,19 @@ public class Store {
         int count = 1;
 
         int choice = -1;
-        userInput.getNumberInput();
-        while (choice != 0) {
-            System.out.println("[0]: Exit");
-            for (Potion potion : potions) {
-                System.out.println("[" + count + "]: " + potion.toString());
-            }
+        System.out.println("[0]: Exit");
+        for (Potion potion : potions) {
+            System.out.println("[" + count + "]: " + potion.toString());
+            count++;
+        }
+        System.out.print("Your Gold: " );
+        output.printYellow("" + hero.getGold() +"\n");
+        while (true) {
             System.out.print("What items would you to buy: ");
             choice = userInput.getNumberInput();
+            if (choice == 0) {
+                return hero;
+            }
             if (choice > 0 && choice <= potions.size()) {
                 if (hero.getGold() >= potions.get(choice - 1).getValue()) {
                     hero.setGold(hero.getGold() - potions.get(choice - 1).getValue());
@@ -50,7 +55,6 @@ public class Store {
                 userInput.sleep(2000);
             }
         }
-        return hero;
     }
 
     public boolean isResetAvailable() {

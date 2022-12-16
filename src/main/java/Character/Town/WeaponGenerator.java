@@ -29,6 +29,9 @@ public class WeaponGenerator {
         for(int i = 0; i < count; i++){
             Weapon weapon = new Weapon(generateWeaponName());
             int wRank = calculateWeaponRank(rank);
+            if(wRank<=0){
+                wRank = 1;
+            }
             int damage = (getRnd().nextInt(4)+1) * (wRank+1);
             weapon.setWeaponDamage(damage + (wRank * getRnd().nextInt(wRank+1)));
             weapon.setDescription("A weapon of rank " + wRank + " made at the blacksmith's shop.");

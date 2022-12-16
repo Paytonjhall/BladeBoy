@@ -16,6 +16,15 @@ public class UserInput {
         return scanner.nextInt();
     }
 
+    public String getInput() {
+        try {
+            return reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void clear(){
         System.out.flush();
     }

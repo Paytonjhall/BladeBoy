@@ -20,7 +20,7 @@ public class MainMenu {
 
         new_game.addActionListener(e -> {
             NewGame newGame = new NewGame();
-            newGame.start();
+            newGame.start("Payton");
         });
 
         load_game.addActionListener(e -> {

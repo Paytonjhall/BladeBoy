@@ -1,5 +1,6 @@
 package Game;
 
+import Character.Town.Town;
 import Game.UserInput;
 
 import java.util.Scanner;
@@ -20,14 +21,19 @@ public class Main {
             switch (choice) {
                 case 1 -> {
                     System.out.println("Starting new game...");
+                    Thread.sleep(1000);
+                    System.out.println("Please enter your name: ");
+                    String name = input.getInput();
                     Thread.sleep(2000);
                     NewGame newGame = new NewGame();
-                    newGame.start();
+                    newGame.start(name);
                     check = false;
                 }
                 case 2 -> {
-                    System.out.println("Loading game... Not implemented yet");
                     check = false;
+                    Load loadGame = new Load();
+                    Hero hero = loadGame.loadGame("Pay");
+                    Town town = new Town(hero);
                 }
                 case 3 -> {
                     System.out.println("Exiting game...");
@@ -38,7 +44,6 @@ public class Main {
                     choice = input.getNumberInput();
                 }
             }
-
         }
     }
 }
