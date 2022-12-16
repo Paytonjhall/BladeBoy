@@ -132,15 +132,13 @@ public class Combat {
     }
 
     private double lifeSteal(Hero hero){
-        boolean check = false;
         double lifeSteal = 0;
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Vamperism")){
                 lifeSteal += mystic.amplifier;
-                check = true;
+
             }
         }
-        if(!check) return 1;
         return lifeSteal;
     }
 

@@ -14,13 +14,18 @@ public class Oracle {
     Hero hero;
     public Hero visitOracle(Hero hero)  {
         this.hero = hero;
+        if(hero.skillPoints == null) return hero;
+        int count = 0;
+        for(int i = 0; i < hero.skillPoints.size(); i++){
+            if(!hero.skillPoints.get(i).isUsed()) count++;
+        }
         System.out.print("Welcome to the "); output.printPurple("Oracle"); System.out.println("!");
-        if(hero.skillPoints.size() < 1) {
+        if(count < 1) {
             System.out.println("You don't have any skill points. . .");
             System.out.println("Come back when you have more skill points");
         }
         else {
-            System.out.println("You have " + hero.skillPoints.size() + " skill points");
+            System.out.println("You have " + count + " skill points");
             System.out.println("Lets take a look at what you can upgrade");
         }
         for(int i = 0; i < hero.skillPoints.size(); i++){
