@@ -28,7 +28,7 @@ public class Hero {
     Output output = new Output();
 
     public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
-        this.armor = armor;
+        equipArmor(armor);
         this.weapon = weapon;
         this.health = health;
         this.maxHealth = health;
@@ -157,7 +157,6 @@ public class Hero {
     }
 
     public void addToBag(ItemInterface item){
-
         if(Bag == null){
             Bag = new ArrayList<ItemInterface>();
         }
@@ -180,9 +179,11 @@ public class Hero {
 
     public void equipArmor(Armor armor){
         if (this.armor != null){
+            maxHealth -= this.armor.getHealthIncrease();
             addToBag(this.armor);
         }
         this.armor = armor;
+        maxHealth += armor.getHealthIncrease();
     }
 
     public void heroDeath(){

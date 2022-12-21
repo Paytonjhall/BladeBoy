@@ -17,8 +17,8 @@ public class NewGame {
         System.out.println("You see an slime come towards you!");
         input.sleep(1000);
         System.out.println("You ready your weapon, the time is now!");
-        Enemy slime = new Enemy("Slime", 20, 4, 0, 30, null, 25);
-        Hero hero = new Hero(new Armor("Torn Leather Armor", 10, "Plain", .05),
+        Enemy slime = new Enemy("Slime", 20, 4, 20, 30, null, 25);
+        Hero hero = new Hero(new Armor("Torn Leather Armor", 10, "Plain", 50,5),
                 new Weapon("Chipped Wood Sword", 10, "An old chipped sword made of wood.", 4),
                 new Artifact("Fortune Amulet", 10, "A old amulet from your mother", "Fortune", 1.125),
                 100, 100, 0, 1, 5, null);

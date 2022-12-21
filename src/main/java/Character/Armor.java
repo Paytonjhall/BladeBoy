@@ -1,17 +1,40 @@
 package Character;
 
 public class Armor implements ItemInterface {
+    //Max armor is 900; This blocks 90% of damage
 
     String name;
     int value;
     String description;
     double armorRating;
+    int healthIncrease = 0;
+
+
+    public Armor(String name) {
+        this.name=name;
+    }
+
+    public Armor(String name, int value, String description, double armorRating, int healthIncrease) {
+        this.name=name;
+        this.value=value;
+        this.description=description;
+        this.armorRating=armorRating;
+        this.healthIncrease=healthIncrease;
+    }
 
     public Armor(String name, int value, String description, double armorRating) {
         this.name = name;
         this.value = value;
         this.description = description;
         this.armorRating = armorRating;
+    }
+
+    public int getHealthIncrease() {
+        return healthIncrease;
+    }
+
+    public void setHealthIncrease(int healthIncrease) {
+        this.healthIncrease=healthIncrease;
     }
 
     public double getArmorRating() {

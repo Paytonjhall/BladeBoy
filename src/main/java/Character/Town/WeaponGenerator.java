@@ -38,9 +38,6 @@ public class WeaponGenerator {
             weapon.setValue((int)Math.abs(wRank * wRank * (wRank + wRank)* (getRnd().nextInt(15))) + (damage * (getRnd().nextInt(6)+14)));
             weapons.add(weapon);
         }
-
-
-
         return weapons;
     }
 

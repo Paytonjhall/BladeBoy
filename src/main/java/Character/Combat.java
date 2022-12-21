@@ -66,7 +66,7 @@ public class Combat {
     private int calculateDamage(Hero hero, Enemy enemy){
         Random random = new Random();
         int damageRange =(int)(hero.weapon.getWeaponDamage()/2) +random.nextInt(hero.weapon.getWeaponDamage());
-        int damage = (int) (damageRange * ((1- enemy.armorRating)));
+        int damage = (int) (damageRange * ((1- enemy.armorRating/1000)));
         damage += strength(hero);
         damage += crush(hero);
         if(critCheck(hero)) damage *= 2.5;
@@ -81,7 +81,7 @@ public class Combat {
     private int calculateDamage(Enemy enemy, Hero hero){
         Random random = new Random();
         int damageRange =(int)(enemy.damage/2) +random.nextInt(enemy.damage);
-        int damage =(int) (damageRange * (1-hero.getArmor().getArmorRating()));
+        int damage =(int) (damageRange * (1-(hero.getArmor().getArmorRating()/1000)));
         return damage;
     }
 
