@@ -67,7 +67,8 @@ public class Combat {
         Random random = new Random();
         int damageRange =(int)(hero.weapon.getWeaponDamage()/2) +random.nextInt(hero.weapon.getWeaponDamage());
         int damage = (int) (damageRange * ((1- enemy.armorRating)));
-        damage *= strength(hero);
+        damage += strength(hero);
+        damage += crush(hero);
         if(critCheck(hero)) damage *= 2.5;
         double lifeSteal = lifeSteal(hero);
         if(lifeSteal > 0) {
@@ -147,7 +148,7 @@ public class Combat {
         double strength = 1;
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Strength")){
-                strength *= mystic.amplifier;
+                strength += mystic.amplifier;
                 check = true;
             }
         }
@@ -169,5 +170,16 @@ public class Combat {
             return true;
         }
         return false;
+    }
+
+    private int crush(Hero hero){
+        int damage = 0;
+        double crushRatio = (double) hero.health / 100.00;
+        for(Mystic mystic : hero.getMystics()){
+            if(mystic.getBuff().equals("Crush")){
+                damage += (int) (mystic.amplifier * crushRatio);
+            }
+        }
+        return damage;
     }
 }

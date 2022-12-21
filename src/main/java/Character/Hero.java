@@ -151,8 +151,8 @@ public class Hero {
         level++;
         nextLevelXp = (int) (nextLevelXp * 1.25);
         System.out.println("You leveled up: " + level);
-        System.out.println("You heal 25% of your health on level up, gain 3 hp, and are given a skill point!");
-        maxHealth += 3;
+        System.out.println("You heal 25% of your health on level up, gain 10 hp, and are given a skill point!");
+        maxHealth += 10;
         heal((int)maxHealth/4);
     }
 

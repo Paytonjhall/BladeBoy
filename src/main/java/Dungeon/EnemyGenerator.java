@@ -18,8 +18,8 @@ public class EnemyGenerator {
 
     public Enemy generateEnemy(){
         int random = rnd.nextInt(10);
-        int health =  random + 5 + (10 * level);
-        int damage = (5 * level) + 5 - random/2;
+        int health =  random + 5 + (7 * level);
+        int damage = (4 * level) + 5 - random/2;
         double armor = (.05 * level);
         int xp = (level * 15) + rnd.nextInt(15) + 15;
         int gold = (level * 12) + rnd.nextInt(20) + rnd.nextInt(5);

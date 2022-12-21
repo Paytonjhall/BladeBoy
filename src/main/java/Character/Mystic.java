@@ -11,7 +11,7 @@ public class Mystic {
     String type;
     int level;
 
-    String[] buffs = new String[]{"Strength", "Health", "Block", "Vamperism", "Critical"};
+    String[] buffs = new String[]{"Strength", "Health", "Block", "Vamperism", "Critical", "Crush"};
 
     public Mystic(String buff, double amplifier, String type, int level) {
         this.buff = buff;
@@ -29,23 +29,26 @@ public class Mystic {
 
         Random rand = new Random();
         buff = buffs[rand.nextInt(buffs.length)];
-
-        switch (buff) {
-            case "Strength":
-                amplifier = (Math.floor((((Math.random() * 3) + 7) * level)) /100) + 1;
-                break;
-            case "Health":
-                amplifier = Math.floor((Math.random() * 5) + 10 * level);
-                break;
-            case "Vamperism":
-                amplifier = (Math.floor((((Math.random() * 2) + 3) * level))) + 1;
-                break;
-            case "Critical":
-                amplifier = (Math.floor((((Math.random() * 5) + 9) * level)) /100) + 1;
-                break;
-            case "Block":
-                amplifier = (Math.floor((((Math.random() * 5) + 9) * level)) /100) + 1;
-                break;
+        if(level == 0) level ++;
+            switch (buff) {
+                case "Strength":
+                    amplifier = (Math.floor((((Math.random() * 4)) * (1 + (double) level/2)))) + 1;
+                    break;
+                case "Health":
+                    amplifier = Math.floor((Math.random() * 5) + 10 * level);
+                    break;
+                case "Vamperism":
+                    amplifier = (Math.floor((((Math.random() * 2) + 3) * level))/2) + 1;
+                    break;
+                case "Critical":
+                    amplifier = (Math.floor((((Math.random() * 5) + 9) * level)) /100) + 1;
+                    break;
+                case "Block":
+                    amplifier = (Math.floor((((Math.random() * 5) + 9) * level)) /100) + 1;
+                    break;
+                case "Crush":
+                    amplifier = ((double)level * 3)/2 + (Math.floor(Math.random()*3)) + 1;
+                    break;
         }
     }
 

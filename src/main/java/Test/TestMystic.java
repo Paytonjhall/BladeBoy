@@ -27,7 +27,10 @@ public class TestMystic {
 
     public static void testHeroMystics(int num) throws InterruptedException {
         Hero hero = new Hero(num);
+        hero.setMaxHealth(100);
+        hero.setHealth(100);
         Oracle oracle = new Oracle();
         oracle.visitOracle(hero);
+        System.out.println(hero.getMaxHealth());
     }
 }

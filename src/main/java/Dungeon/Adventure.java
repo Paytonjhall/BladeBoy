@@ -13,9 +13,9 @@ public class Adventure {
     public Hero startAdventure(Hero hero){
         this.hero = hero;
         level = hero.getDungeonCount();
-        fights = 3 + (level * 2);
+        fights =(int) (3 + (Math.random() * 2));
 
-        System.out.println("You enter the dungeon");
+        System.out.println("You enter the dungeon: There are " + fights + " enemies in this dungeon!");
         for(int i = 0; i < fights; i++){
             Enemy enemy = new EnemyGenerator(level).generateEnemy();
             System.out.println("You encounter a " + enemy.getName());
