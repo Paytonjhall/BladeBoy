@@ -8,6 +8,7 @@ public class Armor implements ItemInterface {
     String description;
     double armorRating;
     int healthIncrease = 0;
+    int protection = 0;
 
 
     public Armor(String name) {
@@ -20,6 +21,15 @@ public class Armor implements ItemInterface {
         this.description=description;
         this.armorRating=armorRating;
         this.healthIncrease=healthIncrease;
+    }
+
+    public Armor(String name, int value, String description, double armorRating, int healthIncrease, int protection) {
+        this.name=name;
+        this.value=value;
+        this.description=description;
+        this.armorRating=armorRating;
+        this.healthIncrease=healthIncrease;
+        this.protection=protection;
     }
 
     public Armor(String name, int value, String description, double armorRating) {
@@ -73,5 +83,18 @@ public class Armor implements ItemInterface {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    public int getProtection() {
+        return protection;
+    }
+
+    public void setProtection(int protection) {
+        this.protection=protection;
+    }
+
+    @Override
+    public String toString(){
+        return name + ": Value(" + value + " Gold), Armor Rating(" + armorRating + "), Health Bonus(" + healthIncrease + "), Protection(" + protection +")";
     }
 }

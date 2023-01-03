@@ -7,6 +7,7 @@ public class Town {
 
     Blacksmith blacksmith = new Blacksmith();
     Oracle oracle = new Oracle();
+    Armory armory = new Armory();
     Store store = new Store();
     Output output = new Output();
     UserInput userInput = new UserInput();
@@ -36,6 +37,8 @@ public class Town {
 
     public Hero visitStore (Hero hero) {return store.visitStore(hero);}
 
+    public Hero visitArmory (Hero hero) {return armory.visitArmory(hero);}
+
     public void saveGame (Hero hero) {
         Save save = new Save();
         save.saveGame(hero);
@@ -46,16 +49,18 @@ public class Town {
         System.out.print("[1]: ");
         output.printRed("Blacksmith\n");
         System.out.print("[2]: ");
-        output.printPurple("Store\n");
+        output.printBlack("Armory\n");
         System.out.print("[3]: ");
-        output.printBlue("Oracle\n");
+        output.printPurple("Store\n");
         System.out.print("[4]: ");
-        output.printGreen("Equipment\n");
+        output.printBlue("Oracle\n");
         System.out.print("[5]: ");
-        output.printCyan("Character Stats\n");
+        output.printGreen("Equipment\n");
         System.out.print("[6]: ");
-        output.printYellow("Next Adventure\n");
+        output.printCyan("Character Stats\n");
         System.out.print("[7]: ");
+        output.printYellow("Next Adventure\n");
+        System.out.print("[8]: ");
         output.printBold("Save Game\n");
     }
 
@@ -65,15 +70,16 @@ public class Town {
             choice = userInput.getNumberInput();
             switch (choice) {
                 case 1 -> hero = visitBlacksmith(hero);
-                case 2 -> hero = visitStore(hero);
-                case 3 -> hero = visitOracle(hero);
-                case 4 -> hero.organizeBag();
-                case 5 -> hero.heroStatus();
-                case 6 -> {
+                case 2 -> hero = visitArmory(hero);
+                case 3 -> hero = visitStore(hero);
+                case 4 -> hero = visitOracle(hero);
+                case 5 -> hero.organizeBag();
+                case 6 -> hero.heroStatus();
+                case 7 -> {
                     hero = startAdventure(hero);
                     returnToTown(hero);
                 }
-                case 7 -> saveGame(hero);
+                case 8 -> saveGame(hero);
                 default -> System.out.println("Invalid input");
             }
 
@@ -86,6 +92,7 @@ public class Town {
         this.blacksmith = new Blacksmith();
         this.oracle = new Oracle();
         this.store = new Store();
+        this.armory = new Armory();
     }
 
     public void returnToTown(Hero hero){

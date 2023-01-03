@@ -6,9 +6,11 @@ import Game.UserInput;
 import java.util.Random;
 
 public class Combat {
+    int protection = 0;
     Output output = new Output();
     public Hero fight (Hero hero, Enemy enemy)  {
         int round = 0;
+        protection = hero.getProtection();
         UserInput userInput = new UserInput();
         boolean fight = true;
         int damage;
@@ -21,7 +23,7 @@ public class Combat {
             enemy.takeDamage(damage);
             if (enemy.health > 0) {
                 {
-                    System.out.print(enemy.getName() + "takes ");
+                    System.out.print(enemy.getName() + " takes ");
                     output.printRed(damage + "");
                     System.out.print(" damage. The "+enemy.getName()+ " has ");
                     output.printGreen(enemy.getHealth() + "");
@@ -82,6 +84,25 @@ public class Combat {
         Random random = new Random();
         int damageRange =(int)(enemy.damage/2) +random.nextInt(enemy.damage);
         int damage =(int) (damageRange * (1-(hero.getArmor().getArmorRating()/1000)));
+        damage = checkProtection(damage);
+        return damage;
+    }
+
+    private int checkProtection(int damage){
+        if(protection > 0){
+            if(protection > damage){
+                protection -= damage;
+                damage = 0;
+                System.out.println("Your armors protection stoped the blow: Protection remaining: " + protection);
+                return damage;
+            }
+            else{
+                damage -= protection;
+                protection = 0;
+                System.out.println("Your armors protected some of the blow: Protection remaining: 0");
+                return damage;
+            }
+        }
         return damage;
     }
 

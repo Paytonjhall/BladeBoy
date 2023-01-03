@@ -163,6 +163,11 @@ public class Hero {
         Bag.add(item);
     }
 
+    public int getProtection(){
+        if(armor != null)return armor.getProtection();
+        else return 0;
+    }
+
     public void equipWeapon(Weapon weapon){
         if (this.weapon != null){
             addToBag(this.weapon);
