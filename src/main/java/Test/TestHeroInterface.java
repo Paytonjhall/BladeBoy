@@ -1,5 +1,6 @@
 package Test;
 import Character.*;
+import view.HeroInventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,9 @@ public class TestHeroInterface {
         hero.addToBag(new Weapon("Incredible Gold Sword", 1000, "An impressively sharp steel blade", 15));
         hero.addToBag(new Weapon("Incredible Diamond Sword", 1000, "An impressively sharp steel blade", 15));
         hero.addToBag(new Weapon("Incredible Copper Sword", 1000, "An impressively sharp steel blade", 15));
+        assert hero.getBag().size() > 0;
+        HeroInventory heroInventory = new HeroInventory();
+        heroInventory.openInventory(hero);
 
-        hero.organizeBag();
-
-        System.out.println(hero.getWeapon().toString());
     }
 }

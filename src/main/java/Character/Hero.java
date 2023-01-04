@@ -374,6 +374,39 @@ public class Hero {
 
     //GETTERS AND SETTERS
 
+    public List<Weapon> getWeapons() {
+        List<Weapon> weapons = new ArrayList<>();
+        if(Bag == null) return weapons;
+        for (ItemInterface itemInterface : Bag) {
+            if (itemInterface.getClass() == Weapon.class) {
+                weapons.add((Weapon) itemInterface);
+            }
+        }
+        return weapons;
+    }
+
+    public List<Armor> getArmors() {
+        List<Armor> armors = new ArrayList<>();
+        if(Bag == null) return armors;
+        for (ItemInterface itemInterface : Bag) {
+            if (itemInterface.getClass() == Armor.class) {
+                armors.add((Armor) itemInterface);
+            }
+        }
+        return armors;
+    }
+
+    public List<Artifact> getArtifacts() {
+        List<Artifact> artifacts = new ArrayList<>();
+        if(Bag == null) return artifacts;
+        for (ItemInterface itemInterface : Bag) {
+            if (itemInterface.getClass() == Artifact.class) {
+                artifacts.add((Artifact) itemInterface);
+            }
+        }
+        return artifacts;
+    }
+
     public List<ItemInterface> getBag() {
         return Bag;
     }

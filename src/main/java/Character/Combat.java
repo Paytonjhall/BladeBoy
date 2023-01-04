@@ -93,7 +93,7 @@ public class Combat {
             if(protection > damage){
                 protection -= damage;
                 damage = 0;
-                System.out.println("Your armors protection stoped the blow: Protection remaining: " + protection);
+                System.out.println("Your armors protection stopped the blow: Protection remaining: " + protection);
                 return damage;
             }
             else{
