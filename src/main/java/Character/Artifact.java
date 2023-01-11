@@ -18,6 +18,7 @@ public class Artifact implements ItemInterface {
     int value;
     String description;
     String type;
+    String iconPath;
     double amplifier;
     double fortune = 1;
     double discount = 1;
@@ -46,6 +47,14 @@ public class Artifact implements ItemInterface {
             case "Conqueror" -> conqueror=amplifier;
             case "Learner" -> learner=amplifier;
         }
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
     }
 
     public int artifactAmplify(int value){
@@ -168,5 +177,10 @@ public class Artifact implements ItemInterface {
 
     public void setLearner(double learner) {
         this.learner=learner;
+    }
+
+    @Override
+    public String toString(){
+        return "Artifact: " + name + " Value: " + value + " Description: " + description + " Type: " + type + " Amplifier: " + amplifier;
     }
 }

@@ -172,6 +172,7 @@ public class Hero {
         if (this.weapon != null){
             addToBag(this.weapon);
         }
+        if(Bag!=null)Bag.remove(weapon);
         this.weapon = weapon;
     }
 
@@ -179,6 +180,7 @@ public class Hero {
         if (this.artifact != null){
             addToBag(this.artifact);
         }
+        if(Bag!=null)Bag.remove(artifact);
         this.artifact = artifact;
     }
 
@@ -187,6 +189,7 @@ public class Hero {
             maxHealth -= this.armor.getHealthIncrease();
             addToBag(this.armor);
         }
+        if(Bag!=null)Bag.remove(armor);
         this.armor = armor;
         maxHealth += armor.getHealthIncrease();
     }

@@ -93,7 +93,7 @@ public class HeroInventory {
             weapon.setIcon(new ImageIcon(dimg)); //Sets the image to be displayed as an icon
             weapon.setToolTipText("No weapon equipped"); //Sets the tooltip text
         } else {
-            Image dimg = getImage("src/Assets/Weapons/Daggers/daggers (1).jpg").getScaledInstance(weapon.getWidth(), weapon.getHeight(),
+            Image dimg = getImage("src/Assets/Weapons/" + hero.getWeapon().getIconPath()).getScaledInstance(weapon.getWidth(), weapon.getHeight(),
                     Image.SCALE_SMOOTH);
             weapon.setIcon(new ImageIcon(dimg)); //Sets the image to be displayed as an icon
             Dimension size = weapon.getPreferredSize(); //Gets the size of the image
@@ -102,7 +102,13 @@ public class HeroInventory {
                 JComboBox bag = new JComboBox(hero.getWeapons().toArray());
                 bag.setBounds(170, 30, 300, 35);
                 c.add(bag);
+                bag.addActionListener(e -> {
+                    hero.equipWeapon((Weapon) bag.getSelectedItem());
+                    f.dispose();
+                    openInventory(hero);
+                });
             }
+
         }
         // Armor
         JLabel armor = new JLabel(); //JLabel Creation
@@ -122,6 +128,11 @@ public class HeroInventory {
                 JComboBox bag = new JComboBox(hero.getArmors().toArray());
                 bag.setBounds(170, 180, 300, 35);
                 c.add(bag);
+                bag.addActionListener(e -> {
+                    hero.equipArmor((Armor) bag.getSelectedItem());
+                    f.dispose();
+                    openInventory(hero);
+                });
             }
         }
 
@@ -134,7 +145,7 @@ public class HeroInventory {
             artifact.setIcon(new ImageIcon(dimg)); //Sets the image to be displayed as an icon
             artifact.setToolTipText("No artifact equipped"); //Sets the tooltip text
         } else {
-            Image dimg3 =getImage("src/Assets/Armor/6.jpg").getScaledInstance(artifact.getWidth(), artifact.getHeight(),
+            Image dimg3 =getImage("src/Assets/" + hero.getArtifact().getIconPath()).getScaledInstance(artifact.getWidth(), artifact.getHeight(),
                     Image.SCALE_SMOOTH);
             artifact.setIcon(new ImageIcon(dimg3)); //Sets the image to be displayed as an icon
             Dimension size3 = artifact.getPreferredSize(); //Gets the size of the image
@@ -143,6 +154,11 @@ public class HeroInventory {
                 JComboBox bag = new JComboBox(hero.getArtifacts().toArray());
                 bag.setBounds(170, 330, 300, 35);
                 c.add(bag);
+                bag.addActionListener(e -> {
+                    hero.equipArtifact((Artifact) bag.getSelectedItem());
+                    f.dispose();
+                    openInventory(hero);
+                });
             }
         }
 
