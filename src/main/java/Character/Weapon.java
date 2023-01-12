@@ -51,16 +51,16 @@ public class Weapon implements ItemInterface {
         int num = 0;
         if(Objects.equals(type, "Dagger")){ //Daggers: 10
             num = random.nextInt(9) + 1;
-            iconPath = "Daggers/dagger" + num + ".jpg";
+            iconPath = "src/Assets/Weapons/Daggers/dagger" + num + ".jpg";
         } else if (Objects.equals(type, "Sword")){ //Sword 64
-            num = random.nextInt(63) + 1;
-            iconPath = "Swords/sword" + num + ".png";
+            num = random.nextInt(44) + 20;
+            iconPath = "src/Assets/Weapons/Swords/sword" + num + ".png";
         } else if (Objects.equals(type, "Axe")){ //Axe 20
             num = random.nextInt(19) + 1;
-            iconPath = "Axes/" + num + ".png";
+            iconPath = "src/Assets/Weapons/Axes/" + num + ".png";
         } else if (Objects.equals(type, "Spear")){ //Spear 12
             num = random.nextInt(11) + 1;
-            iconPath = "Spears/" + num + ".png";
+            iconPath = "src/Assets/Weapons/Spears/" + num + ".png";
         }
     }
 
@@ -120,6 +120,6 @@ public class Weapon implements ItemInterface {
 
     @Override
     public String toString(){
-        return "Name: " + name + " Value: " + value + " \nType: " + type + " Weapon Damage: " + weaponDamage;
+        return "Name: " + name + " Value: " + value + " Type: " + type + " Weapon Damage: " + weaponDamage;
     }
 }

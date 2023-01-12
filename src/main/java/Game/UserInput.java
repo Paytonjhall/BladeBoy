@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.Scanner;
+import Character.*;
 
 public class UserInput {
     Scanner scanner = new Scanner(System.in);
@@ -83,4 +84,18 @@ public class UserInput {
             //  Handle any exceptions.
         }
     }
+
+
+    public Hero wait(Hero hero) {
+        System.out.println("Waiting on user");
+        hero.wait = true;
+        while (hero.wait)
+            try {
+                Thread.sleep(500);
+            } catch (Exception e) {
+
+            }
+        return hero;
+    }
+
 }

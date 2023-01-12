@@ -3,16 +3,20 @@ import Character.*;
 import Character.Town.ArmorGenerator;
 import Character.Town.ArtifactGenerator;
 import Character.Town.WeaponGenerator;
+import Game.AssetPath;
+import Game.UserInput;
 import view.HeroInventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestHeroInterface {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         WeaponGenerator wg = new WeaponGenerator();
         ArmorGenerator ag = new ArmorGenerator();
         ArtifactGenerator artg = new ArtifactGenerator();
+        AssetPath assetPath = new AssetPath();
+        UserInput ui = new UserInput();
         List<Mystic> mystics = new ArrayList<Mystic>();
         Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
@@ -23,6 +27,16 @@ public class TestHeroInterface {
 //        hero.addToBag(new Weapon("Incredible Gold Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Diamond Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Copper Sword", 1000, "An impressively sharp steel blade", 15));
+
+
+
+
+            Potion potion = new Potion("Heal Potion", 40, 100);
+            potion.setIconPath(assetPath.healthPotion);
+            Potion potion2 = new Potion("Power Potion", 40, 100);
+            potion2.setIconPath(assetPath.healthPotion);
+            hero.addPotion(potion);
+            hero.addPotion(potion2);
 
         // assert hero.getBag().size() > 0;
         // hero.getWeapon().setIconPath("Swords/sword58.png");
@@ -37,7 +51,12 @@ public class TestHeroInterface {
         hero.setArmor(ag.generateArmor(10,1).get(0));
         hero.setArtifact(artg.generateArtifact(10,1).get(0));
         HeroInventory heroInventory = new HeroInventory();
-        heroInventory.openInventory(hero);
+        hero.setWeapon(null);
+        hero = heroInventory.openInventory(hero);
+
+        ui.wait(hero);
+
+        System.out.println(hero.getWeapon().toString());
 
     }
 }

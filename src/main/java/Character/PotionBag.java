@@ -52,13 +52,26 @@ public class PotionBag {
     }
 
     public Potion getPotion(int i){
-        if(i == 1 || firstPotion != null){
+        if(i == 1 && firstPotion != null){
             return firstPotion;
         }
-        else if(i == 2 || secondPotion != null){
+        else if(i == 2 && secondPotion != null){
             return secondPotion;
         }
-        else if(i == 3 || thirdPotion != null){
+        else if(i == 3 && thirdPotion != null){
+            return thirdPotion;
+        }
+        else return null;
+    }
+
+    public Potion getPotion(String name){
+        if(firstPotion != null && firstPotion.toString().equals(name)){
+            return firstPotion;
+        }
+        else if(secondPotion != null && secondPotion.toString().equals(name)){
+            return secondPotion;
+        }
+        else if(thirdPotion != null && thirdPotion.toString().equals(name)){
             return thirdPotion;
         }
         else return null;
@@ -77,5 +90,27 @@ public class PotionBag {
         else {
             System.out.println("Potion bag is full");
         }
+    }
+
+    public int getPotionCount(){
+        int count = 0;
+        if(firstPotion != null){
+            count++;
+        }
+        if(secondPotion != null){
+            count++;
+        }
+        if(thirdPotion != null){
+            count++;
+        }
+        return count;
+    }
+
+    public void removePotion(Potion potion){
+        if(potion == firstPotion) firstPotion = null;
+        else if(potion == secondPotion) secondPotion = null;
+        else if(potion == thirdPotion) thirdPotion = null;
+        else System.out.println("Potion not found");
+        sortBag();
     }
 }

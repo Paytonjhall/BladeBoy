@@ -4,7 +4,9 @@ import Game.Output;
 import Game.UserInput;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Hero {
     Armor armor;
@@ -26,6 +28,7 @@ public class Hero {
     UserInput input = new UserInput();
 
     Output output = new Output();
+    public boolean wait = false;
 
     public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
         equipArmor(armor);
@@ -139,7 +142,7 @@ public class Hero {
         }
     }
 
-    public void heal(int health){
+    public void heal (int health){
         this.health += health;
         if(this.health > this.maxHealth){
             this.health = this.maxHealth;
@@ -225,6 +228,7 @@ public class Hero {
     }
 
     public void usePotion(Potion potion){
+
         switch (potion.getType()) {
             case "Heal Potion" -> heal(potion.getEffect());
             case "Gods Strength Potion" -> System.out.println("Not implemented yet");
@@ -233,6 +237,8 @@ public class Hero {
             case "Double Tap Potion" -> System.out.println("Need to add double tap potion");
             case "Scavenge Potion" -> System.out.println("Need to add scavenge");
         }
+        potionBag.removePotion(potion);
+
     }
 
     public void selectPotion(){

@@ -4,6 +4,7 @@ public class Potion {
     String type;
     int effect;
     int value;
+    String iconPath = "";
 
     //Types: Heal Potion, God's Strength, Defense, Survival, Double Tap, Scavenge potion (doubles rewards and garuentees item drop)
 
@@ -43,5 +44,13 @@ public class Potion {
 
     public String toString(){
         return "Potion: " + type + " - " + effect + ", gold : " + value;
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
     }
 }
