@@ -12,6 +12,9 @@ public class HeroSaveAdapter {
     public Artifact artifact;
     public List<ItemInterface> Bag;
     public List<Mystic> mystics;
+    public List<Weapon> weapons;
+    public List<Armor> armors;
+    public List<Artifact> artifacts;
     public int health;
     public int maxHealth;
     public int xp;
@@ -27,7 +30,9 @@ public class HeroSaveAdapter {
         this.armor = hero.getArmor();
         this.weapon = hero.getWeapon();
         this.artifact = hero.getArtifact();
-        this.Bag = hero.getBag();
+        this.armors = hero.getArmors();
+        this.weapons = hero.getWeapons();
+        this.artifacts = hero.getArtifacts();
         this.mystics = hero.getMystics();
         this.health = hero.getHealth();
         this.maxHealth = hero.getMaxHealth();

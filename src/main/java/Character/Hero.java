@@ -55,10 +55,13 @@ public class Hero {
     }
 
     public Hero(HeroSaveAdapter newHero){
+        Bag = new ArrayList<ItemInterface>();
         this.armor = newHero.armor;
         this.weapon = newHero.weapon;
         this.artifact = newHero.artifact;
-        this.Bag = newHero.Bag;
+        Bag.addAll(newHero.artifacts);
+        Bag.addAll(newHero.armors);
+        Bag.addAll(newHero.weapons);
         this.mystics = newHero.mystics;
         this.health = newHero.health;
         this.maxHealth = newHero.maxHealth;
