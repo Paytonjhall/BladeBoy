@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.Scanner;
 import Character.*;
+import view.GameView;
 
 public class UserInput {
     Scanner scanner = new Scanner(System.in);
@@ -86,12 +87,15 @@ public class UserInput {
     }
 
 
-    public Hero wait(Hero hero) {
+    public Hero wait(Hero hero, GameView view) {
         System.out.println("Waiting on user");
         hero.wait = true;
         while (hero.wait)
             try {
                 Thread.sleep(500);
+                hero.addXp(100);
+                hero.takeDamage(1);
+                view.update(hero);
             } catch (Exception e) {
 
             }

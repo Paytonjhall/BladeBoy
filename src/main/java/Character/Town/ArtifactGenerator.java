@@ -45,7 +45,7 @@ public class ArtifactGenerator {
             int value = ((rank/2 * rank) + 1) * (100 + rand.nextInt(10) + 3);
             Artifact artifact = new Artifact(name, value, description, type, getAmp(type, rank));
             int number = rand.nextInt(24)+1;
-            artifact.setIconPath("Artifact/" + number + ".png");
+            artifact.setIconPath("src/Assets/Artifact/" + number + ".png");
             artifacts.add(artifact);
         }
         return artifacts;

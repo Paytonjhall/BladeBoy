@@ -94,7 +94,7 @@ public class HeroInventory {
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
         f.setSize(500,725);
         f.setLayout(null);
-        Container c = f.getContentPane(); //Gets the content layer
+        Container container = f.getContentPane(); //Gets the content layer
 
         // Weapon
         JLabel weapon = new JLabel(); //JLabel Creation
@@ -107,7 +107,7 @@ public class HeroInventory {
             if(hero.getWeapons() != null){
                 JComboBox bag = new JComboBox(hero.getWeapons().toArray());
                 bag.setBounds(170, 30, 300, 35);
-                c.add(bag);
+                container.add(bag);
                 bag.addActionListener(e -> {
                     hero.equipWeapon((Weapon) bag.getSelectedItem());
                     f.dispose();
@@ -131,7 +131,7 @@ public class HeroInventory {
             if(hero.getArmors() != null){
                 JComboBox bag = new JComboBox(hero.getArmors().toArray());
                 bag.setBounds(170, 180, 300, 35);
-                c.add(bag);
+                container.add(bag);
                 bag.addActionListener(e -> {
                     hero.equipArmor((Armor) bag.getSelectedItem());
                     f.dispose();
@@ -150,12 +150,12 @@ public class HeroInventory {
         if(hero.getArtifact() == null) {
             artifact = lc.createLabel("src/Assets/Artifact/emptyArtifact.tif", "No artifact equipped",50, 330, 100, 100);
         } else {
-            artifact = lc.createLabel("src/Assets/" + hero.getArtifact().getIconPath(), hero.getArtifact().toString(),50, 330, 100, 100);
+            artifact = lc.createLabel(hero.getArtifact().getIconPath(), hero.getArtifact().toString(),50, 330, 100, 100);
         }
             if(hero.getArtifacts() != null){
                 JComboBox bag = new JComboBox(hero.getArtifacts().toArray());
                 bag.setBounds(170, 330, 300, 35);
-                c.add(bag);
+                container.add(bag);
                 bag.addActionListener(e -> {
                     hero.equipArtifact((Artifact) bag.getSelectedItem());
                     f.dispose();
@@ -224,14 +224,14 @@ public class HeroInventory {
         });
 
         // ADD TO CONTAINER
-        c.add(weapon); //Adds objects to the container
-        c.add(armor);
-        c.add(artifact);
-        c.add(gold);
-        c.add(goldAmount);
-        c.add(back);
+        container.add(weapon); //Adds objects to the container
+        container.add(armor);
+        container.add(artifact);
+        container.add(gold);
+        container.add(goldAmount);
+        container.add(back);
         for(JLabel potion : potions){
-            c.add(potion);
+            container.add(potion);
         }
         f.setVisible(true); // Exhibit the frame
         return hero;

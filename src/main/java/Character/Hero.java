@@ -2,6 +2,7 @@ package Character;
 import Game.HeroSaveAdapter;
 import Game.Output;
 import Game.UserInput;
+import view.GameView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class Hero {
     // public int skillPoints=0;
     int dungeonCount = 0;
     String username = " ";
+
     public List<SkillPoints> skillPoints = new ArrayList<>();
     List<Mystic> mystics = new ArrayList<>();
     PotionBag potionBag = new PotionBag();
