@@ -1,13 +1,17 @@
 package view;
 
 import Character.*;
+import Game.AssetPath;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GameView {
     Hero hero;
     LabelCreator labelCreator = new LabelCreator();
+    AssetPath ap = new AssetPath();
     //Steps, Make the panel,
     //Make containers
     // - Need a main overview container for the bottom where you see all the heros stuff.
@@ -16,9 +20,12 @@ public class GameView {
     JLabel weapon;
     JLabel armor;
     JLabel artifact;
-    JLabel health;
+    JLabel gold;
+    JLabel inventory;
+
     JProgressBar healthBar;
     JProgressBar XPBar;
+    Boolean inventoryOpen = false;
 
 
     public GameView() {
@@ -33,11 +40,12 @@ public class GameView {
 
         frame.setLayout(null);
         Container cont = frame.getContentPane();
-        JLabel border = labelCreator.createLabel("src/Assets/UI/itemBorder.png","", 5, 725, 375, 250);
+        JLabel border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 725, 475, 250);
          weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 850, 75, 75);
          armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 850, 75, 75);
          artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 850, 75, 75);
-
+         gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 770, 65, 65);
+         inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 850, 75, 75);
         healthBar = new JProgressBar(0, hero.getMaxHealth());
         healthBar.setValue(hero.getHealth());
         healthBar.setBounds(35, 775, 300, 25);
@@ -55,33 +63,42 @@ public class GameView {
         XPBar.setString("XP: " + hero.getXp() + "/" + hero.getNextLevelXp());
 
 
+        inventory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                openInventory();
+
+            }
+        });
 
         cont.add(weapon);
         cont.add(armor);
         cont.add(artifact);
         cont.add(healthBar);
         cont.add(XPBar);
+        cont.add(gold);
+        cont.add(inventory);
         cont.add(border);
+
         frame.setVisible(true);
         return hero;
     }
 
-    public void updateHealth(int health) {
-        if(healthBar != null){
-            healthBar.setValue(health);
-            healthBar.setString("Health: " + health + "/" + hero.getMaxHealth());
-        }
-    }
 
     public void update(Hero hero){
+        this.hero = hero;
         if(weapon != null){
-            weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 850, 75, 75);
+            labelCreator.update(hero.getWeapon().getIconPath(), weapon, hero.getWeapon().toString());
+            //weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 850, 75, 75);
         }
         if(armor != null){
-            armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 850, 75, 75);
+            labelCreator.update("src/Assets/Armor/platemail.png", armor, hero.getArmor().toString());
+            //armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 850, 75, 75);
         }
         if(artifact != null){
-            artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 850, 75, 75);
+            labelCreator.update(hero.getArtifact().getIconPath(), artifact, hero.getArtifact().toString());
+            //artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 850, 75, 75);
         }
         if(healthBar != null){
             healthBar.setValue(hero.getHealth());
@@ -93,14 +110,20 @@ public class GameView {
             XPBar.setString("XP: " + hero.getXp() + "/" + hero.getNextLevelXp());
             XPBar.setMaximum(hero.getNextLevelXp());
         }
-    }
-
-
-    class HeroPanel extends JPanel {
-        public void MyCompenent() {
-            setPreferredSize(new Dimension(100, 100));
+        if(gold != null){
+            gold.setText(hero.getGold()+"");
+            gold.setToolTipText(hero.getGold()+"");
         }
     }
 
+    public void openInventory()  {
+        HeroInventory heroInventory = new HeroInventory();
+        try {
+            update(heroInventory.openInventory(hero));
+            inventoryOpen = true;
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

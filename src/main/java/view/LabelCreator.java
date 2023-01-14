@@ -37,6 +37,27 @@ public class LabelCreator {
         return label;
     }
 
+    public JButton createButton(String path, String hover , int x, int y, int width, int height){
+        JButton button = new JButton();
+        button.setBounds(x, y, width, height);
+        Image dimg = getImage(path).getScaledInstance(button.getWidth(), button.getHeight(),
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        button.setIcon(imageIcon);
+        Dimension size = button.getPreferredSize(); //Gets the size of the image
+        button.setToolTipText(hover); //Sets the tooltip text
+        return button;
+    }
+
+    public JLabel update(String path, JLabel label, String hover){
+        Image dimg = getImage(path).getScaledInstance(label.getWidth(), label.getHeight(),
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        label.setToolTipText(hover);
+        label.setIcon(imageIcon);
+        return label;
+    }
+
     private Image getImage(String iconPath) {
         BufferedImage img = null;
         try {

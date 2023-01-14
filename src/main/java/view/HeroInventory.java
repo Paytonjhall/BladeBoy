@@ -18,6 +18,7 @@ public class HeroInventory {
     boolean returner =false;
     Hero hero;
     AssetPath ap = new AssetPath();
+    JFrame f;
     LabelCreator lc = new LabelCreator();
     public static void main(String[] args) {
         OpenInventory();
@@ -83,12 +84,12 @@ public class HeroInventory {
     public Hero openInventory(Hero hero) throws Exception {
         this.hero = hero;
         if(returner) {
-            hero.wait = false;
+            //hero.wait = false;
             return hero;
         }
 
         //Make a new JFrame
-        JFrame f=new JFrame("Inventory");
+        f=new JFrame("Inventory");
         f.update(f.getGraphics());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
@@ -235,6 +236,14 @@ public class HeroInventory {
         }
         f.setVisible(true); // Exhibit the frame
         return hero;
+    }
+
+    public boolean isOpen(){
+        if(f.isVisible()){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
