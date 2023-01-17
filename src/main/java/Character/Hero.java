@@ -582,4 +582,12 @@ public class Hero {
             this.used = used;
         }
     }
+
+    public int getUnusedSkillPoints(){
+        int count = 0;
+        for(int i = 0; i < skillPoints.size(); i++){
+            if(!skillPoints.get(i).isUsed()) count++;
+        }
+        return count;
+    }
 }

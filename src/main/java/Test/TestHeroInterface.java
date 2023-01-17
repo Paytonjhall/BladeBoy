@@ -8,7 +8,9 @@ import Game.UserInput;
 import view.GameView;
 import view.HeroInventory;
 import view.blacksmith;
+import view.artificiary;
 import view.armory;
+import view.oracle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class TestHeroInterface {
         ArmorGenerator ag = new ArmorGenerator();
         blacksmith bs = new blacksmith();
         armory ar = new armory();
+        oracle or = new oracle();
+        artificiary art = new artificiary();
         ArtifactGenerator artg = new ArtifactGenerator();
         AssetPath assetPath = new AssetPath();
         UserInput ui = new UserInput();
@@ -61,7 +65,9 @@ public class TestHeroInterface {
         //bs.visitBlackSmith(hero);
         // hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
-        ar.visitArmory(hero);
+        //hero = art.visitArtificiary(hero);
+        //ar.visitArmory(hero);
+        or.visitOracle(hero);
 
         ui.wait(hero, gameView);
 

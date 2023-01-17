@@ -1,13 +1,11 @@
 package view;
 
 import Character.Town.Armory;
+import Character.Town.Artificiary;
 import Game.AssetPath;
 
 import javax.swing.*;
 import Character.*;
-import Character.Town.Armory;
-import Character.Town.Blacksmith;
-import Game.AssetPath;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,7 +19,7 @@ public class artificiary {
     AssetPath ap = new AssetPath();
     JFrame f;
     LabelCreator lc = new LabelCreator();
-    Armory armory = new Armory();
+    Artificiary artifactStore= new Artificiary();
     public Hero visitArtificiary(Hero hero) {
         List<Artifact> artifacts = new ArrayList<>();
         this.hero = hero;
@@ -37,53 +35,53 @@ public class artificiary {
         container.add(heroGold);
         JLabel heroGoldText = lc.createText(hero.getGold() + "", 450, 10, 200, 100);
         container.add(heroGoldText);
-        JLabel blacksmithLabel = lc.createLabelWithoutHover(ap.viking, 40, 20, 75, 75);
-        container.add(blacksmithLabel);
-        JLabel blacksmithText = lc.createText("Welcome to my shop, check out my stock:", 125, 20, 375, 75);
-        container.add(blacksmithText);
-        if (artifacts.isEmpty()) artifacts = ; //TODO: MAKE ARTIFACT STORE
+        JLabel wizardLabel = lc.createLabelWithoutHover(ap.wizard, 40, 20, 75, 75);
+        container.add(wizardLabel);
+        JLabel wizardText = lc.createText("Welcome to my shop, check out my stock:", 125, 20, 375, 75);
+        container.add(wizardText);
+        if (artifacts.isEmpty()) artifacts = artifactStore.getItems(hero); //TODO: MAKE ARTIFACT STORE
         int i = 0;
         for (Artifact artifact : artifacts) {
             JLabel label = lc.createLabel(artifact.getIconPath(), "Buy?", 50, 100 + i * 125, 100, 100);
-            JLabel armorName = lc.createText(artifact.getName(), 175, 105 + i * 125, 250, 35);
+            JLabel artifactName = lc.createText(artifact.getName(), 175, 105 + i * 125, 250, 35);
             JLabel gold = lc.createLabel(ap.Gold, artifact.getValue() + "", 175, 135 + i * 125, 30, 30);
             JLabel goldText = lc.createText(artifact.getValue() + "", 215, 135 + i * 125, 200, 35);
-            JLabel damage = lc.createLabel(ap.damageIcon, artifact.getType() + " " + artifact.getAmplifier(), 175, 170 + i * 125, 30, 30);
-            JLabel damageText = lc.createText(artifact.getType() + " " + artifact.getAmplifier(), 215, 170 + i * 125, 200, 35);
+            JLabel artifactEffect = lc.createLabel(ap.damageIcon, artifact.getType() + " " + artifact.getAmplifier(), 175, 170 + i * 125, 30, 30);
+            JLabel artifactEffectText = lc.createText(artifact.getType() + " " + artifact.getAmplifier(), 215, 170 + i * 125, 200, 35);
             i++;
 
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
-                    if (armory.itemBuyable(hero, artifact)) { //TODO: FIX THIS
+                    if (artifactStore.itemBuyable(hero, artifact)) { //TODO: FIX THIS
                         hero.setGold(hero.getGold() - artifact.getValue());
-                        //armory.removeArmor(artifact);
+                        artifactStore.removeArtifact(artifact);
                         f.dispose();
                         visitArtificiary(hero);
                     }
                 }
             });
 
-            JButton back = new JButton("Exit Armory");
+            JButton back = new JButton("Exit Artificiary");
 
             back.setBounds(100, 710, 150, 35);
             back.addActionListener(e -> {
                 returner = true;
                 f.dispose();
                 try {
-                    visitArmory(hero);
+                    visitArtificiary(hero);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             });
 
             container.add(label);
-            container.add(armorName);
+            container.add(artifactName);
             container.add(gold);
             container.add(goldText);
-            container.add(damage);
-            container.add(damageText);
+            container.add(artifactEffect);
+            container.add(artifactEffectText);
             container.add(back);
         }
         f.setVisible(true);

@@ -9,4 +9,6 @@ public class AssetPath {
     public String viking = "src/Assets/Portraits/viking.png";
     public String damageIcon="src/Assets/Weapons/Swords/damageIcon.png";
     public String wizard = "src/Assets/Portraits/wizard.png";
+    public String oracle = "src/Assets/Portraits/Oracle.png";
+    public String skillpoint = "src/Assets/Other/skillpoint.png";
 }

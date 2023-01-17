@@ -10,7 +10,7 @@ public class WeaponGenerator {
 
     Hero hero;
 
-    // Rank1 weapons = 5, Rank2 weapons = 10, Rank3 weapons = 15
+    // Rank1 artifacts = 5, Rank2 artifacts = 10, Rank3 artifacts = 15
     // Value is equal
 
     String[] swordNames = new String[]{"Sword", "Blade", "Dirk","Axe", "Knife", "Razor","Battle Axe", "Hand Axe", "Rapier", "Edge", "Broadsword", "Knife", "Dagger", "Scimitar", "Longsword", "Shortsword", "Saber", "Cutlass", "Falchion", "Claymore", "Flamberge", "Zweihander", "Mace", "Morning Star", "War Hammer", "Club", "Flail", "Maul", "Spear", "Pike", "Halberd", "Trident", "Lance", "Javelin", "Glaive", "Guisarme", "Quarterstaff", "Bastard Sword", "Scythe", "War Scythe", "Great Sword", "Great Axe", "Great Mace", "Great Hammer"};
