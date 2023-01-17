@@ -58,6 +58,13 @@ public class LabelCreator {
         return label;
     }
 
+    public JLabel createText(String text, int x, int y, int width, int height){
+        JLabel label = new JLabel();
+        label.setBounds(x, y, width, height);
+        label.setText(text);
+        return label;
+    }
+
     private Image getImage(String iconPath) {
         BufferedImage img = null;
         try {

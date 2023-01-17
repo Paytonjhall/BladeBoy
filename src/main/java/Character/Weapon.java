@@ -53,7 +53,7 @@ public class Weapon implements ItemInterface {
             num = random.nextInt(9) + 1;
             iconPath = "src/Assets/Weapons/Daggers/dagger" + num + ".jpg";
         } else if (Objects.equals(type, "Sword")){ //Sword 64
-            num = random.nextInt(44) + 20;
+            num = random.nextInt(43) + 21;
             iconPath = "src/Assets/Weapons/Swords/sword" + num + ".png";
         } else if (Objects.equals(type, "Axe")){ //Axe 20
             num = random.nextInt(19) + 1;

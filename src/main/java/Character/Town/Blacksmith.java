@@ -58,6 +58,32 @@ public class Blacksmith {
 
     }
 
+    public List<Weapon> getItems(Hero hero){
+        if(weapons.isEmpty()){
+            weapons = wg.generateWeapons(hero.getLevel()/5, 5);
+        }
+        return weapons;
+    }
+
+    public boolean itemBuyable(Hero hero, Weapon weapon){
+        if(hero.getGold() >= weapon.getValue()){
+            return true;
+        }
+        return false;
+    }
+
+    public Hero buyItem(Hero hero, Weapon weapon){
+            hero.setGold(hero.getGold() - weapon.getValue());
+            hero.addToBag(weapon);
+            System.out.println("You bought a " + weapon.getName());
+            weapons.remove(weapon);
+        return hero;
+    }
+
+    public void removeWeapon(Weapon weapon){
+        weapons.remove(weapon);
+    }
+
     public boolean isResetAvailable() {
         return resetAvailable;
     }

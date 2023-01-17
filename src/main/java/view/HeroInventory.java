@@ -20,6 +20,7 @@ public class HeroInventory {
     AssetPath ap = new AssetPath();
     JFrame f;
     LabelCreator lc = new LabelCreator();
+
     public static void main(String[] args) {
         OpenInventory();
     }

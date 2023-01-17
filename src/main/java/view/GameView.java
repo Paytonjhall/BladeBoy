@@ -5,6 +5,8 @@ import Game.AssetPath;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -36,19 +38,36 @@ public class GameView {
         JFrame frame = new JFrame("BladeBoy");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-        frame.setSize(1600, 1000);
+        frame.setSize(1300, 800);
+
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                keyInput(e.getKeyChar());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
 
         frame.setLayout(null);
         Container cont = frame.getContentPane();
-        JLabel border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 725, 475, 250);
-         weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 850, 75, 75);
-         armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 850, 75, 75);
-         artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 850, 75, 75);
-         gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 770, 65, 65);
-         inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 850, 75, 75);
+        JLabel border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
+         weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 650, 75, 75);
+         armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 650, 75, 75);
+         artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 650, 75, 75);
+         gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
+         inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 650, 75, 75);
         healthBar = new JProgressBar(0, hero.getMaxHealth());
         healthBar.setValue(hero.getHealth());
-        healthBar.setBounds(35, 775, 300, 25);
+        healthBar.setBounds(35, 575, 300, 25);
         healthBar.setStringPainted(true);
         healthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
         healthBar.setForeground(Color.RED);
@@ -56,7 +75,7 @@ public class GameView {
 
         XPBar = new JProgressBar(0, hero.getNextLevelXp());
         XPBar.setValue(hero.getXp());
-        XPBar.setBounds(35, 815, 300, 25);
+        XPBar.setBounds(35, 615, 300, 25);
         XPBar.setStringPainted(true);
         XPBar.setFont(new Font("MV Boli", Font.BOLD, 20));
         XPBar.setForeground(Color.blue);
@@ -126,4 +145,18 @@ public class GameView {
             e.printStackTrace();
         }
     }
+
+    public void progressChat(){
+
+    }
+
+    public void keyInput(char e) {
+        switch (e) {
+            case 'i' -> openInventory();
+            case ' ' -> progressChat();
+        }
+    }
+
+
+
 }

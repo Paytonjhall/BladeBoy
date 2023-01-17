@@ -58,6 +58,32 @@ public class Armory {
 
   }
 
+  public Hero buyItem(Hero hero, Armor armor){
+    hero.setGold(hero.getGold() - armor.getValue());
+    hero.addToBag(armor);
+    System.out.println("You bought a " + armor.getName());
+    armors.remove(armor);
+    return hero;
+  }
+
+  public boolean itemBuyable(Hero hero, Armor armor){
+    if(hero.getGold() >= armor.getValue()){
+      return true;
+    }
+    return false;
+  }
+
+  public List<Armor> getItems(Hero hero){
+    if(armors.isEmpty()){
+      armors = ag.generateArmor(hero.getLevel()/5, 5);
+    }
+    return armors;
+  }
+
+  public void removeArmor(Armor armor){
+    armors.remove(armor);
+  }
+
   public boolean isResetAvailable() {
     return resetAvailable;
   }

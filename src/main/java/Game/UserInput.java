@@ -95,7 +95,7 @@ public class UserInput {
                 Thread.sleep(500);
                 //hero.addXp(100);
                 //hero.takeDamage(1);
-                hero.addGold(5);
+                //hero.addGold(5);
                 view.update(hero);
             } catch (Exception e) {
 

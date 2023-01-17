@@ -7,7 +7,8 @@ import Game.AssetPath;
 import Game.UserInput;
 import view.GameView;
 import view.HeroInventory;
-
+import view.blacksmith;
+import view.armory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class TestHeroInterface {
     public static void main(String[] args) throws Exception {
         WeaponGenerator wg = new WeaponGenerator();
         ArmorGenerator ag = new ArmorGenerator();
+        blacksmith bs = new blacksmith();
+        armory ar = new armory();
         ArtifactGenerator artg = new ArtifactGenerator();
         AssetPath assetPath = new AssetPath();
         UserInput ui = new UserInput();
@@ -55,8 +58,10 @@ public class TestHeroInterface {
         HeroInventory heroInventory = new HeroInventory();
         //hero.setWeapon(null);
         hero.setHealth(hero.getMaxHealth()/2);
-        hero = gameView.startGameView(hero);
+        //bs.visitBlackSmith(hero);
+        // hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
+        ar.visitArmory(hero);
 
         ui.wait(hero, gameView);
 
