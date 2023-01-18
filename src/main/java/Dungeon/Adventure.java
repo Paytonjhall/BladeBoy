@@ -19,7 +19,7 @@ public class Adventure {
         for(int i = 0; i < fights; i++){
             Enemy enemy = new EnemyGenerator(level).generateEnemy();
             System.out.println("You encounter a " + enemy.getName());
-            combat.fight(hero, enemy);
+            //combat.fight(hero, enemy);
         }
         hero.setDungeonCount(hero.getDungeonCount() + 1);
         return hero;

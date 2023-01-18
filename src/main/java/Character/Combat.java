@@ -8,61 +8,45 @@ import java.util.Random;
 public class Combat {
     int protection = 0;
     Output output = new Output();
-    public Hero fight (Hero hero, Enemy enemy)  {
-        int round = 0;
-        protection = hero.getProtection();
-        UserInput userInput = new UserInput();
-        boolean fight = true;
-        int damage;
-        while (fight) {
-            round++;
-            output.printBlue("Hero Turn: ");
-            userInput.checkUser();
-            System.out.println("Hero attacks " + enemy.name);
-            damage = calculateDamage(hero, enemy);
-            enemy.takeDamage(damage);
-            if (enemy.health > 0) {
-                {
-                    System.out.print(enemy.getName() + " takes ");
-                    output.printRed(damage + "");
-                    System.out.print(" damage. The "+enemy.getName()+ " has ");
-                    output.printGreen(enemy.getHealth() + "");
-                    System.out.println(" health left.\n");
-                }
-            }
-            else {
-                System.out.println("The " + enemy.name + " has been defeated!");
-                fight = false;
-                continue;
-            }
+    Hero hero;
+    Enemy enemy;
+    boolean turn = true; // true = hero, false = enemy
+    public void startFight (Hero hero, Enemy enemy)  {
+        this.hero = hero;
+        this.enemy = enemy;
+        turn = true;
+    }
 
-            output.printRed("Enemies Turn: ");
-            userInput.sleep(1000);
-            System.out.println("Enemy attacks Hero");
-            damage = calculateDamage(enemy, hero);
-            if(!block(hero))hero.takeDamage(damage);
-            else System.out.println("Hero blocked the attack");
-            if (hero.health > 0) {
-                System.out.print("Hero takes ");
-                output.printRed(damage + "");
-                System.out.print(" damage. The Hero has ");
-                output.printGreen(hero.health+"");
-                System.out.println(" health left \n");
-            }
-            else {
-                System.out.println("The Hero has been defeated!");
-                fight = false;
-            }
-        }
-
-        awardItems(hero, enemy);
-        System.out.println("You take a moment to gather your self, after combat:\n");
-        hero.heroOptions();
+    //Normal attack
+    public Hero attack(){
+        enemy.takeDamage(calculateDamage(hero, enemy));
+        hero = checkHealths();
+        turn = false;
+        EnemyTurn();
         return hero;
     }
 
-    private void EnemyTurn(){
 
+    private void EnemyTurn(){
+        if(enemy.getHealth() > 0){
+            hero.takeDamage(calculateDamage(enemy, hero));
+            hero = checkHealths();
+            turn = true;
+        }
+    }
+
+    public Hero checkHealths(){
+        if(enemy.health<=0) {
+            //Monster has died.
+            //Give gold and exp
+            hero = awardItems(hero, enemy);
+            return hero;
+        } else if(hero.health<=0) {
+            //Hero has died
+            //Game over
+            System.exit(100);
+        }
+        return hero;
     }
 
     private int calculateDamage(Hero hero, Enemy enemy){
@@ -133,6 +117,7 @@ public class Combat {
         } else {
                 System.out.println("The " + enemy.name + " dropped no gold.");
             }
+        hero.inCombat = false;
         return hero;
     }
 

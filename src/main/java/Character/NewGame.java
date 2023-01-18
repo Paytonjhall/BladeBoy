@@ -24,7 +24,7 @@ public class NewGame {
                 100, 100, 0, 1, 5, null);
         hero.setUsername(name);
         Combat combat = new Combat();
-        combat.fight(hero, slime);
+        //combat.fight(hero, slime);
         input.sleep(1000);
         System.out.println("Good job, Hero! You defeated your first enemy. It gets harder from here. You have 2 more enemies until you reach camp");
         input.sleep(3000);
@@ -32,7 +32,7 @@ public class NewGame {
         input.sleep(1000);
         System.out.println("You ready your weapon, Round two, fight!");
         Enemy goblin = new Enemy("Goblin", 25, 6, .1, 50, null, 55);
-        combat.fight(hero, goblin);
+        //combat.fight(hero, goblin);
         input.sleep(1000);
         System.out.println("The golbin fell! You have 1 more enemy until you reach camp.");
         input.sleep(3000);
@@ -42,7 +42,7 @@ public class NewGame {
         List<ItemInterface> wolfWeapons= new ArrayList<ItemInterface>();
         wolfWeapons.add(new Weapon("Wolf Fang", 50, "A sharp wolf fang", 6));
         Enemy wolf = new Enemy("Wolf", 15, 8, -.25, 30, wolfWeapons, 15);
-        combat.fight(hero, wolf);
+        //combat.fight(hero, wolf);
         input.sleep(1000);
         System.out.println("You have defeated the wolf! You have made it to camp!");
         input.sleep(3000);

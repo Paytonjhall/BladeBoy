@@ -90,7 +90,6 @@ public class oracle {
       }
     }
 
-
     container.add(oracle);
     container.add(heroSkillpointsText);
     container.add(heroSkillpoints);

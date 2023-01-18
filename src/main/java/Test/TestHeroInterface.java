@@ -63,11 +63,12 @@ public class TestHeroInterface {
         //hero.setWeapon(null);
         hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
-        //hero = gameView.startGameView(hero);
+        hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
         //hero = art.visitArtificiary(hero);
         //ar.visitArmory(hero);
-        or.visitOracle(hero);
+        //or.visitOracle(hero);
+        gameView.startCombat();
 
         ui.wait(hero, gameView);
 

@@ -23,6 +23,7 @@ public class Hero {
     // public int skillPoints=0;
     int dungeonCount = 0;
     String username = " ";
+    public boolean inCombat = false;
 
     public List<SkillPoints> skillPoints = new ArrayList<>();
     List<Mystic> mystics = new ArrayList<>();

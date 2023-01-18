@@ -9,6 +9,11 @@ public class AssetPath {
     public String viking = "src/Assets/Portraits/viking.png";
     public String damageIcon="src/Assets/Weapons/Swords/damageIcon.png";
     public String wizard = "src/Assets/Portraits/wizard.png";
+    public String hero = "src/Assets/Portraits/hero.png";
     public String oracle = "src/Assets/Portraits/Oracle.png";
     public String skillpoint = "src/Assets/Other/skillpoint.png";
+    public String forest = "src/Assets/Dungeon/forest.png";
+    public String jungle = "src/Assets/Dungeon/jungle.png";
+    public String beach = "src/Assets/Dungeon/beach.png";
+    public String swamp = "src/Assets/Dungeon/swamp.png";
 }

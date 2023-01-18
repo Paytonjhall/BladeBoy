@@ -77,6 +77,16 @@ public class LabelCreator {
         return label;
     }
 
+    public JPanel createPanel(String path, int x, int y, int width, int height){
+        JPanel panel = new JPanel();
+        panel.setBounds(x, y, width, height);
+        Image dimg = getImage(path).getScaledInstance(panel.getWidth(), panel.getHeight(),
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        panel.add(new JLabel(imageIcon));
+        return panel;
+    }
+
     public String getMysticIconPath(Mystic mystic){
         switch (mystic.getBuff()) {
             case "Strength":
