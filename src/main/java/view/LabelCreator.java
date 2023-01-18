@@ -65,6 +65,36 @@ public class LabelCreator {
         return label;
     }
 
+    public JLabel createMystic(Mystic mystic, int x, int y, int width, int height){
+        JLabel label = new JLabel();
+        label.setBounds(x, y, width, height);
+        Image dimg = getImage(getMysticIconPath(mystic)).getScaledInstance(label.getWidth(), label.getHeight(),
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        label.setIcon(imageIcon);
+        Dimension size = label.getPreferredSize(); //Gets the size of the image
+        label.setToolTipText(mystic.getBuff()); //Sets the tooltip text
+        return label;
+    }
+
+    public String getMysticIconPath(Mystic mystic){
+        switch (mystic.getBuff()) {
+            case "Strength":
+                return "src/Assets/Mystics/strength.png";
+            case "Health":
+                return "src/Assets/Mystics/health.png";
+            case "Vamperism":
+                return "src/Assets/Mystics/vamperism.png";
+            case "Critical":
+                return "src/Assets/Mystics/critical.png";
+            case "Block":
+                return "src/Assets/Mystics/block.png";
+            case "Crush":
+                return "src/Assets/Mystics/crush.png";
+        }
+        return "src/Assets/Mystics/health.png";
+    }
+
     private Image getImage(String iconPath) {
         BufferedImage img = null;
         try {

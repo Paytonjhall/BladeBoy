@@ -39,7 +39,7 @@ public class TestHeroInterface {
 
 
 
-
+        hero.addXp(30000);
             Potion potion = new Potion("Heal Potion", 40, 100);
             potion.setIconPath(assetPath.healthPotion);
             Potion potion2 = new Potion("Power Potion", 40, 100);
@@ -63,7 +63,7 @@ public class TestHeroInterface {
         //hero.setWeapon(null);
         hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
-        // hero = gameView.startGameView(hero);
+        //hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
         //hero = art.visitArtificiary(hero);
         //ar.visitArmory(hero);

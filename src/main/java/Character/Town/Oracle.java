@@ -69,4 +69,21 @@ public class Oracle {
             System.out.println("Invalid input");
         }
     }
+
+    public List<Mystic> getMystics(int level) {
+        List<Mystic> mystics = new ArrayList<Mystic>();
+        Mystic mystic1 = new Mystic(level);
+        Mystic mystic2 = new Mystic(level);
+        Mystic mystic3 = new Mystic(level);
+        mystics.add(mystic1);
+        mystics.add(mystic2);
+        mystics.add(mystic3);
+        int count = 1;
+        for(Mystic mystic: mystics){
+            mystic.createMystic();
+            System.out.println("[" + count + "]: " + mystic.toString());
+            count++;
+        }
+        return mystics;
+    }
 }

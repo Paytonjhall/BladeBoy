@@ -590,4 +590,20 @@ public class Hero {
         }
         return count;
     }
+
+    public List<SkillPoints> getUnusedSkillPointsList(){
+        List<SkillPoints> skillPointsList = new ArrayList<>();
+        for(int i = 0; i < skillPoints.size(); i++){
+            if(!skillPoints.get(i).isUsed()) skillPointsList.add(skillPoints.get(i));
+        }
+        return skillPointsList;
+    }
+
+    public void useSkillPoint(int level){
+        for(int i = 0; i < skillPoints.size(); i++){
+            if(skillPoints.get(i).getLevel() == level){
+                skillPoints.get(i).setUsed(true);
+            }
+        }
+    }
 }
