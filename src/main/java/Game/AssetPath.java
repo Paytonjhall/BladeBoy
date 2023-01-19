@@ -16,4 +16,5 @@ public class AssetPath {
     public String jungle = "src/Assets/Dungeon/jungle.png";
     public String beach = "src/Assets/Dungeon/beach.png";
     public String swamp = "src/Assets/Dungeon/swamp.png";
+    public String baseTile = "src/Assets/Dungeon/Tiles/base.png";
 }

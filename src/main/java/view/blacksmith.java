@@ -4,6 +4,7 @@ import javax.swing.*;
 import Character.*;
 import Character.Town.Blacksmith;
 import Game.AssetPath;
+import Game.Sound;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,6 +22,7 @@ public class blacksmith {
     JFrame f;
     LabelCreator lc = new LabelCreator();
     Blacksmith blacksmith = new Blacksmith();
+    Sound sound = new Sound();
     public blacksmith() {
     }
 
@@ -59,6 +61,7 @@ public class blacksmith {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     if(blacksmith.itemBuyable(hero, weapon)){
+                        sound.buySound();
                         hero.setGold(hero.getGold() - weapon.getValue());
                         blacksmith.removeWeapon(weapon);
                         f.dispose();

@@ -4,6 +4,7 @@ import Character.*;
 import Character.Town.Armory;
 import Character.Town.Blacksmith;
 import Game.AssetPath;
+import Game.Sound;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -17,6 +18,7 @@ public class armory {
     JFrame f;
     LabelCreator lc = new LabelCreator();
     Armory armory = new Armory();
+    Sound sound = new Sound();
     public armory() {
     }
 
@@ -55,6 +57,7 @@ public class armory {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     if (armory.itemBuyable(hero, armor)) {
+                        sound.buySound();
                         hero.setGold(hero.getGold() - armor.getValue());
                         armory.removeArmor(armor);
                         f.dispose();

@@ -3,6 +3,7 @@ package view;
 import Character.*;
 import Dungeon.EnemyGenerator;
 import Game.AssetPath;
+import Game.Sound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Optional;
 
 public class GameView {
     Hero hero;
@@ -39,12 +41,15 @@ public class GameView {
     Boolean inventoryOpen = false;
     Boolean inCombat = false;
     Enemy enemy;
-
+    DungeonTile[][] dungeon;
+    JLabel dungeonHero;
+    Sound sound = new Sound();
 
     public GameView() {
     }
 
     public Hero startGameView(Hero hero){
+
         this.hero = hero;
         frame = new JFrame("BladeBoy");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,7 +59,6 @@ public class GameView {
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
@@ -64,7 +68,6 @@ public class GameView {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         });
 
@@ -153,6 +156,9 @@ public class GameView {
             gold.setText(hero.getGold()+"");
             gold.setToolTipText(hero.getGold()+"");
         }
+        if(heroIcon != null){
+            heroIcon.setToolTipText("Level: " + hero.getLevel());
+        }
 
         inCombat = hero.inCombat;
 
@@ -175,6 +181,15 @@ public class GameView {
             if(enemyIcon!=null)enemyIcon.setVisible(false);
         }
 
+        //System.out.println("Hero in combat: " + hero.inCombat + ", Hero in dungeon: " + hero.inDungeon);
+        //System.out.print("Hero x: " + hero.x + ", Hero y: " + hero.y);
+        if(hero.inDungeon){
+            //cont.remove(dungeonHero);
+            //dungeonHero = labelCreator.createLabel(ap.hero, "Hero", hero.x*100, hero.y*100, 100, 100);
+            dungeonHero.setBounds(hero.x*100, hero.y*100, 100, 100);
+            //cont.add(dungeonHero);
+        }
+
 
         frame.invalidate();
         frame.validate();
@@ -184,6 +199,7 @@ public class GameView {
     public void openInventory()  {
         HeroInventory heroInventory = new HeroInventory();
         try {
+            sound.openBagSound();
             update(heroInventory.openInventory(hero));
             inventoryOpen = true;
 
@@ -199,7 +215,19 @@ public class GameView {
     public void keyInput(char e) {
         switch (e) {
             case 'i' -> openInventory();
-            case ' ' -> progressChat();
+            case 'w' -> {
+                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y -1);
+            }
+            case 'a' -> {
+                if(hero.inDungeon&& !hero.inCombat)checkMove(hero.x -1, hero.y);
+            }
+            case 's' -> {
+                if(hero.inDungeon&& !hero.inCombat)checkMove(hero.x, hero.y +1);
+            }
+            case 'd' -> {
+                if(hero.inDungeon)checkMove(hero.x +1, hero.y);
+            }
+
         }
     }
 
@@ -248,8 +276,41 @@ public class GameView {
         cont.add(enemyBorder);
 
         update(hero);
-
     }
+
+    public void loadDungeon(){
+        DungeonFloorCreator dungeonFloorCreator = new DungeonFloorCreator();
+        dungeon = dungeonFloorCreator.createFloor(15,7);
+        DungeonTile entrance = dungeonFloorCreator.findEntrance(dungeon);
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 7; j++){
+                if(dungeon[i][j] == entrance){
+                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero",  dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                    hero.x = i;
+                    hero.y = j;
+                    cont.add(dungeonHero);
+                }
+                cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                if(i!=0 && i != 14 && j!=0 && j!=6)cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+            }
+        }
+        hero.inDungeon = true;
+    }
+
+//    public void loadDungeon(DungeonTile[][] floor){
+//
+//    }
+
+    public void checkMove(int x, int y){
+        if(hero.inDungeon){
+            if(dungeon[x][y].isWalkable){
+                hero.x = x;
+                hero.y = y;
+                update(hero);
+            }
+        }
+    }
+
 
 
 

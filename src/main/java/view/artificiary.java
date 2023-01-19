@@ -6,6 +6,7 @@ import Game.AssetPath;
 
 import javax.swing.*;
 import Character.*;
+import Game.Sound;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -20,6 +21,7 @@ public class artificiary {
     JFrame f;
     LabelCreator lc = new LabelCreator();
     Artificiary artifactStore= new Artificiary();
+    Sound sound = new Sound();
     public Hero visitArtificiary(Hero hero) {
         List<Artifact> artifacts = new ArrayList<>();
         this.hero = hero;
@@ -55,6 +57,7 @@ public class artificiary {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     if (artifactStore.itemBuyable(hero, artifact)) { //TODO: FIX THIS
+                        sound.buySound();
                         hero.setGold(hero.getGold() - artifact.getValue());
                         artifactStore.removeArtifact(artifact);
                         f.dispose();

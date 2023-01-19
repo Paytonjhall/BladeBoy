@@ -1,15 +1,18 @@
 package Character;
 
 import Game.Output;
+import Game.Sound;
 import Game.UserInput;
 
 import java.util.Random;
 
 public class Combat {
+    UserInput userInput = new UserInput();
     int protection = 0;
     Output output = new Output();
     Hero hero;
     Enemy enemy;
+    Sound sound = new Sound();
     boolean turn = true; // true = hero, false = enemy
     public void startFight (Hero hero, Enemy enemy)  {
         this.hero = hero;
@@ -20,6 +23,7 @@ public class Combat {
     //Normal attack
     public Hero attack(){
         enemy.takeDamage(calculateDamage(hero, enemy));
+        sound.swordHitSound();
         hero = checkHealths();
         turn = false;
         EnemyTurn();
@@ -39,6 +43,7 @@ public class Combat {
         if(enemy.health<=0) {
             //Monster has died.
             //Give gold and exp
+            sound.victorySound();
             hero = awardItems(hero, enemy);
             return hero;
         } else if(hero.health<=0) {

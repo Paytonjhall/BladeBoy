@@ -14,5 +14,10 @@ public class PanelCreator {
         return panel;
     }
 
+    public JPanel getDungeonPanel() {
+        panel = labelCreator.createPanel(ap.forest,0, 0, 1300, 500);
+        return panel;
+    }
+
 
 }

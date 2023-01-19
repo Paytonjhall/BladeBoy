@@ -1,6 +1,7 @@
 package Character;
 import Game.HeroSaveAdapter;
 import Game.Output;
+import Game.Sound;
 import Game.UserInput;
 import view.GameView;
 
@@ -22,8 +23,11 @@ public class Hero {
     int gold;
     // public int skillPoints=0;
     int dungeonCount = 0;
+    public boolean inDungeon = false;
     String username = " ";
     public boolean inCombat = false;
+    public int x = 0;
+    public int y = 0;
 
     public List<SkillPoints> skillPoints = new ArrayList<>();
     List<Mystic> mystics = new ArrayList<>();
@@ -31,6 +35,7 @@ public class Hero {
     UserInput input = new UserInput();
 
     Output output = new Output();
+    Sound sound = new Sound();
     public boolean wait = false;
 
     public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
@@ -133,6 +138,7 @@ public class Hero {
     }
 
     public void addGold(int gold){
+        sound.gainMoneySound();
         this.gold += gold;
     }
 
@@ -156,6 +162,7 @@ public class Hero {
     }
 
     public void levelUp(){
+        sound.levelUpSound();
         skillPoints.add(new SkillPoints(level, false));
         level++;
         nextLevelXp = (int) (nextLevelXp * 1.25);
@@ -178,6 +185,7 @@ public class Hero {
     }
 
     public void equipWeapon(Weapon weapon){
+        sound.equipItemSound();
         if (this.weapon != null){
             addToBag(this.weapon);
         }
@@ -186,6 +194,7 @@ public class Hero {
     }
 
     public void equipArtifact(Artifact artifact){
+        sound.equipItemSound();
         if (this.artifact != null){
             addToBag(this.artifact);
         }
@@ -194,6 +203,7 @@ public class Hero {
     }
 
     public void equipArmor(Armor armor){
+        sound.equipItemSound();
         if (this.armor != null){
             maxHealth -= this.armor.getHealthIncrease();
             addToBag(this.armor);
@@ -204,6 +214,7 @@ public class Hero {
     }
 
     public void heroDeath(){
+        sound.deathSound();
         System.out.println("You have died");
         input.sleep(1000);
         System.out.println("Game Over");
@@ -243,6 +254,7 @@ public class Hero {
             case "Double Tap Potion" -> System.out.println("Need to add double tap potion");
             case "Scavenge Potion" -> System.out.println("Need to add scavenge");
         }
+        sound.drinkSound();
         potionBag.removePotion(potion);
 
     }

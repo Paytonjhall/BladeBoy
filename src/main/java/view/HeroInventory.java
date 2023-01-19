@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import Character.*;
 import Game.AssetPath;
+import Game.Sound;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -20,6 +21,7 @@ public class HeroInventory {
     AssetPath ap = new AssetPath();
     JFrame f;
     LabelCreator lc = new LabelCreator();
+    Sound sound = new Sound();
 
     public static void main(String[] args) {
         OpenInventory();
@@ -216,6 +218,7 @@ public class HeroInventory {
 
         back.setBounds(50, 550, 150, 35);
         back.addActionListener(e -> {
+            sound.closeBagSound();
             returner = true;
             f.dispose();
             try {
