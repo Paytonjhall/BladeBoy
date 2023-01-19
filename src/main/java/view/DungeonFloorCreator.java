@@ -13,12 +13,14 @@ public class DungeonFloorCreator {
             for(int j = 0; j < height; j++){
                 floor[i][j] = new DungeonTile();
                 if(i == 0 || j == 0 || i == width - 1 || j == height - 1){
-                    if(i==0||i==width)floor[i][j].setVertEdge();
+                    if(i==0||i==width-1)
+                        floor[i][j].setVertEdge();
                     else floor[i][j].setHorEdge();
                     floor[i][j].setXandY(i, j);
-                } else if(i == 1  && j == entranceHeight){
+                } else if(i == 1 && j == entranceHeight){
                     floor[i][j].setEntrance();
                     floor[i][j].setXandY(i, j);
+                    floor[i][j].isWalkable = true;
                 } else if (i == width - 2 && j == exitHeight){
                     floor[i][j].setExit();
                     floor[i][j].setXandY(i, j);

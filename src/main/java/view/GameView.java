@@ -303,11 +303,12 @@ public class GameView {
 
     public void checkMove(int x, int y){
         if(hero.inDungeon){
-            if(dungeon[x][y].isWalkable){
+            if(dungeon[x][y]!= null && dungeon[x][y].isWalkable){
                 hero.x = x;
                 hero.y = y;
                 update(hero);
             }
+            else System.out.println("Can't move there, x:d" + x + " y:" + y);
         }
     }
 
