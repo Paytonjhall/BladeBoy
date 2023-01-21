@@ -23,8 +23,9 @@ public class Hero {
     int gold;
     // public int skillPoints=0;
     int dungeonCount = 0;
-    public boolean inDungeon = false;
     String username = " ";
+    public boolean inDungeon = false;
+    public boolean finishedCombat = false;
     public boolean inCombat = false;
     public int x = 0;
     public int y = 0;

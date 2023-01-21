@@ -25,6 +25,7 @@ public class Combat {
         enemy.takeDamage(calculateDamage(hero, enemy));
         sound.swordHitSound();
         hero = checkHealths();
+        if(hero.finishedCombat) return hero;
         turn = false;
         EnemyTurn();
         return hero;
@@ -123,6 +124,7 @@ public class Combat {
                 System.out.println("The " + enemy.name + " dropped no gold.");
             }
         hero.inCombat = false;
+        hero.finishedCombat = true;
         return hero;
     }
 

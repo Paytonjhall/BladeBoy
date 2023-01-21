@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Optional;
+import java.util.Random;
 
 public class GameView {
     Hero hero;
@@ -39,12 +39,14 @@ public class GameView {
     JLabel enemyBorder;
     JProgressBar enemyHealthBar;
     Boolean inventoryOpen = false;
-    Boolean inCombat = false;
     Enemy enemy;
     DungeonTile[][] dungeon;
     JLabel dungeonHero;
     Sound sound = new Sound();
-
+    Container dungeonContainer;
+    Container combatContainer;
+    DungeonTile exit;
+    DungeonFloorCreator dungeonFloorCreator;
     public GameView() {
     }
 
@@ -55,7 +57,6 @@ public class GameView {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         frame.setSize(1300, 800);
-
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -70,55 +71,8 @@ public class GameView {
             public void keyReleased(KeyEvent e) {
             }
         });
-
+        loadInventory();
         frame.setLayout(null);
-        cont = frame.getContentPane();
-
-
-
-         border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
-         weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 650, 75, 75);
-         armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 650, 75, 75);
-         artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 650, 75, 75);
-         heroIcon = labelCreator.createLabel(ap.hero, "Level: " + hero.getLevel(), 35, 570, 75, 75);
-         //gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
-         inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 650, 75, 75);
-        healthBar = new JProgressBar(0, hero.getMaxHealth());
-        healthBar.setValue(hero.getHealth());
-        healthBar.setBounds(135, 575, 300, 25);
-        healthBar.setStringPainted(true);
-        healthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
-        healthBar.setForeground(Color.RED);
-        healthBar.setString("Health: " + hero.getHealth() + "/" + hero.getMaxHealth());
-
-        XPBar = new JProgressBar(0, hero.getNextLevelXp());
-        XPBar.setValue(hero.getXp());
-        XPBar.setBounds(135, 615, 300, 25);
-        XPBar.setStringPainted(true);
-        XPBar.setFont(new Font("MV Boli", Font.BOLD, 20));
-        XPBar.setForeground(Color.blue);
-        XPBar.setString("XP: " + hero.getXp() + "/" + hero.getNextLevelXp());
-
-
-        inventory.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                openInventory();
-
-            }
-        });
-
-        cont.add(weapon);
-        cont.add(armor);
-        cont.add(artifact);
-        cont.add(healthBar);
-        cont.add(XPBar);
-        //cont.add(gold);
-        cont.add(heroIcon);
-        cont.add(inventory);
-        cont.add(border);
-
         frame.setVisible(true);
         return hero;
     }
@@ -160,34 +114,18 @@ public class GameView {
             heroIcon.setToolTipText("Level: " + hero.getLevel());
         }
 
-        inCombat = hero.inCombat;
-
-        if(inCombat){
-            if(enemy != null){
-                enemyHealthBar.setValue(enemy.getHealth());
-                if(attack!=null)attack.setVisible(true);
-                if(run!=null)run.setVisible(true);
-                if(items!=null)items.setVisible(true);
-                if(skills!=null)skills.setVisible(true);
-                if(enemyHealthBar!=null)enemyHealthBar.setVisible(true);
-                if(enemyIcon!=null)enemyIcon.setVisible(true);
-            }
-        } else {
-            if(attack!=null)attack.setVisible(false);
-            if(run!=null)run.setVisible(false);
-            if(items!=null)items.setVisible(false);
-            if(skills!=null)skills.setVisible(false);
-            if(enemyHealthBar!=null)enemyHealthBar.setVisible(false);
-            if(enemyIcon!=null)enemyIcon.setVisible(false);
+        if(hero.finishedCombat){
+            endCombat();
+            hero.finishedCombat = false;
+            hero.inCombat = false;
         }
 
-        //System.out.println("Hero in combat: " + hero.inCombat + ", Hero in dungeon: " + hero.inDungeon);
-        //System.out.print("Hero x: " + hero.x + ", Hero y: " + hero.y);
+        if(hero.inCombat){
+            updateEnemy();
+        }
+
         if(hero.inDungeon){
-            //cont.remove(dungeonHero);
-            //dungeonHero = labelCreator.createLabel(ap.hero, "Hero", hero.x*100, hero.y*100, 100, 100);
             dungeonHero.setBounds(hero.x*100, hero.y*100, 100, 100);
-            //cont.add(dungeonHero);
         }
 
 
@@ -208,10 +146,6 @@ public class GameView {
         }
     }
 
-    public void progressChat(){
-
-    }
-
     public void keyInput(char e) {
         switch (e) {
             case 'i' -> openInventory();
@@ -219,101 +153,208 @@ public class GameView {
                 if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y -1);
             }
             case 'a' -> {
-                if(hero.inDungeon&& !hero.inCombat)checkMove(hero.x -1, hero.y);
+                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x -1, hero.y);
             }
             case 's' -> {
-                if(hero.inDungeon&& !hero.inCombat)checkMove(hero.x, hero.y +1);
+                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y +1);
             }
             case 'd' -> {
-                if(hero.inDungeon)checkMove(hero.x +1, hero.y);
+                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x +1, hero.y);
             }
-
+            case 'g' -> {
+                if(exit != null && hero.x == exit.x/100 && hero.y == exit.y/100){
+                    loadInventory();
+                    loadDungeon();
+                }
+            }
         }
     }
 
 
     public void startCombat(){
-        inCombat = true;
-        hero.inCombat = true;
-        panel = pc.getCombatPanel();
+        //panel = pc.getCombatPanel();
         combat = new Combat();
         EnemyGenerator enemyGenerator = new EnemyGenerator(hero.getLevel());
         enemy = enemyGenerator.generateEnemy();
         combat.startFight(hero, enemy);
+        loadEnemy();
         //Populate buttons.
+        update(hero);
+    }
+
+    public void updateEnemy(){
+        if(enemyHealthBar!=null) {
+            enemyHealthBar.setValue(enemy.getHealth());
+            enemyHealthBar.setString("Health: " + enemy.getHealth() + "/" + enemy.getMaxHealth());
+            enemyHealthBar.setMaximum(enemy.getMaxHealth());
+        }
+    }
+
+    public void endCombat(){
+        cont.remove(enemyHealthBar);
+        cont.remove(enemyIcon);
+        if(attack!=null)attack.setVisible(false);
+        if(run!=null)run.setVisible(false);
+        if(items!=null)items.setVisible(false);
+        if(skills!=null)skills.setVisible(false);
+        if(enemyHealthBar!=null)enemyHealthBar.setVisible(false);
+        if(enemyIcon!=null)enemyIcon.setVisible(false);
+    }
+
+    public void loadEnemy(){
+        //combatContainer = frame.getContentPane();
+        cont = frame.getContentPane();
+        enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
+        if(enemy != null && hero.inCombat) {
+            attack = new JButton("Attack");
+            attack.setBounds(500, 600, 100, 30);
+            attack.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    if(hero.inCombat)hero = combat.attack();
+                    update(hero);
+                }
+            });
+            skills = new JButton("Skills");
+            skills.setBounds(500, 660, 100, 30);
+            items = new JButton("Item");
+            items.setBounds(650, 660, 100, 30);
+            run = new JButton("Run");
+            run.setBounds(650, 600, 100, 30);
+            enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
+            enemyIcon = labelCreator.createLabel("src/Assets/Portraits/Icons_24.png",enemy.getName() + "", 1135, 565, 75, 75);
+            enemyHealthBar = new JProgressBar(0, enemy.getHealth());
+            enemyHealthBar.setValue(enemy.getMaxHealth());
+            enemyHealthBar.setBounds(825, 575, 300, 25);
+
+            enemyHealthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
+            enemyHealthBar.setForeground(Color.RED);
+            attack.setVisible(true);
+            cont.add(enemyIcon);
+            //cont.add(panel);
+            cont.add(enemyHealthBar);
+            cont.add(enemyBorder);
+
+        }
+    }
+
+    public void loadInventory(){
+        cont = frame.getContentPane();
+        border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
+        weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 650, 75, 75);
+        armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 650, 75, 75);
+        artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 650, 75, 75);
+        heroIcon = labelCreator.createLabel(ap.hero, "Level: " + hero.getLevel(), 35, 570, 75, 75);
+        //gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
+        inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 650, 75, 75);
+        healthBar = new JProgressBar(0, hero.getMaxHealth());
+        healthBar.setValue(hero.getHealth());
+        healthBar.setBounds(135, 575, 300, 25);
+        healthBar.setStringPainted(true);
+        healthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
+        healthBar.setForeground(Color.RED);
+        healthBar.setString("Health: " + hero.getHealth() + "/" + hero.getMaxHealth());
+
+        XPBar = new JProgressBar(0, hero.getNextLevelXp());
+        XPBar.setValue(hero.getXp());
+        XPBar.setBounds(135, 615, 300, 25);
+        XPBar.setStringPainted(true);
+        XPBar.setFont(new Font("MV Boli", Font.BOLD, 20));
+        XPBar.setForeground(Color.blue);
+        XPBar.setString("XP: " + hero.getXp() + "/" + hero.getNextLevelXp());
+
+
         attack = new JButton("Attack");
         attack.setBounds(500, 600, 100, 30);
-        attack.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+        attack.addActionListener( e -> {
+            if(hero.inCombat) {
                 hero = combat.attack();
                 update(hero);
             }
-        });
+                });
+
         skills = new JButton("Skills");
         skills.setBounds(500, 660, 100, 30);
         items = new JButton("Item");
         items.setBounds(650, 660, 100, 30);
         run = new JButton("Run");
         run.setBounds(650, 600, 100, 30);
-        enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
-        enemyIcon = labelCreator.createLabel("src/Assets/Portraits/Icons_24.png",enemy.getName() + "", 1135, 565, 75, 75);
-        enemyHealthBar = new JProgressBar(0, enemy.getHealth());
-        enemyHealthBar.setValue(enemy.getHealth());
-        enemyHealthBar.setBounds(825, 575, 300, 25);
 
-        enemyHealthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
-        enemyHealthBar.setForeground(Color.RED);
+        inventory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                openInventory();
 
-        cont.add(enemyIcon);
-        cont.add(attack);
-        cont.add(skills);
-        cont.add(items);
-        cont.add(run);
-        cont.add(panel);
-        cont.add(enemyHealthBar);
-        cont.add(enemyBorder);
+            }
+        });
 
-        update(hero);
+//        cont.add(attack);
+//        cont.add(skills);
+//        cont.add(items);
+//        cont.add(run);
+        cont.add(weapon);
+        cont.add(armor);
+        cont.add(artifact);
+        cont.add(healthBar);
+        cont.add(XPBar);
+        //cont.add(gold);
+        cont.add(heroIcon);
+        cont.add(inventory);
+        cont.add(border);
     }
 
     public void loadDungeon(){
-        DungeonFloorCreator dungeonFloorCreator = new DungeonFloorCreator();
-        dungeon = dungeonFloorCreator.createFloor(15,7);
+        dungeonContainer = frame.getContentPane();
+        dungeonFloorCreator = new DungeonFloorCreator();
+        dungeon = dungeonFloorCreator.createFloor();
         DungeonTile entrance = dungeonFloorCreator.findEntrance(dungeon);
-        for(int i = 0; i < 15; i++){
-            for(int j = 0; j < 7; j++){
+        exit = dungeonFloorCreator.findExit(dungeon);
+        for(int i = 0; i < dungeonFloorCreator.width; i++){
+            for(int j = 0; j < dungeonFloorCreator.height; j++){
                 if(dungeon[i][j] == entrance){
                     dungeonHero = labelCreator.createLabel(ap.hero, "Hero",  dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     hero.x = i;
                     hero.y = j;
-                    cont.add(dungeonHero);
+                    dungeonContainer.add(dungeonHero);
+                    dungeonContainer.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                 }
-                cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
-                if(i!=0 && i != 14 && j!=0 && j!=6)cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                else if(dungeon[i][j].hasChest) dungeonContainer.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/chest.png", dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                else if(dungeon[i][j].hasEnemy) dungeonContainer.add(labelCreator.createLabelWithoutHover(ap.enemyTile, dungeon[i][j].x+15, dungeon[i][j].y+15, 70, 70));
+                else dungeonContainer.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                if(dungeon[i][j] == entrance || dungeon[i][j]== exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy) dungeonContainer.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                if(j==dungeonFloorCreator.height-1) dungeonContainer.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/horizontalEdge.png", dungeon[i][j].x, dungeon[i][j].y + 100, 100, 100));
             }
         }
         hero.inDungeon = true;
     }
 
-//    public void loadDungeon(DungeonTile[][] floor){
-//
-//    }
-
     public void checkMove(int x, int y){
         if(hero.inDungeon){
-            if(dungeon[x][y]!= null && dungeon[x][y].isWalkable){
+            if(x<dungeonFloorCreator.width && y<dungeonFloorCreator.height && x > -1 && y > -1 && dungeon[x][y]!= null && dungeon[x][y].isWalkable){
                 hero.x = x;
                 hero.y = y;
+                if(dungeon[x][y].hasEnemy){
+                    startCombat();
+                    hero.inCombat = true;
+                    dungeon[x][y].hasEnemy = false;
+                    //hero.inCombat = false;
+                }
+                //makeRandomTileBlackTest();
                 update(hero);
             }
             else System.out.println("Can't move there, x:d" + x + " y:" + y);
         }
     }
 
-
-
-
-
+//    public void makeRandomTileBlackTest(){
+//        Random rand = new Random();
+//        int x = rand.nextInt(dungeonFloorCreator.width);
+//        int y = rand.nextInt(dungeonFloorCreator.height);
+//        JLabel label = labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/blackTile.png", dungeon[x][y].x, dungeon[x][y].y, 100, 100);
+//        label.setComponentZOrder(frame, 0);
+//        dungeonContainer.add(label);
+//
+//    }
 }

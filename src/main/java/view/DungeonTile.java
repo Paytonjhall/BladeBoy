@@ -6,7 +6,7 @@ public class DungeonTile {
     boolean isEdge = false;
     boolean isWall = false;
     boolean hasEnemy = false;
-    boolean hasItem = false;
+    boolean hasChest = false;
     boolean isExit = false;
     boolean isEntrance = false;
     boolean isVisited = false;
@@ -14,6 +14,7 @@ public class DungeonTile {
     boolean isPath = false;
     boolean hasPlayer = false;
     boolean isWalkable = true;
+    boolean hasTorch = false;
     String icon;
     int x;
     int y;
@@ -21,7 +22,7 @@ public class DungeonTile {
     public void setEntrance() {
         isEntrance = true;
         isWalkable = true;
-        isVisited = true;
+        isVisited = false;
         icon = "src/Assets/Dungeon/Tiles/entrance.png";
     }
 
@@ -60,7 +61,7 @@ public class DungeonTile {
     }
 
     public void setXandY(int x, int y){
-        this.x = (x-1)*100;
-        this.y = (y-1)*100;
+        this.x = (x)*100;
+        this.y = (y)*100;
     }
 }

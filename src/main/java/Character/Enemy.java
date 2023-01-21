@@ -93,6 +93,14 @@ public class Enemy {
         this.xp=xp;
     }
 
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth=maxHealth;
+    }
+
     public String toString(){
         String string = "Name: " + name + "\nHealth: " + health + "\nDamage: " + damage + "\nArmor Rating: " + armorRating + "\nXP: " + xp + "\nGold: " + gold;
         if(drops != null){
