@@ -7,11 +7,7 @@ import Game.Sound;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Random;
+import java.awt.event.*;
 
 public class GameView {
     Hero hero;
@@ -19,6 +15,7 @@ public class GameView {
     AssetPath ap = new AssetPath();
     PanelCreator pc = new PanelCreator();
     Container cont;
+    //Container cont;
     JPanel panel = new JPanel();
     JFrame frame;
     Combat combat;
@@ -41,10 +38,10 @@ public class GameView {
     Boolean inventoryOpen = false;
     Enemy enemy;
     DungeonTile[][] dungeon;
+    JLabel[][] dungeonLabels;
     JLabel dungeonHero;
     Sound sound = new Sound();
-    Container dungeonContainer;
-    Container combatContainer;
+
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
     public GameView() {
@@ -57,26 +54,26 @@ public class GameView {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         frame.setSize(1300, 800);
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                keyInput(e.getKeyChar());
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });
+//        frame.addKeyListener(new KeyListener() {
+//            @Override
+//            public void keyTyped(KeyEvent e) {
+//            }
+//
+//            @Override
+//            public void keyPressed(KeyEvent e) {
+//                keyInput(e.getKeyChar());
+//            }
+//
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//            }
+//        });
         loadInventory();
+        loadKeyBindings();
         frame.setLayout(null);
         frame.setVisible(true);
         return hero;
     }
-
 
     public void update(Hero hero){
         this.hero = hero;
@@ -112,6 +109,10 @@ public class GameView {
         }
         if(heroIcon != null){
             heroIcon.setToolTipText("Level: " + hero.getLevel());
+        }
+
+        if(enemyHealthBar != null && enemyHealthBar.getValue() == 0){
+            cont.remove(enemyHealthBar);
         }
 
         if(hero.finishedCombat){
@@ -173,6 +174,7 @@ public class GameView {
 
     public void startCombat(){
         //panel = pc.getCombatPanel();
+        hero.inCombat = true;
         combat = new Combat();
         EnemyGenerator enemyGenerator = new EnemyGenerator(hero.getLevel());
         enemy = enemyGenerator.generateEnemy();
@@ -193,7 +195,10 @@ public class GameView {
     public void endCombat(){
         cont.remove(enemyHealthBar);
         cont.remove(enemyIcon);
-        if(attack!=null)attack.setVisible(false);
+        if(attack!=null){
+            attack.setVisible(false);
+            attack.removeMouseListener(attack.getMouseListeners()[0]);
+        }
         if(run!=null)run.setVisible(false);
         if(items!=null)items.setVisible(false);
         if(skills!=null)skills.setVisible(false);
@@ -202,9 +207,7 @@ public class GameView {
     }
 
     public void loadEnemy(){
-        //combatContainer = frame.getContentPane();
-        cont = frame.getContentPane();
-        enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
+        cont.remove(enemyBorder);
         if(enemy != null && hero.inCombat) {
             attack = new JButton("Attack");
             attack.setBounds(500, 600, 100, 30);
@@ -228,6 +231,11 @@ public class GameView {
             enemyHealthBar.setValue(enemy.getMaxHealth());
             enemyHealthBar.setBounds(825, 575, 300, 25);
 
+            cont.add(attack);
+            cont.add(skills);
+            cont.add(items);
+            cont.add(run);
+
             enemyHealthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
             enemyHealthBar.setForeground(Color.RED);
             attack.setVisible(true);
@@ -239,6 +247,51 @@ public class GameView {
         }
     }
 
+    public void loadKeyBindings(){
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("W"), "w");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("A"), "a");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("S"), "s");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("D"), "d");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("G"), "g");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("I"), "i");
+        heroIcon.getActionMap().put("w", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('w');
+            }
+        });
+        heroIcon.getActionMap().put("a", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('a');
+            }
+        });
+        heroIcon.getActionMap().put("s", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('s');
+            }
+        });
+        heroIcon.getActionMap().put("d", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('d');
+            }
+        });
+        heroIcon.getActionMap().put("g", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('g');
+            }
+        });
+        heroIcon.getActionMap().put("i", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openInventory();
+            }
+        });
+    }
+
     public void loadInventory(){
         cont = frame.getContentPane();
         border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
@@ -246,6 +299,8 @@ public class GameView {
         armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 650, 75, 75);
         artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().toString(), 255, 650, 75, 75);
         heroIcon = labelCreator.createLabel(ap.hero, "Level: " + hero.getLevel(), 35, 570, 75, 75);
+
+        enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
         //gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
         inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 650, 75, 75);
         healthBar = new JProgressBar(0, hero.getMaxHealth());
@@ -274,59 +329,71 @@ public class GameView {
             }
                 });
 
-        skills = new JButton("Skills");
-        skills.setBounds(500, 660, 100, 30);
-        items = new JButton("Item");
-        items.setBounds(650, 660, 100, 30);
-        run = new JButton("Run");
-        run.setBounds(650, 600, 100, 30);
+//        skills = new JButton("Skills");
+//        skills.setBounds(500, 660, 100, 30);
+//        items = new JButton("Item");
+//        items.setBounds(650, 660, 100, 30);
+//        run = new JButton("Run");
+//        run.setBounds(650, 600, 100, 30);
+//
+//        inventory.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                super.mouseClicked(e);
+//                openInventory();
+//
+//            }
+//        });
 
-        inventory.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                openInventory();
-
-            }
-        });
-
-//        cont.add(attack);
-//        cont.add(skills);
-//        cont.add(items);
-//        cont.add(run);
         cont.add(weapon);
         cont.add(armor);
         cont.add(artifact);
         cont.add(healthBar);
         cont.add(XPBar);
         //cont.add(gold);
+        cont.add(enemyBorder);
         cont.add(heroIcon);
         cont.add(inventory);
         cont.add(border);
     }
 
     public void loadDungeon(){
-        dungeonContainer = frame.getContentPane();
+        dungeonLabels = new JLabel[13][5];
+        cont = frame.getContentPane();
         dungeonFloorCreator = new DungeonFloorCreator();
         dungeon = dungeonFloorCreator.createFloor();
         DungeonTile entrance = dungeonFloorCreator.findEntrance(dungeon);
         exit = dungeonFloorCreator.findExit(dungeon);
         for(int i = 0; i < dungeonFloorCreator.width; i++){
-            for(int j = 0; j < dungeonFloorCreator.height; j++){
-                if(dungeon[i][j] == entrance){
-                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero",  dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+            for(int j = 0; j < dungeonFloorCreator.height; j++) {
+                dungeonLabels[i][j] = labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/blackTile.png", (i * 100), (j * 100), 100, 100);
+                if (dungeon[i][j] == entrance) {
+                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     hero.x = i;
                     hero.y = j;
-                    dungeonContainer.add(dungeonHero);
-                    dungeonContainer.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                    cont.add(dungeonHero);
+                    cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                    cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+
+                } else {
+                    cont.add(dungeonLabels[i][j]);
+                if (dungeon[i][j].hasChest) {
+                        cont.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/chest.png", dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                    } else if (dungeon[i][j].hasEnemy) {
+                        cont.add(labelCreator.createLabelWithoutHover(ap.enemyTile, dungeon[i][j].x + 15, dungeon[i][j].y + 15, 70, 70));;
+                    } else {
+
+                        cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                    }
+                    if (dungeon[i][j] == entrance || dungeon[i][j] == exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy) {
+                        cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                    }
+                    if (j == dungeonFloorCreator.height - 1)
+                        cont.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/horizontalEdge.png", dungeon[i][j].x, dungeon[i][j].y + 100, 100, 100));
                 }
-                else if(dungeon[i][j].hasChest) dungeonContainer.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/chest.png", dungeon[i][j].x, dungeon[i][j].y, 100, 100));
-                else if(dungeon[i][j].hasEnemy) dungeonContainer.add(labelCreator.createLabelWithoutHover(ap.enemyTile, dungeon[i][j].x+15, dungeon[i][j].y+15, 70, 70));
-                else dungeonContainer.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
-                if(dungeon[i][j] == entrance || dungeon[i][j]== exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy) dungeonContainer.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
-                if(j==dungeonFloorCreator.height-1) dungeonContainer.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/horizontalEdge.png", dungeon[i][j].x, dungeon[i][j].y + 100, 100, 100));
             }
         }
+        removeDarkness();
         hero.inDungeon = true;
     }
 
@@ -337,17 +404,29 @@ public class GameView {
                 hero.y = y;
                 if(dungeon[x][y].hasEnemy){
                     startCombat();
-                    hero.inCombat = true;
                     dungeon[x][y].hasEnemy = false;
                     //hero.inCombat = false;
                 }
+                removeDarkness();
                 //makeRandomTileBlackTest();
+                frame.repaint();
                 update(hero);
             }
             else System.out.println("Can't move there, x:d" + x + " y:" + y);
         }
     }
 
+    public void removeDarkness(){
+        int x = hero.x;
+        int y = hero.y;
+        cont.remove(dungeonLabels[x][y]);
+        if(x-1 > -1) cont.remove(dungeonLabels[x-1][y]);
+        if(x+1 < dungeonFloorCreator.width) cont.remove(dungeonLabels[x+1][y]);
+        if(y-1 > -1) cont.remove(dungeonLabels[x][y-1]);
+        if(y+1 < dungeonFloorCreator.height) cont.remove(dungeonLabels[x][y+1]);
+    }
+
+//
 //    public void makeRandomTileBlackTest(){
 //        Random rand = new Random();
 //        int x = rand.nextInt(dungeonFloorCreator.width);
