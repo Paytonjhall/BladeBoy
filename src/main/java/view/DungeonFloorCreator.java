@@ -3,8 +3,8 @@ package view;
 import java.util.Random;
 
 public class DungeonFloorCreator {
-    public int width =13;
-    public int height=5;
+    public int width = 13;
+    public int height = 5;
     LabelCreator labelCreator = new LabelCreator();
     int enemyCount = 0;
     int chestCount = 0;
