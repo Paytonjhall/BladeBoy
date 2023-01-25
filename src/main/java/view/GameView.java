@@ -58,6 +58,7 @@ public class GameView {
     JTextArea displayPane;
     JScrollPane scrollPane;
     BufferedReader reader;
+    int floorCount = 1;
     public GameView() {
     }
 
@@ -182,6 +183,7 @@ public class GameView {
             case 'g' -> {
                 if(exit != null && hero.x == exit.x/100 && hero.y == exit.y/100) {
                     //heroIcon.getInputMap().clear();
+                    floorCount++;
                     loadInventory();
                     loadDungeon();
                     updateKeyBindings();
@@ -189,7 +191,6 @@ public class GameView {
             }
         }
     }
-
 
     public void startCombat(){
         //panel = pc.getCombatPanel();
@@ -251,6 +252,7 @@ public class GameView {
             enemyHealthBar.setValue(enemy.getMaxHealth());
             enemyHealthBar.setBounds(825, 575, 300, 25);
 
+            print("You encountered a " + enemy.getName() + "!");
             cont.add(attack);
             cont.add(skills);
             cont.add(items);
@@ -370,9 +372,7 @@ public class GameView {
         displayPane.setWrapStyleWord(true);
         displayPane.setFont(new Font("HelveticaNeue", Font.BOLD, 20));
 
-
         cont.add(scrollPane);
-
         cont.add(weapon);
         cont.add(armor);
         cont.add(artifact);
@@ -435,6 +435,8 @@ public class GameView {
         }
         removeDarkness();
         hero.inDungeon = true;
+        print("You are on floor: " + floorCount);
+
     }
 
     public void checkMove(int x, int y){
@@ -507,7 +509,7 @@ public class GameView {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         String time = sdf.format(date);
-        displayPane.setText(displayPane.getText() + '\n' + time + ": " + string);
+        if(displayPane!= null) displayPane.setText(displayPane.getText() + '\n' + time + ": " + string);
         //displayPane.update(cont.getGraphics());
     }
 
