@@ -8,12 +8,14 @@ public class DungeonFloorCreator {
     LabelCreator labelCreator = new LabelCreator();
     int enemyCount = 0;
     int chestCount = 0;
+    int torchCount = 0;
     Random random = new Random();
     DungeonTile[][] floor;
     public DungeonTile[][] createFloor(){
         Random random = new Random();
         enemyCount = random.nextInt(3) + 2;
         chestCount = random.nextInt(1) + 1;
+        torchCount = random.nextInt(3);
         int exitHeight = random.nextInt(height);
         floor = new DungeonTile[width][height];
         for(int i = 0; i < width; i++){
@@ -41,6 +43,7 @@ public class DungeonFloorCreator {
         if(completeFloor(0,0,floor,exitHeight)){
             assignChests();
             assignEnemies();
+            assignTorch();
             System.out.println("Created floor");
             return floor;
         }
@@ -147,6 +150,19 @@ public class DungeonFloorCreator {
                 i--;
             }
         }
+    }
+
+    public void assignTorch(){
+        for(int i = 0; i < torchCount; i++){
+            int x = random.nextInt(width);
+            int y = random.nextInt(height);
+            if(floor[x][y].isWalkable && !floor[x][y].isEntrance && !floor[x][y].isExit && !floor[x][y].hasChest && !floor[x][y].hasEnemy && !floor[x][y].hasTorch){
+                floor[x][y].hasTorch = true;
+            } else {
+                i--;
+            }
+        }
+
     }
 
 }

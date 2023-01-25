@@ -105,7 +105,7 @@ public class LabelCreator {
         return "src/Assets/Mystics/health.png";
     }
 
-    private Image getImage(String iconPath) {
+    public Image getImage(String iconPath) {
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File(iconPath));
@@ -114,4 +114,10 @@ public class LabelCreator {
         }
         return img;
     }
+
+//    public Icon getIcon(String iconPath) {
+//       Image image =  getImage(iconPath);
+//        Image dimg = getImage(getMysticIconPath(mystic)).getScaledInstance(label.getWidth(), label.getHeight(),
+//                Image.SCALE_SMOOTH);
+//    }
 }

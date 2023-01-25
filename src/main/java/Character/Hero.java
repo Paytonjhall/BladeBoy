@@ -1,4 +1,5 @@
 package Character;
+import Dungeon.Loot;
 import Game.HeroSaveAdapter;
 import Game.Output;
 import Game.Sound;
@@ -398,6 +399,23 @@ public class Hero {
                 return;
             }
         }
+    }
+
+    public void addLoot(Loot loot){
+        if(loot == null) return;
+        if(loot.getWeapon() != null){
+            Bag.add(loot.getWeapon());
+        }
+        if(loot.getArmor() != null){
+            Bag.add(loot.getArmor());
+        }
+        if(loot.getArtifact() != null){
+            Bag.add(loot.getArtifact());
+        }
+        if(loot.getPotion() != null && potionBag.getPotionCount() < 3){
+            potionBag.addPotion(loot.getPotion());
+        }
+        gold += loot.getGold();
     }
 
     //GETTERS AND SETTERS

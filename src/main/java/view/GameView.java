@@ -1,14 +1,20 @@
 package view;
 
 import Character.*;
+import Dungeon.ChestLoot;
 import Dungeon.EnemyGenerator;
+import Dungeon.Loot;
 import Game.AssetPath;
 import Game.Sound;
+import com.sun.tools.jconsole.JConsoleContext;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GameView {
@@ -16,6 +22,7 @@ public class GameView {
     LabelCreator labelCreator = new LabelCreator();
     AssetPath ap = new AssetPath();
     PanelCreator pc = new PanelCreator();
+    ChestLoot chestLoot = new ChestLoot();
     Container cont;
     //Container cont;
     JPanel panel = new JPanel();
@@ -44,8 +51,13 @@ public class GameView {
     JLabel dungeonHero;
     Sound sound = new Sound();
     List<JLabel> enemyTiles;
+    List<JLabel> chestTiles;
+    List<JLabel> torchTiles;
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
+    JTextArea displayPane;
+    JScrollPane scrollPane;
+    BufferedReader reader;
     public GameView() {
     }
 
@@ -55,7 +67,8 @@ public class GameView {
         frame = new JFrame("BladeBoy");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-        frame.setSize(1300, 800);
+        frame.setSize(1300, 1000);
+
 //        frame.addKeyListener(new KeyListener() {
 //            @Override
 //            public void keyTyped(KeyEvent e) {
@@ -163,6 +176,9 @@ public class GameView {
             case 'd' -> {
                 if(hero.inDungeon && !hero.inCombat)checkMove(hero.x +1, hero.y);
             }
+            case 'e' -> {
+                if(hero.inDungeon && !hero.inCombat)unlockChest(hero.x, hero.y);
+            }
             case 'g' -> {
                 if(exit != null && hero.x == exit.x/100 && hero.y == exit.y/100) {
                     //heroIcon.getInputMap().clear();
@@ -263,6 +279,7 @@ public class GameView {
         heroIcon.getInputMap().put(KeyStroke.getKeyStroke("D"), "d");
         heroIcon.getInputMap().put(KeyStroke.getKeyStroke("G"), "g");
         heroIcon.getInputMap().put(KeyStroke.getKeyStroke("I"), "i");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("E"), "e");
         heroIcon.getActionMap().put("w", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -299,12 +316,21 @@ public class GameView {
                 openInventory();
             }
         });
+        heroIcon.getActionMap().put("e", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('e');
+            }
+        });
     }
 
     public void loadInventory(){
         heroIcon = null;
         cont = frame.getContentPane();
         cont.removeAll();
+        displayPane = new JTextArea();
+        scrollPane = new JScrollPane(displayPane);
+        scrollPane.setBounds(15, 775, 1250, 175);
         border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
         weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 650, 75, 75);
         armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 650, 75, 75);
@@ -339,22 +365,13 @@ public class GameView {
                 update(hero);
             }
                 });
+        displayPane.setEditable(false);
+        displayPane.setLineWrap(true);
+        displayPane.setWrapStyleWord(true);
+        displayPane.setFont(new Font("HelveticaNeue", Font.BOLD, 20));
 
-//        skills = new JButton("Skills");
-//        skills.setBounds(500, 660, 100, 30);
-//        items = new JButton("Item");
-//        items.setBounds(650, 660, 100, 30);
-//        run = new JButton("Run");
-//        run.setBounds(650, 600, 100, 30);
-//
-//        inventory.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                super.mouseClicked(e);
-//                openInventory();
-//
-//            }
-//        });
+
+        cont.add(scrollPane);
 
         cont.add(weapon);
         cont.add(armor);
@@ -371,6 +388,8 @@ public class GameView {
     public void loadDungeon(){
         dungeonLabels = new JLabel[13][5];
         enemyTiles = new ArrayList<>();
+        chestTiles = new ArrayList<>();
+        torchTiles = new ArrayList<>();
         cont = frame.getContentPane();
         dungeonFloorCreator = new DungeonFloorCreator();
         dungeon = dungeonFloorCreator.createFloor();
@@ -386,26 +405,33 @@ public class GameView {
                     cont.add(dungeonHero);
                     cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
-
                 } else {
                     cont.add(dungeonLabels[i][j]);
                 if (dungeon[i][j].hasChest) {
-                        cont.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/chest.png", dungeon[i][j].x, dungeon[i][j].y, 100, 100));
+                        JLabel chest = labelCreator.createLabelWithoutHover(ap.chest, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                        chestTiles.add(chest);
+                        cont.add(chest);
                     } else if (dungeon[i][j].hasEnemy) {
                     JLabel enemyTile = labelCreator.createLabelWithoutHover(ap.enemyTile, dungeon[i][j].x + 15, dungeon[i][j].y + 15, 70, 70);
                     enemyTiles.add(enemyTile);
                     cont.add(enemyTile);
-                        //cont.add(labelCreator.createLabelWithoutHover(ap.enemyTile, dungeon[i][j].x + 15, dungeon[i][j].y + 15, 70, 70));;
+                    } else if (dungeon[i][j].hasTorch) {
+                        JLabel torch = labelCreator.createLabelWithoutHover(ap.torch, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                        torchTiles.add(torch);
+                        cont.add(torch);
                     } else {
                         cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
-                    if (dungeon[i][j] == entrance || dungeon[i][j] == exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy) {
+                    if (dungeon[i][j] == entrance || dungeon[i][j] == exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy || dungeon[i][j].hasTorch) {
                         cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
                     if (j == dungeonFloorCreator.height - 1)
                         cont.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/horizontalEdge.png", dungeon[i][j].x, dungeon[i][j].y + 100, 100, 100));
                 }
             }
+        }
+        for(JLabel t : torchTiles){
+            removeDarkness(t.getX()/100, t.getY()/100);
         }
         removeDarkness();
         hero.inDungeon = true;
@@ -422,11 +448,10 @@ public class GameView {
                     //hero.inCombat = false;
                 }
                 removeDarkness();
-                //makeRandomTileBlackTest();
                 frame.repaint();
                 update(hero);
             }
-            else System.out.println("Can't move there, x:d" + x + " y:" + y);
+            else print("Can't move there, x:" + x + " y:" + y);
         }
     }
 
@@ -440,24 +465,50 @@ public class GameView {
         if(y+1 < dungeonFloorCreator.height) cont.remove(dungeonLabels[x][y+1]);
     }
 
+    public void removeDarkness(int x, int y){
+        cont.remove(dungeonLabels[x][y]);
+        if(x-1 > -1) cont.remove(dungeonLabels[x-1][y]);
+        if(x+1 < dungeonFloorCreator.width) cont.remove(dungeonLabels[x+1][y]);
+        if(y-1 > -1) cont.remove(dungeonLabels[x][y-1]);
+        if(y+1 < dungeonFloorCreator.height) cont.remove(dungeonLabels[x][y+1]);
+    }
+
     public void removeEnemyTile(int x, int y){
         for(JLabel enemyTile : enemyTiles){
             if(enemyTile.getX() == (x * 100) + 15 && enemyTile.getY() == (y * 100) + 15){
                 cont.remove(enemyTile);
                 enemyTiles.remove(enemyTile);
+                dungeon[x][y].hasEnemy = false;
                 break;
             }
         }
     }
 
-//
-//    public void makeRandomTileBlackTest(){
-//        Random rand = new Random();
-//        int x = rand.nextInt(dungeonFloorCreator.width);
-//        int y = rand.nextInt(dungeonFloorCreator.height);
-//        JLabel label = labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/blackTile.png", dungeon[x][y].x, dungeon[x][y].y, 100, 100);
-//        label.setComponentZOrder(frame, 0);
-//        dungeonContainer.add(label);
-//
-//    }
+    public void unlockChest(int x, int y){
+        for(JLabel chest : chestTiles){
+            if(chest.getX() == (x * 100) && chest.getY() == (y * 100)){
+                //I would like to replace the chest with a new tile, but right now the new tile looks funny.
+//                JLabel openedChest = labelCreator.createLabelWithoutHover(ap.openedChest, chest.getX(), chest.getY(), 200, 200);
+//                chest.setIcon(openedChest.getIcon());
+//                chest.repaint();
+                cont.remove(chest);
+                Loot loot = chestLoot.generateLoot(hero.getLevel());
+                // Dialogue box to say what was in the chest!
+                print("You found " + loot.getType() + " in the chest!");
+                hero.addLoot(loot);
+                dungeon[x][y].hasChest = false;
+                chestTiles.remove(chest);
+                break;
+            }
+        }
+    }
+
+    public void print(String string){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String time = sdf.format(date);
+        displayPane.setText(displayPane.getText() + '\n' + time + ": " + string);
+        //displayPane.update(cont.getGraphics());
+    }
+
 }
