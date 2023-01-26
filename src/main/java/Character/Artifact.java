@@ -107,6 +107,11 @@ public class Artifact implements ItemInterface {
         return description;
     }
 
+    @Override
+    public String hoverString() {
+        return name  + " Type: " + type + " Amplifier: " + amplifier + ": Value: " + value;
+    }
+
     public double getFortune() {
         return fortune;
     }
@@ -181,6 +186,7 @@ public class Artifact implements ItemInterface {
 
     @Override
     public String toString(){
-        return "Artifact: " + name + " Value: " + value + " Description: " + description + " Type: " + type + " Amplifier: " + amplifier;
+        return hoverString();
+        //return "Artifact: " + name + " Value: " + value + " Description: " + description + " Type: " + type + " Amplifier: " + amplifier;
     }
 }

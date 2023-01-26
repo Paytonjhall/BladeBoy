@@ -106,7 +106,7 @@ public class HeroInventory {
         if(hero.getWeapon() == null) {
             weapon = lc.createLabel("src/Assets/Weapons/Swords/emptySword.tif", "No weapon equipped",50, 30, 100, 100);
         } else {
-            weapon = lc.createLabel(hero.getWeapon().getIconPath(), hero.getWeapon().toString(), 50, 30, 100, 100);
+            weapon = lc.createLabel(hero.getWeapon().getIconPath(), hero.getWeapon().hoverString(), 50, 30, 100, 100);
         }
             if(hero.getWeapons() != null){
                 JComboBox bag = new JComboBox(hero.getWeapons().toArray());
@@ -130,7 +130,7 @@ public class HeroInventory {
         if(hero.getArmor() == null) {
             armor = lc.createLabel("src/Assets/Armor/emptyArmor.tif", "No armor equipped",50, 180, 100, 100);
         } else {
-            armor = lc.createLabel("src/Assets/Armor/platemail.png", hero.getArmor().toString(),50, 180, 100, 100);
+            armor = lc.createLabel("src/Assets/Armor/platemail.png", hero.getArmor().hoverString(),50, 180, 100, 100);
         }
             if(hero.getArmors() != null){
                 JComboBox bag = new JComboBox(hero.getArmors().toArray());
@@ -154,7 +154,7 @@ public class HeroInventory {
         if(hero.getArtifact() == null) {
             artifact = lc.createLabel("src/Assets/Artifact/emptyArtifact.tif", "No artifact equipped",50, 330, 100, 100);
         } else {
-            artifact = lc.createLabel(hero.getArtifact().getIconPath(), hero.getArtifact().toString(),50, 330, 100, 100);
+            artifact = lc.createLabel(hero.getArtifact().getIconPath(), hero.getArtifact().hoverString(),50, 330, 100, 100);
         }
             if(hero.getArtifacts() != null){
                 JComboBox bag = new JComboBox(hero.getArtifacts().toArray());

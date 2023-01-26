@@ -85,6 +85,16 @@ public class Armor implements ItemInterface {
         return description;
     }
 
+    @Override
+    public String hoverString() {
+        if(healthIncrease>0) {
+            return name + ": HP +" + healthIncrease + ", Armor +" + armorRating + ", Value: " + value;
+        }
+        else {
+            return name + ": Protection +" + protection + ", Armor +" + armorRating + ", Value +" + value;
+        }
+    }
+
     public int getProtection() {
         return protection;
     }
@@ -103,6 +113,7 @@ public class Armor implements ItemInterface {
 
     @Override
     public String toString(){
-        return name + ": Value(" + value + " Gold), Armor Rating(" + armorRating + "), Health Bonus(" + healthIncrease + "), Protection(" + protection +")";
+        return hoverString();
+        //return name + ": Value(" + value + " Gold), Armor Rating(" + armorRating + "), Health Bonus(" + healthIncrease + "), Protection(" + protection +")";
     }
 }

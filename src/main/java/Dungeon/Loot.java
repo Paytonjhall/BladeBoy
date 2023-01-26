@@ -6,12 +6,14 @@ public class Loot {
     Artifact artifact = null;
     Potion potion = null;
     int gold = 0;
-    public Loot(Weapon weapon, Armor armor, Artifact artifact, Potion potion, int gold){
+    String loot = "";
+    public Loot(Weapon weapon, Armor armor, Artifact artifact, Potion potion, int gold, String loot){
         this.weapon = weapon;
         this.armor = armor;
         this.artifact = artifact;
         this.potion = potion;
         this.gold = gold;
+        this.loot = loot;
     }
 
     public Weapon getWeapon() {
@@ -52,6 +54,14 @@ public class Loot {
 
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public String getLoot() {
+        return loot;
+    }
+
+    public void setLoot(String loot) {
+        this.loot = loot;
     }
 
     public String getType(){

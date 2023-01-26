@@ -120,6 +120,11 @@ public class Weapon implements ItemInterface {
 
     @Override
     public String toString(){
-        return "Name: " + name + " Value: " + value + " Type: " + type + " Weapon Damage: " + weaponDamage;
+        return hoverString();
+        // return "Name: " + name + " Value: " + value + " Type: " + type + " Weapon Damage: " + weaponDamage;
+    }
+
+    public String hoverString(){
+        return name + ": damage: " + weaponDamage + " value: " + value;
     }
 }

@@ -10,4 +10,5 @@ public interface ItemInterface {
     String getName();
     int getValue();
     String getDescription();
+    String hoverString();
 }

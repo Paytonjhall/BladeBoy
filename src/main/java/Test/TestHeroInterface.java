@@ -2,6 +2,7 @@ package Test;
 import Character.*;
 import Character.Town.ArmorGenerator;
 import Character.Town.ArtifactGenerator;
+import Character.Town.PotionGenerator;
 import Character.Town.WeaponGenerator;
 import Game.AssetPath;
 import Game.UserInput;
@@ -18,6 +19,7 @@ public class TestHeroInterface {
     public static void main(String[] args) throws Exception {
         WeaponGenerator wg = new WeaponGenerator();
         ArmorGenerator ag = new ArmorGenerator();
+        PotionGenerator pg = new PotionGenerator();
         blacksmith bs = new blacksmith();
         armory ar = new armory();
         oracle or = new oracle();
@@ -40,12 +42,13 @@ public class TestHeroInterface {
 
 
         // hero.addXp(30000);
-            Potion potion = new Potion("Heal Potion", 40, 100);
-            potion.setIconPath(assetPath.healthPotion);
-            Potion potion2 = new Potion("Power Potion", 40, 100);
-            potion2.setIconPath(assetPath.healthPotion);
-            hero.addPotion(potion);
-            hero.addPotion(potion2);
+//            Potion potion = new Potion("Heal Potion", 40, 100);
+//            potion.setIconPath(assetPath.healthPotion);
+//            Potion potion2 = new Potion("Power Potion", 40, 100);
+//            potion2.setIconPath(assetPath.healthPotion);
+            hero.addPotion(pg.makeXPotion(400, 300));
+            hero.addPotion(pg.makeDevilPotion(400, 300));
+            hero.addPotion(pg.makeHealthPotion(400, 300));
 
         // assert hero.getBag().size() > 0;
         // hero.getWeapon().setIconPath("Swords/sword58.png");
@@ -63,14 +66,15 @@ public class TestHeroInterface {
         //hero.setWeapon(null);
         //hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
-        //hero = gameView.startGameView(hero);
+        hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
         //hero = art.visitArtificiary(hero);
         //ar.visitArmory(hero);
         //or.visitOracle(hero);
         //art.visitArtificiary(hero);
 
-        gameView.loadDungeon();
+        //gameView.loadDungeon();
+        gameView.loadBossFloor();
         //gameView.startCombat();
         ui.wait(hero, gameView);
 

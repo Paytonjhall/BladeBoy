@@ -11,6 +11,7 @@ public class Enemy {
     int xp;
     List<ItemInterface>drops;
     int gold;
+    String iconPath = "src/Assets/Portraits/Icons_24.png";
 
     public Enemy(String name, int health, int damage, double armorRating, int xp, List<ItemInterface> drops, int gold) {
         this.health = health;
@@ -21,6 +22,18 @@ public class Enemy {
         this.xp = xp;
         this.drops = drops;
         this.gold = gold;
+    }
+
+    public Enemy(String name, int health, int damage, double armorRating, int xp, List<ItemInterface> drops, int gold, String iconPath) {
+        this.health = health;
+        this.maxHealth = health;
+        this.damage = damage;
+        this.armorRating = armorRating;
+        this.name = name;
+        this.xp = xp;
+        this.drops = drops;
+        this.gold = gold;
+        this.iconPath = iconPath;
     }
 
     public void takeDamage(int damage){
@@ -99,6 +112,14 @@ public class Enemy {
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth=maxHealth;
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
     }
 
     public String toString(){

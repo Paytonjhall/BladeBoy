@@ -15,6 +15,8 @@ public class DungeonTile {
     boolean hasPlayer = false;
     boolean isWalkable = true;
     boolean hasTorch = false;
+    boolean hasBoss = false;
+    boolean hasBossChest = false;
     String icon;
     int x;
     int y;

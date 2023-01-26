@@ -250,6 +250,14 @@ public class Hero {
 
         switch (potion.getType()) {
             case "Heal Potion" -> heal(potion.getEffect());
+            case "XP Potion" -> addXp(potion.getEffect());
+            case "Devil Potion" -> {
+                health = 1;
+                addXp(nextLevelXp);
+            }
+            case "Blood Potion" -> heal((int)Math.pow(((double)(maxHealth - health)/16), 2) ); //divide by ten then square.
+            case "Regen Potion" -> System.out.println("Need to add hero active effects.");
+            case "Luck Potion" -> System.out.println("Need to add hero active effects.");
             case "Gods Strength Potion" -> System.out.println("Not implemented yet");
             case "Defense Potion" -> System.out.println("Not implemented");
             case "Survival Potion" -> System.out.println("Needs to be implemented");

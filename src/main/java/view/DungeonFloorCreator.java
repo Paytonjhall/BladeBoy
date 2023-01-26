@@ -11,6 +11,7 @@ public class DungeonFloorCreator {
     int torchCount = 0;
     Random random = new Random();
     DungeonTile[][] floor;
+
     public DungeonTile[][] createFloor(){
         Random random = new Random();
         enemyCount = random.nextInt(3) + 2;
@@ -50,6 +51,42 @@ public class DungeonFloorCreator {
 
         System.out.println("Floor not complete");
         return createFloor();
+    }
+
+    public DungeonTile[][] createBossFloor(){
+        floor = new DungeonTile[width][height];
+        for(int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                floor[i][j] = new DungeonTile();
+                if (i == 0 && j == 2) {
+                    floor[i][j].setEntrance();
+                    floor[i][j].setXandY(i, j);
+                } else if (i == width - 1 && j == 2) {
+                    floor[i][j].setExit();
+                    floor[i][j].setXandY(i, j);
+                } else if (i == 0 || i == width - 1 || j == 0 || j == height - 1 || (i == 11 && j ==1) || (i == 11 && j == 3) || (i == 12 && j == 1) || (i == 12 && j == 3)) {
+                    floor[i][j].setWall();
+                    floor[i][j].setXandY(i, j);
+                } else if (i == 10 && j == 2) {
+                    floor[i][j].setFloor();
+                    floor[i][j].hasBoss = true;
+                    floor[i][j].setXandY(i, j);
+                } else if(i == 10 && j == 1 || i == 10 && j == 3){
+                    floor[i][j].setFloor();
+                    floor[i][j].hasTorch = true;
+                    floor[i][j].setXandY(i, j);
+                } else if(i == 11 && j == 2){
+                    floor[i][j].setFloor();
+                    floor[i][j].hasBossChest = true;
+                    floor[i][j].setXandY(i, j);
+                }
+                else {
+                    floor[i][j].setFloor();
+                    floor[i][j].setXandY(i, j);
+                }
+            }
+        }
+        return floor;
     }
 
     public DungeonTile findEntrance(DungeonTile[][] floor){

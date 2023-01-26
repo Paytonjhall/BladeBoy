@@ -6,12 +6,28 @@ public class Potion {
     int value;
     String iconPath = "";
 
-    //Types: Heal Potion, God's Strength, Defense, Survival, Double Tap, Scavenge potion (doubles rewards and garuentees item drop)
+    //Types: Heal Potion, xpPotion (gives a little xp), done
+    // XP Potion done
+    // luckPotion (doubles next chest drop),
+    // void Potion (IDK, next enemy attack miss maybe?),
+    // holyPotion (remove all darkness?),
+    // bloodPotion (the more health your missing, the more heal it gives?), done
+    // regen potion(gain health as you move, only for 20 blocks),
+    // critPotion(next hit crit),
+    // devil Potion( health set to 30%, but levels you up instantly.
+
 
     public Potion(String type, int effect, int value) {
         this.type = type;
         this.effect = effect;
         this.value = value;
+    }
+
+    public Potion(String type, int effect, int value, String iconPath) {
+        this.type = type;
+        this.effect = effect;
+        this.value = value;
+        this.iconPath = iconPath;
     }
 
     public Potion(){
