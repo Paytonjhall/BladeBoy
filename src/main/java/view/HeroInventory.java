@@ -3,6 +3,10 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import Character.*;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.Potion;
+import Character.Equipment.Weapon;
 import Game.AssetPath;
 import Game.Sound;
 

@@ -1,8 +1,8 @@
 package view;
 import javax.swing.*;
 import Character.*;
+import Character.Equipment.Armor;
 import Character.Town.Armory;
-import Character.Town.Blacksmith;
 import Game.AssetPath;
 import Game.Sound;
 

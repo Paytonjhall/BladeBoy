@@ -1,15 +1,14 @@
 package Character;
+import Character.Abilities.Mystic;
+import Character.Equipment.*;
 import Dungeon.Loot;
 import Game.HeroSaveAdapter;
 import Game.Output;
 import Game.Sound;
 import Game.UserInput;
-import view.GameView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Hero {
     Armor armor;

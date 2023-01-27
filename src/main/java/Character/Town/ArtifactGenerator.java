@@ -1,5 +1,5 @@
 package Character.Town;
-import Character.*;
+import Character.Equipment.Artifact;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package Character;
+package Character.Abilities;
 
 import java.util.ArrayList;
 import java.util.Random;

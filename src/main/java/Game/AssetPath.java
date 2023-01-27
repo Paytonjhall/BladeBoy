@@ -46,6 +46,18 @@ public class AssetPath {
     public String boarBossIcon = "src/Assets/Portraits/boarBoss.png";
     public String barbarianIcon = "src/Assets/Portraits/barbarian.png";
     public String batIcon = "src/Assets/Portraits/bat.png";
+    public String blackTile = "src/Assets/Dungeon/Tiles/blackTile.png";
+    public String horizontalEdge = "src/Assets/Dungeon/Tiles/horizontalEdge.png";
+    public String exit = "src/Assets/Dungeon/Tiles/exit.png";
+    public String bossDoor = "src/Assets/Dungeon/Tiles/bossDoor.png";
+    public String entrance = "src/Assets/Dungeon/Tiles/entrance.png";
+    public String wall = "src/Assets/Dungeon/Tiles/wall.png";
+    public String rightwall = "src/Assets/Dungeon/Tiles/rightwall.png";
+    public String leftwall = "src/Assets/Dungeon/Tiles/leftwall.png";
+    public String middlewall = "src/Assets/Dungeon/Tiles/middlewall.png";
+    public String alonewall = "src/Assets/Dungeon/Tiles/alonewall.png";
+    public String barrel = "src/Assets/Dungeon/Tiles/barrel.png";
+    public String box = "src/Assets/Dungeon/Tiles/box.png";
 
     public String enemyIcon(){
         return "src/Assets/Portraits/enemy"+ (int)(Math.random() * 3)+".png";

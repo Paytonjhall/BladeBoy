@@ -1,4 +1,4 @@
-package Character;
+package Character.Equipment;
 
 import java.util.Objects;
 import java.util.Random;

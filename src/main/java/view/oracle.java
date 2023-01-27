@@ -1,9 +1,7 @@
 package view;
 
+import Character.Abilities.Mystic;
 import Character.Town.Oracle;
-import Game.AssetPath;
-import Character.Town.Armory;
-import Character.Town.Artificiary;
 import Game.AssetPath;
 
 import javax.swing.*;
@@ -14,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
 
 public class oracle {
   boolean returner =false;

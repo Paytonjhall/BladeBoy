@@ -1,7 +1,9 @@
 package view;
 
 import javax.swing.*;
-import Character.*;
+
+import Game.NewGame;
+
 public class MainMenu {
     private JButton newGameButton;
     private JButton loadGameButton;

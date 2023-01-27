@@ -1,5 +1,5 @@
 package Character.Town;
-import Character.*;
+import Character.Equipment.Potion;
 import Game.AssetPath;
 
 import java.util.ArrayList;

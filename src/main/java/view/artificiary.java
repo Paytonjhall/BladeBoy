@@ -1,6 +1,6 @@
 package view;
 
-import Character.Town.Armory;
+import Character.Equipment.Artifact;
 import Character.Town.Artificiary;
 import Game.AssetPath;
 

@@ -1,4 +1,4 @@
-package Character;
+package Character.Equipment;
 
 public class Potion {
     String type;

@@ -1,11 +1,17 @@
-package Character;
+package Game;
 
+import Character.Hero;
+import Character.Combat;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.ItemInterface;
+import Character.Equipment.Weapon;
 import Character.Town.Town;
+import Dungeon.Enemy;
 import Game.UserInput;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class NewGame {
     UserInput input = new UserInput();

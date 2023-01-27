@@ -17,6 +17,7 @@ public class DungeonTile {
     boolean hasTorch = false;
     boolean hasBoss = false;
     boolean hasBossChest = false;
+    boolean isShop = false;
     String icon;
     int x;
     int y;
@@ -65,5 +66,15 @@ public class DungeonTile {
     public void setXandY(int x, int y){
         this.x = (x)*100;
         this.y = (y)*100;
+    }
+
+
+
+    public void setIcon(String icon){
+        this.icon = icon;
+    }
+
+    public String getIcon(){
+        return icon;
     }
 }

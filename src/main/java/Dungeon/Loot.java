@@ -1,5 +1,9 @@
 package Dungeon;
-import Character.*;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.Potion;
+import Character.Equipment.Weapon;
+
 public class Loot {
     Weapon weapon = null;
     Armor armor = null;

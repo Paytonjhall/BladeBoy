@@ -1,7 +1,7 @@
-package Character;
+package Dungeon;
 
 import java.util.List;
-
+import Character.Equipment.ItemInterface;
 public class Enemy {
     int health;
     int maxHealth;

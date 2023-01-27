@@ -16,16 +16,12 @@ public class Sound {
     private final String drink;
     private final String openBag;
     private final String closeBag;
+    private final String openChest;
+    private final String enterDoor;
+    private final String step1;
+    private final String step2;
 
     public Sound() {
-        //this.buy = getClass().getClassLoader().getResource("src/Sounds/buy.wav");
-        //this.gainMoney = getClass().getClassLoader().getResource("src/Sounds/gain-money.wav");
-        //death = getClass().getResource("src/Sounds/death.wav");
-        //swordHit = getClass().getResource("src/Sounds/sword-hit.wav");
-        //swordSheath = getClass().getResource("src/Sounds/sword-sheath.wav");
-        //equipItem = getClass().getResource("src/Sounds/item-equip.wav");
-        //victory = getClass().getResource("src/Sounds/victory.wav");
-        //levelUp = getClass().getResource("src/Sounds/levelup.wav");
         buy = "src/Sounds/buy.wav";
         gainMoney = "src/Sounds/gain-money.wav";
         death = "src/Sounds/death.wav";
@@ -37,6 +33,10 @@ public class Sound {
         drink = "src/Sounds/drink.wav";
         openBag = "src/Sounds/open-bag.wav";
         closeBag = "src/Sounds/close-bag.wav";
+        openChest = "src/Sounds/chest.wav";
+        enterDoor = "src/Sounds/enter-Door.wav";
+        step1 = "src/Sounds/step1.wav";
+        step2 = "src/Sounds/step2.wav";
     }
 
     public void buySound(){
@@ -81,6 +81,19 @@ public class Sound {
 
     public void closeBagSound(){
         play(new File(closeBag));
+    }
+
+    public void openChestSound(){play(new File(openChest));}
+
+    public void enterDoorSound(){play(new File(enterDoor));}
+
+    public void stepSound(){
+        int random = (int) (Math.random() * 2);
+        if (random == 0) {
+            play(new File(step1));
+        } else {
+            play(new File(step2));
+        }
     }
 
 

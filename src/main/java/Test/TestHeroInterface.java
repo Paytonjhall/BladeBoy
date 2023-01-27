@@ -1,5 +1,9 @@
 package Test;
 import Character.*;
+import Character.Abilities.Mystic;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.Weapon;
 import Character.Town.ArmorGenerator;
 import Character.Town.ArtifactGenerator;
 import Character.Town.PotionGenerator;
@@ -40,7 +44,6 @@ public class TestHeroInterface {
 //        hero.addToBag(new Weapon("Incredible Copper Sword", 1000, "An impressively sharp steel blade", 15));
 
 
-
         // hero.addXp(30000);
 //            Potion potion = new Potion("Heal Potion", 40, 100);
 //            potion.setIconPath(assetPath.healthPotion);
@@ -66,15 +69,15 @@ public class TestHeroInterface {
         //hero.setWeapon(null);
         //hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
-        hero = gameView.startGameView(hero);
+        //hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
         //hero = art.visitArtificiary(hero);
         //ar.visitArmory(hero);
         //or.visitOracle(hero);
         //art.visitArtificiary(hero);
-
+        hero = gameView.startNewDungeon(hero, 2);
         //gameView.loadDungeon();
-        gameView.loadBossFloor();
+        //gameView.loadBossFloor();
         //gameView.startCombat();
         ui.wait(hero, gameView);
 

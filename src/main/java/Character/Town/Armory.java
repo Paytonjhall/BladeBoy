@@ -1,5 +1,6 @@
 package Character.Town;
 
+import Character.Equipment.Armor;
 import Game.Output;
 import Game.UserInput;
 import Character.*;

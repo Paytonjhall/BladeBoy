@@ -2,7 +2,8 @@ package view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import Character.*;
+
+import Character.Abilities.Mystic;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

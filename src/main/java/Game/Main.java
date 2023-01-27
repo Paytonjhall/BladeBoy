@@ -1,9 +1,7 @@
 package Game;
 
 import Character.Town.Town;
-import Game.UserInput;
 
-import java.util.Scanner;
 import Character.*;
 public class Main {
 

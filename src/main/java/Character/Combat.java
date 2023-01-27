@@ -1,5 +1,8 @@
 package Character;
 
+import Character.Abilities.Mystic;
+import Character.Equipment.ItemInterface;
+import Dungeon.Enemy;
 import Game.Output;
 import Game.Sound;
 import Game.UserInput;
@@ -41,13 +44,13 @@ public class Combat {
     }
 
     public Hero checkHealths(){
-        if(enemy.health<=0) {
+        if(enemy.getHealth()<=0) {
             //Monster has died.
             //Give gold and exp
             sound.victorySound();
             hero = awardItems(hero, enemy);
             return hero;
-        } else if(hero.health<=0) {
+        } else if(hero.getHealth()<=0) {
             //Hero has died
             //Game over
             System.exit(100);
@@ -58,7 +61,7 @@ public class Combat {
     private int calculateDamage(Hero hero, Enemy enemy){
         Random random = new Random();
         int damageRange =(int)(hero.weapon.getWeaponDamage()/2) +random.nextInt(hero.weapon.getWeaponDamage());
-        int damage = (int) (damageRange * ((1- enemy.armorRating/1000)));
+        int damage = (int) (damageRange * ((1- enemy.getArmorRating()/1000)));
         damage += strength(hero);
         damage += crush(hero);
         if(critCheck(hero)) damage *= 2.5;
@@ -72,7 +75,7 @@ public class Combat {
 
     private int calculateDamage(Enemy enemy, Hero hero){
         Random random = new Random();
-        int damageRange =(int)(enemy.damage/2) +random.nextInt(enemy.damage);
+        int damageRange =(int)(enemy.getDamage()/2) +random.nextInt(enemy.getDamage());
         int damage =(int) (damageRange * (1-(hero.getArmor().getArmorRating()/1000)));
         damage = checkProtection(damage);
         return damage;
@@ -105,11 +108,11 @@ public class Combat {
                 hero.addToBag(item);
             }
         } else {
-            System.out.println("The " + enemy.name + " dropped no items.");
+            System.out.println("The " + enemy.getName() + " dropped no items.");
         }
         if(enemy.getGold()>0 && hero.getArtifact() != null && hero.getArtifact().getType().equals("Fortune")){
             int extraGold = hero.getArtifact().artifactAmplify(enemy.getGold());
-            System.out.print("The " + enemy.name + " dropped ");
+            System.out.print("The " + enemy.getName() + " dropped ");
             output.printYellow(enemy.getGold() + "");
             System.out.print(" gold, but your artifact amplifies it to ");
             output.printYellow(extraGold + "");
@@ -117,11 +120,11 @@ public class Combat {
             hero.addGold(extraGold);
         } else if (enemy.getGold()>0) {
             hero.addGold(enemy.getGold());
-            System.out.print("The " + enemy.name + " dropped ");
+            System.out.print("The " + enemy.getName() + " dropped ");
             output.printYellow(enemy.getGold() + "");
             System.out.println(" gold!");
         } else {
-                System.out.println("The " + enemy.name + " dropped no gold.");
+                System.out.println("The " + enemy.getName() + " dropped no gold.");
             }
         hero.inCombat = false;
         hero.finishedCombat = true;
@@ -134,7 +137,7 @@ public class Combat {
         int critChance = random.nextInt(100);
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Critical")){
-                baseCritChance *= mystic.amplifier;
+                baseCritChance *= mystic.getAmplifier();
             }
         }
 
@@ -149,7 +152,7 @@ public class Combat {
         double lifeSteal = 0;
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Vamperism")){
-                lifeSteal += mystic.amplifier;
+                lifeSteal += mystic.getAmplifier();
 
             }
         }
@@ -161,7 +164,7 @@ public class Combat {
         double strength = 1;
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Strength")){
-                strength += mystic.amplifier;
+                strength += mystic.getAmplifier();
                 check = true;
             }
         }
@@ -175,7 +178,7 @@ public class Combat {
         int blockChance = random.nextInt(100);
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Block")){
-                baseBlockChance *= mystic.amplifier;
+                baseBlockChance *= mystic.getAmplifier();
             }
         }
 
@@ -187,10 +190,10 @@ public class Combat {
 
     private int crush(Hero hero){
         int damage = 0;
-        double crushRatio = (double) hero.health / 100.00;
+        double crushRatio = (double) hero.getHealth() / 100.00;
         for(Mystic mystic : hero.getMystics()){
             if(mystic.getBuff().equals("Crush")){
-                damage += (int) (mystic.amplifier * crushRatio);
+                damage += (int) (mystic.getAmplifier() * crushRatio);
             }
         }
         return damage;

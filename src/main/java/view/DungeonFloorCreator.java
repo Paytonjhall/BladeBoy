@@ -1,98 +1,100 @@
 package view;
 
+import Game.AssetPath;
+import view.Map.MapInterface;
+
+import java.util.Objects;
 import java.util.Random;
 
-public class DungeonFloorCreator {
-    public int width = 13;
-    public int height = 5;
+public class DungeonFloorCreator implements MapInterface {
+    AssetPath ap = new AssetPath();
     LabelCreator labelCreator = new LabelCreator();
     int enemyCount = 0;
     int chestCount = 0;
     int torchCount = 0;
     Random random = new Random();
-    DungeonTile[][] floor;
+    DungeonTile[][] map;
 
-    public DungeonTile[][] createFloor(){
+    public DungeonTile[][] createMap() {
         Random random = new Random();
         enemyCount = random.nextInt(3) + 2;
         chestCount = random.nextInt(1) + 1;
         torchCount = random.nextInt(3);
         int exitHeight = random.nextInt(height);
-        floor = new DungeonTile[width][height];
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < height; j++){
-                floor[i][j] = new DungeonTile();
-                    if(i == 0 && j == 0){
-                    floor[i][j].setEntrance();
-                    floor[i][j].setXandY(i, j);
-                    floor[i][j].isWalkable = true;
-                } else if (i == width - 1 && j == exitHeight){
-                    floor[i][j].setExit();
-                    floor[i][j].setXandY(i, j);
+        map = new DungeonTile[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                map[i][j] = new DungeonTile();
+                if (i == 0 && j == 0) {
+                    map[i][j].setEntrance();
+                    map[i][j].setXandY(i, j);
+                    map[i][j].isWalkable = true;
+                } else if (i == width - 1 && j == exitHeight) {
+                    map[i][j].setExit();
+                    map[i][j].setXandY(i, j);
                 } else {
-                        int floorType = random.nextInt(20);
-                        if(floorType >= 9){
-                            floor[i][j].setFloor();
-                            floor[i][j].setXandY(i, j);
-                        } else {
-                            floor[i][j].setWall();
-                            floor[i][j].setXandY(i, j);
-                        }
+                    int floorType = random.nextInt(20);
+                    if (floorType >= 9) {
+                        map[i][j].setFloor();
+                        map[i][j].setXandY(i, j);
+                    } else {
+                        map[i][j].setWall();
+                        map[i][j].setXandY(i, j);
+                    }
                 }
             }
         }
-        if(completeFloor(0,0,floor,exitHeight)){
+        if (completeFloor(0, 0, map, exitHeight)) {
             assignChests();
             assignEnemies();
             assignTorch();
             System.out.println("Created floor");
-            return floor;
+            return fixWalls();
         }
 
         System.out.println("Floor not complete");
-        return createFloor();
+        return createMap();
     }
 
-    public DungeonTile[][] createBossFloor(){
-        floor = new DungeonTile[width][height];
-        for(int i = 0; i < width; i++) {
+    public DungeonTile[][] createBossFloor() {
+        map = new DungeonTile[width][height];
+        for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                floor[i][j] = new DungeonTile();
+                map[i][j] = new DungeonTile();
                 if (i == 0 && j == 2) {
-                    floor[i][j].setEntrance();
-                    floor[i][j].setXandY(i, j);
+                    map[i][j].setEntrance();
+                    map[i][j].setXandY(i, j);
                 } else if (i == width - 1 && j == 2) {
-                    floor[i][j].setExit();
-                    floor[i][j].setXandY(i, j);
-                } else if (i == 0 || i == width - 1 || j == 0 || j == height - 1 || (i == 11 && j ==1) || (i == 11 && j == 3) || (i == 12 && j == 1) || (i == 12 && j == 3)) {
-                    floor[i][j].setWall();
-                    floor[i][j].setXandY(i, j);
+                    map[i][j].setExit();
+                    map[i][j].setXandY(i, j);
+                } else if (i == 0 || i == width - 1 || j == 0 || j == height - 1 || (i == 11 && j == 1) || (i == 11 && j == 3) || (i == 12 && j == 1) || (i == 12 && j == 3)) {
+                    map[i][j].setWall();
+                    map[i][j].setXandY(i, j);
                 } else if (i == 10 && j == 2) {
-                    floor[i][j].setFloor();
-                    floor[i][j].hasBoss = true;
-                    floor[i][j].setXandY(i, j);
-                } else if(i == 10 && j == 1 || i == 10 && j == 3){
-                    floor[i][j].setFloor();
-                    floor[i][j].hasTorch = true;
-                    floor[i][j].setXandY(i, j);
-                } else if(i == 11 && j == 2){
-                    floor[i][j].setFloor();
-                    floor[i][j].hasBossChest = true;
-                    floor[i][j].setXandY(i, j);
-                }
-                else {
-                    floor[i][j].setFloor();
-                    floor[i][j].setXandY(i, j);
+                    map[i][j].setFloor();
+                    map[i][j].hasBoss = true;
+                    map[i][j].setXandY(i, j);
+                } else if (i == 10 && j == 1 || i == 10 && j == 3) {
+                    map[i][j].setFloor();
+                    map[i][j].hasTorch = true;
+                    map[i][j].setXandY(i, j);
+                } else if (i == 11 && j == 2) {
+                    map[i][j].setFloor();
+                    map[i][j].hasBossChest = true;
+                    map[i][j].setXandY(i, j);
+                } else {
+                    map[i][j].setFloor();
+                    map[i][j].setXandY(i, j);
                 }
             }
         }
-        return floor;
+        return fixWalls();
     }
 
-    public DungeonTile findEntrance(DungeonTile[][] floor){
-        for(int i = 0; i < floor.length; i++){
-            for(int j = 0; j < floor[i].length; j++){
-                if(floor[i][j].isEntrance){
+    public DungeonTile findEntrance(DungeonTile[][] floor) {
+        for (int i = 0; i < floor.length; i++) {
+            for (int j = 0; j < floor[i].length; j++) {
+                if (floor[i][j].isEntrance) {
                     return floor[i][j];
                 }
             }
@@ -100,10 +102,10 @@ public class DungeonFloorCreator {
         return null;
     }
 
-    public DungeonTile findExit(DungeonTile[][] floor){
-        for(int i = 0; i < floor.length; i++){
-            for(int j = 0; j < floor[i].length; j++){
-                if(floor[i][j].isExit){
+    public DungeonTile findExit(DungeonTile[][] floor) {
+        for (int i = 0; i < floor.length; i++) {
+            for (int j = 0; j < floor[i].length; j++) {
+                if (floor[i][j].isExit) {
                     return floor[i][j];
                 }
             }
@@ -112,89 +114,89 @@ public class DungeonFloorCreator {
     }
 
 
-    public boolean completeFloor(int x, int y, DungeonTile[][] floor, int exitHeight){
-        if(x == width-1 && y == exitHeight){
+    public boolean completeFloor(int x, int y, DungeonTile[][] floor, int exitHeight) {
+        if (x == width - 1 && y == exitHeight) {
             return true;
         }
-        if(x < 0 || y < 0 || x >= width || y >= height){
+        if (x < 0 || y < 0 || x >= width || y >= height) {
             return false;
         }
-        if(floor[x][y].isWall || floor[x][y].isVisited){
+        if (floor[x][y].isWall || floor[x][y].isVisited) {
             return false;
         }
         floor[x][y].isVisited = true;
-        if(completeFloor(x + 1, y, floor, exitHeight)){
+        if (completeFloor(x + 1, y, floor, exitHeight)) {
             return true;
         }
-        if(completeFloor(x, y + 1, floor,exitHeight)){
+        if (completeFloor(x, y + 1, floor, exitHeight)) {
             return true;
         }
-        if(completeFloor(x - 1, y, floor, exitHeight)){
+        if (completeFloor(x - 1, y, floor, exitHeight)) {
             return true;
         }
-        if(completeFloor(x, y - 1, floor,exitHeight)){
+        if (completeFloor(x, y - 1, floor, exitHeight)) {
             return true;
         }
         return false;
     }
 
 
-    public boolean accessibleTile(int x, int y, DungeonTile[][] floor, int desiredX, int desiredY){
-            if(x == desiredX && y == desiredY){
-                return true;
-            }
-            if(x < 0 || y < 0 || x >= width || y >= height){
-                return false;
-            }
-            if(floor[x][y].isWall || floor[x][y].isVisited){
-                return false;
-            }
-            floor[x][y].isVisited = true;
-            if(accessibleTile(x + 1, y, floor, desiredX, desiredY)){
-                return true;
-            }
-            if(accessibleTile(x, y + 1, floor, desiredX, desiredY)){
-                return true;
-            }
-            if(accessibleTile(x - 1, y, floor, desiredX, desiredY)){
-                return true;
-            }
-            if(accessibleTile(x, y - 1, floor, desiredX, desiredY)){
-                return true;
-            }
+    public boolean accessibleTile(int x, int y, DungeonTile[][] floor, int desiredX, int desiredY) {
+        if (x == desiredX && y == desiredY) {
+            return true;
+        }
+        if (x < 0 || y < 0 || x >= width || y >= height) {
             return false;
+        }
+        if (floor[x][y].isWall || floor[x][y].isVisited) {
+            return false;
+        }
+        floor[x][y].isVisited = true;
+        if (accessibleTile(x + 1, y, floor, desiredX, desiredY)) {
+            return true;
+        }
+        if (accessibleTile(x, y + 1, floor, desiredX, desiredY)) {
+            return true;
+        }
+        if (accessibleTile(x - 1, y, floor, desiredX, desiredY)) {
+            return true;
+        }
+        if (accessibleTile(x, y - 1, floor, desiredX, desiredY)) {
+            return true;
+        }
+        return false;
     }
 
-    public void assignEnemies(){ //TODO: Fixed if enemies are accessible or not
-        for(int i = 0; i < enemyCount; i++){
+    public void assignEnemies() { //TODO: Fixed if enemies are accessible or not
+        for (int i = 0; i < enemyCount; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
-            if(floor[x][y].isWalkable && !floor[x][y].isEntrance && !floor[x][y].isExit && !floor[x][y].hasChest && !floor[x][y].hasEnemy){
-                floor[x][y].hasEnemy = true;
+            if (map[x][y].isWalkable && !map[x][y].isEntrance && !map[x][y].isExit && !map[x][y].hasChest && !map[x][y].hasEnemy) {
+                map[x][y].hasEnemy = true;
             } else {
                 i--;
             }
         }
     }
 
-    public void assignChests(){ //TODO: Fixed if chests are accessible or not
-        for(int i = 0; i < chestCount; i++){
+    public void assignChests() { //TODO: Fixed if chests are accessible or not
+        for (int i = 0; i < chestCount; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
-            if(floor[x][y].isWalkable && !floor[x][y].isEntrance && !floor[x][y].isExit && !floor[x][y].hasChest && !floor[x][y].hasEnemy){
-                floor[x][y].hasChest= true;
+            if (map[x][y].isWalkable && !map[x][y].isEntrance && !map[x][y].isExit && !map[x][y].hasChest && !map[x][y].hasEnemy) {
+                map[x][y].hasChest = true;
             } else {
                 i--;
             }
         }
     }
 
-    public void assignTorch(){
-        for(int i = 0; i < torchCount; i++){
+    public void assignTorch() {
+        for (int i = 0; i < torchCount; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
-            if(floor[x][y].isWalkable && !floor[x][y].isEntrance && !floor[x][y].isExit && !floor[x][y].hasChest && !floor[x][y].hasEnemy && !floor[x][y].hasTorch){
-                floor[x][y].hasTorch = true;
+            if (map[x][y].isWalkable && !map[x][y].isEntrance && !map[x][y].isExit && !map[x][y].hasChest && !map[x][y].hasEnemy && !map[x][y].hasTorch) {
+                map[x][y].hasTorch = true;
             } else {
                 i--;
             }
@@ -202,6 +204,26 @@ public class DungeonFloorCreator {
 
     }
 
+    public DungeonTile[][] fixWalls() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                //if (map[i][j].isWall) {
+                    if(i == 0 && map[i][j].isWall) map[i][j].setIcon(ap.rightwall);
+                    if(i == 0 && map[i][j].isWall && map[i+1][j].isWall) map[i][j].setIcon(ap.leftwall);
+                    if(i == 12 && map[i][j].isWall) map[i][j].setIcon(ap.leftwall);
+                    if(i == 12 && map[i][j].isWall && map[i-1][j].isWall) map[i][j].setIcon(ap.rightwall);
+                    //else if(map[i-1][j].isWall && !map[i][j].isWall) map[i-1][j].setIcon(ap.alonewall);
+                    //else if(map[i+1][j].isWall && !map[i][j].isWall) map[i+1][j].setIcon(ap.leftwall);
+                    if(i>0 && i < 12 && map[i][j].isWall && map[i-1][j].isWall && map[i+1][j].isWall) map[i][j].setIcon(ap.wall); //This needs to be checked with the other walls to make sure its not the same one.
+                if(i>0 && i < 12 && map[i][j].isWall && map[i-1][j].isWall && map[i+1][j].isWall && Objects.equals(map[i - 1][j].getIcon(), ap.wall)) map[i][j].setIcon(ap.middlewall);
+                    if(i>0 && i < 12 && map[i][j].isWall && map[i-1][j].isWall && !map[i+1][j].isWall) map[i][j].setIcon(ap.rightwall);
+                    if(i>0 && i < 12 && map[i][j].isWall && !map[i-1][j].isWall && map[i+1][j].isWall) map[i][j].setIcon(ap.leftwall);
+                    if(i>0 && i < 12 && map[i][j].isWall && !map[i-1][j].isWall && !map[i+1][j].isWall) map[i][j].setIcon(ap.alonewall);
+            //    }
+            }
+        }
+        return map;
+    }
 }
 
 

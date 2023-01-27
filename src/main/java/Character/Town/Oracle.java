@@ -1,5 +1,6 @@
 package Character.Town;
 import Character.*;
+import Character.Abilities.Mystic;
 import Game.Output;
 import Game.UserInput;
 

@@ -1,6 +1,9 @@
 package Test;
 import Character.*;
-import Game.HeroSaveAdapter;
+import Character.Abilities.Mystic;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.Weapon;
 import Game.Load;
 import Game.Save;
 

@@ -2,11 +2,11 @@ package view;
 
 import Character.*;
 import Dungeon.ChestLoot;
+import Dungeon.Enemy;
 import Dungeon.EnemyGenerator;
 import Dungeon.Loot;
 import Game.AssetPath;
 import Game.Sound;
-import com.sun.tools.jconsole.JConsoleContext;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,24 +57,37 @@ public class GameView {
     DungeonFloorCreator dungeonFloorCreator;
     JTextArea displayPane;
     JScrollPane scrollPane;
-    BufferedReader reader;
 
     int heroLevel = 0;
     int floorCount = 1;
+    int bossFloorCount = 0;
     public GameView() {
     }
 
-    public Hero startGameView(Hero hero){
+    //Consider adding a string to the parameters here for the type of dungeon we want to do.
+    public Hero startNewDungeon(Hero hero,int length) {
+        bossFloorCount = length;
+        startGameView(hero);
+        if(length == floorCount) loadBossFloor();
+        else loadDungeon();
+        while(this.hero.getHealth()>0){
+            if (floorCount < bossFloorCount) {
+                return hero;
+            }
+        }
+        return null;
+    }
 
+
+
+    public Hero startGameView(Hero hero){
         this.hero = hero;
         heroLevel = hero.getLevel();
         frame = new JFrame("BladeBoy");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         frame.setSize(1300, 1000);
-
         loadInventory();
-
         frame.setLayout(null);
         frame.setVisible(true);
         return hero;
@@ -176,8 +189,10 @@ public class GameView {
                     //heroIcon.getInputMap().clear();
                     dungeonLabels = null;
                     floorCount++;
+                    sound.enterDoorSound();
                     loadInventory();
-                    loadDungeon();
+                    if(bossFloorCount>1 && floorCount == bossFloorCount)loadBossFloor();
+                    else loadDungeon();
                     updateKeyBindings();
                 }
             }
@@ -407,12 +422,12 @@ public class GameView {
         torchTiles = new ArrayList<>();
         cont = frame.getContentPane();
         dungeonFloorCreator = new DungeonFloorCreator();
-        dungeon = dungeonFloorCreator.createFloor();
+        dungeon = dungeonFloorCreator.createMap();
         DungeonTile entrance = dungeonFloorCreator.findEntrance(dungeon);
         exit = dungeonFloorCreator.findExit(dungeon);
         for(int i = 0; i < dungeonFloorCreator.width; i++){
             for(int j = 0; j < dungeonFloorCreator.height; j++) {
-                dungeonLabels[i][j] = labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/blackTile.png", (i * 100), (j * 100), 100, 100);
+                dungeonLabels[i][j] = labelCreator.createLabelWithoutHover(ap.blackTile, (i * 100), (j * 100), 100, 100);
                 if (dungeon[i][j] == entrance) {
                     dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     hero.x = i;
@@ -438,6 +453,16 @@ public class GameView {
                         JLabel torch = labelCreator.createLabelWithoutHover(ap.torch, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                         torchTiles.add(torch);
                         cont.add(torch);
+                    } else if (dungeon[i][j].isExit) {
+                        if(bossFloorCount-1 == floorCount){
+                            //make boss door
+                            JLabel bossDoor = labelCreator.createLabelWithoutHover(ap.bossDoor, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                            cont.add(bossDoor);
+                        } else {
+                            //normal door
+                            JLabel door = labelCreator.createLabelWithoutHover(ap.exit, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                            cont.add(door);
+                        }
                     } else {
                         cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
@@ -445,7 +470,7 @@ public class GameView {
                         cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
                     if (j == dungeonFloorCreator.height - 1)
-                        cont.add(labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/horizontalEdge.png", dungeon[i][j].x, dungeon[i][j].y + 100, 100, 100));
+                        cont.add(labelCreator.createLabelWithoutHover(ap.horizontalEdge, dungeon[i][j].x, dungeon[i][j].y + 100, 100, 100));
                 }
             }
         }
@@ -454,12 +479,12 @@ public class GameView {
         }
         removeDarkness();
         hero.inDungeon = true;
-        print("You are on floor: " + floorCount);
+        if(floorCount == bossFloorCount) print("You have reached the boss floor!");
+        else print("You are on floor: " + floorCount);
 
     }
 
     public void loadBossFloor(){
-        //dungeonLabels = new JLabel[13][5];
         enemyTiles = new ArrayList<>();
         chestTiles = new ArrayList<>();
         torchTiles = new ArrayList<>();
@@ -470,7 +495,6 @@ public class GameView {
         exit = dungeonFloorCreator.findExit(dungeon);
         for(int i = 0; i < dungeonFloorCreator.width; i++){
             for(int j = 0; j < dungeonFloorCreator.height; j++) {
-                //dungeonLabels[i][j] = labelCreator.createLabelWithoutHover("src/Assets/Dungeon/Tiles/blackTile.png", (i * 100), (j * 100), 100, 100);
                 if (dungeon[i][j] == entrance) {
                     dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     hero.x = i;
@@ -507,10 +531,7 @@ public class GameView {
                 }
             }
         }
-//        for(JLabel t : torchTiles){
-//            removeDarkness(t.getX()/100, t.getY()/100);
-//        }
-        //removeDarkness();
+        // Don't have darkness in boss rooms.
         hero.inDungeon = true;
         print("You are on floor: " + floorCount);
     }
@@ -520,6 +541,7 @@ public class GameView {
             if(x<dungeonFloorCreator.width && y<dungeonFloorCreator.height && x > -1 && y > -1 && dungeon[x][y]!= null && dungeon[x][y].isWalkable){
                 hero.x = x;
                 hero.y = y;
+                sound.stepSound();
                 if(dungeon[x][y].hasEnemy){
                     startCombat();
                     dungeon[x][y].hasEnemy = false;
@@ -576,6 +598,7 @@ public class GameView {
 //                chest.repaint();
                 cont.remove(chest);
                 if(dungeon[x][y].hasChest) {
+                    sound.openChestSound();
                     Loot loot = chestLoot.generateLoot(hero.getLevel());
                     // Dialogue box to say what was in the chest!
                     print("You opened the chest. " + loot.getLoot());
@@ -585,11 +608,12 @@ public class GameView {
                     break;
                 }
                 if(dungeon[x][y].hasBossChest){ //Make boss loot.
+                    sound.openChestSound();
                     Loot loot = chestLoot.generateBossLoot(hero.getLevel());
                     // Dialogue box to say what was in the chest!
                     print("You opened the boss chest. " + loot.getLoot());
                     hero.addLoot(loot);
-                    dungeon[x][y].hasChest = false;
+                    dungeon[x][y].hasBossChest = false;
                     chestTiles.remove(chest);
                     break;
                 }

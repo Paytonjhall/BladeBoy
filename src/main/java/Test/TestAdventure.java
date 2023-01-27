@@ -1,8 +1,11 @@
 package Test;
 
 import Character.*;
+import Character.Abilities.Mystic;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.Weapon;
 import Character.Town.Oracle;
-import Character.Town.Town;
 import Dungeon.Adventure;
 
 import java.util.ArrayList;

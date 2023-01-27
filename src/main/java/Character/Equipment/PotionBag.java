@@ -1,4 +1,6 @@
-package Character;
+package Character.Equipment;
+
+import Character.Equipment.Potion;
 
 public class PotionBag {
     public Potion firstPotion;

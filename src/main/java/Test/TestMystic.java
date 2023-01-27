@@ -1,8 +1,7 @@
 package Test;
 import Character.*;
+import Character.Abilities.Mystic;
 import Character.Town.Oracle;
-
-import java.util.List;
 
 public class TestMystic {
     public static void main(String[] args) throws InterruptedException {

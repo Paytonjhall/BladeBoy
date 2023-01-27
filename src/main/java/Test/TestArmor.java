@@ -1,5 +1,5 @@
 package Test;
-import Character.*;
+import Character.Equipment.Armor;
 import Character.Town.*;
 
 import java.util.List;

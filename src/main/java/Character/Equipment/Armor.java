@@ -1,4 +1,4 @@
-package Character;
+package Character.Equipment;
 
 public class Armor implements ItemInterface {
     //Max armor is 900; This blocks 90% of damage

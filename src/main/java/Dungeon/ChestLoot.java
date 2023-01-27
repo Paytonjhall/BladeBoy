@@ -1,5 +1,8 @@
 package Dungeon;
-import Character.*;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
+import Character.Equipment.Potion;
+import Character.Equipment.Weapon;
 import Character.Town.ArmorGenerator;
 import Character.Town.ArtifactGenerator;
 import Character.Town.PotionGenerator;

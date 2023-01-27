@@ -3,7 +3,9 @@ package Dungeon;
 
 import java.util.List;
 import java.util.Random;
-import Character.*;
+
+import Character.Equipment.ItemInterface;
+import Character.Equipment.Weapon;
 import Character.Town.WeaponGenerator;
 import Game.AssetPath;
 
