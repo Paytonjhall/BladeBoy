@@ -38,6 +38,7 @@ public class LabelCreator {
         return label;
     }
 
+    // I think this function is broken.
     public JButton createButton(String path, String hover , int x, int y, int width, int height){
         JButton button = new JButton();
         button.setBounds(x, y, width, height);

@@ -57,6 +57,8 @@ public class GameView {
     DungeonFloorCreator dungeonFloorCreator;
     JTextArea displayPane;
     JScrollPane scrollPane;
+    DungeonClearedData dungeonClearedData = new DungeonClearedData();
+    ClearedDungeon clearedDungeon;
 
     int heroLevel = 0;
     int floorCount = 1;
@@ -168,18 +170,25 @@ public class GameView {
 
     public void keyInput(char e) {
         switch (e) {
-            case 'i' -> openInventory();
+            case 'i' -> {
+                if(hero.inDungeon && !hero.inCombat) openInventory();
+                else print("You can't open your inventory while in combat!");
+            }
             case 'w' -> {
                 if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y -1);
+                else print("You can't move in combat!");
             }
             case 'a' -> {
                 if(hero.inDungeon && !hero.inCombat)checkMove(hero.x -1, hero.y);
+                else print("You can't move in combat!");
             }
             case 's' -> {
                 if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y +1);
+                else print("You can't move in combat!");
             }
             case 'd' -> {
                 if(hero.inDungeon && !hero.inCombat)checkMove(hero.x +1, hero.y);
+                else print("You can't move in combat!");
             }
             case 'e' -> {
                 if(hero.inDungeon && !hero.inCombat)unlockChest(hero.x, hero.y);
@@ -187,11 +196,16 @@ public class GameView {
             case 'g' -> {
                 if(exit != null && hero.x == exit.x/100 && hero.y == exit.y/100) {
                     //heroIcon.getInputMap().clear();
+                    dungeonClearedData.addFloorsCleared(1);
                     dungeonLabels = null;
                     floorCount++;
                     sound.enterDoorSound();
                     loadInventory();
                     if(bossFloorCount>1 && floorCount == bossFloorCount)loadBossFloor();
+                    else if(bossFloorCount < floorCount) {
+                        hero.inDungeon = false;
+                        clearedDungeon = new ClearedDungeon(dungeonClearedData);
+                    }
                     else loadDungeon();
                     updateKeyBindings();
                 }
@@ -243,6 +257,8 @@ public class GameView {
         else {
             print("You defeated the " + enemy.getName() + "! Gained " + enemy.getXp() + " XP and " + enemy.getGold() + " gold.");
         }
+        dungeonClearedData.addXpEarned(enemy.getXp());
+        dungeonClearedData.addGoldEarned(enemy.getGold());
         cont.remove(enemyHealthBar);
         cont.remove(enemyIcon);
         if(attack!=null){
@@ -254,6 +270,7 @@ public class GameView {
         if(skills!=null)skills.setVisible(false);
         if(enemyHealthBar!=null)enemyHealthBar.setVisible(false);
         if(enemyIcon!=null)enemyIcon.setVisible(false);
+        dungeonClearedData.addEnemiesKilled(1);
         removeEnemyTile(hero.x, hero.y);
     }
 
@@ -266,7 +283,11 @@ public class GameView {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
-                    if(hero.inCombat)hero = combat.attack();
+                    if(hero.inCombat){
+                        hero = combat.attack();
+                        dungeonClearedData.addHeroDamage(combat.getRecentHeroDamage());
+                        dungeonClearedData.addDamageTaken(combat.getRecentEnemyDamage());
+                    }
                     update(hero);
                 }
             });
@@ -344,7 +365,7 @@ public class GameView {
         heroIcon.getActionMap().put("i", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openInventory();
+                keyInput('i');
             }
         });
         heroIcon.getActionMap().put("e", new AbstractAction() {
@@ -358,7 +379,6 @@ public class GameView {
     public void loadInventory(){
         heroIcon = null;
         cont = frame.getContentPane();
-
         cont.removeAll();
         displayPane = new JTextArea();
         scrollPane = new JScrollPane(displayPane);
@@ -542,6 +562,10 @@ public class GameView {
                 hero.x = x;
                 hero.y = y;
                 sound.stepSound();
+                if(!dungeon[x][y].isVisited) {
+                    dungeon[x][y].isVisited = true;
+                    dungeonClearedData.addTilesExplored(1);
+                }
                 if(dungeon[x][y].hasEnemy){
                     startCombat();
                     dungeon[x][y].hasEnemy = false;
@@ -554,7 +578,7 @@ public class GameView {
                 frame.repaint();
                 update(hero);
             }
-            else print("Can't move there, x:" + x + " y:" + y);
+            // else print("Can't move there, x:" + x + " y:" + y);
         }
     }
 
@@ -592,6 +616,7 @@ public class GameView {
     public void unlockChest(int x, int y){
         for(JLabel chest : chestTiles){
             if(chest.getX() == (x * 100) && chest.getY() == (y * 100)){
+                dungeonClearedData.addChestsOpened(1);
                 //I would like to replace the chest with a new tile, but right now the new tile looks funny.
 //                JLabel openedChest = labelCreator.createLabelWithoutHover(ap.openedChest, chest.getX(), chest.getY(), 200, 200);
 //                chest.setIcon(openedChest.getIcon());
@@ -622,9 +647,11 @@ public class GameView {
     }
 
     public void checkHeroLevel(){
-        if(hero.getLevel()!= heroLevel){
+        if(hero.getLevel() > heroLevel){
             print("You have leveled up! You are now level " + hero.getLevel());
-            heroLevel= hero.getLevel();
+            heroLevel++;
+            dungeonClearedData.addLevelsGained(1);
+            checkHeroLevel();
         }
     }
 
@@ -635,5 +662,4 @@ public class GameView {
         if(displayPane!= null) displayPane.setText(displayPane.getText() + '\n' + time + ": " + string);
         //displayPane.update(cont.getGraphics());
     }
-
 }

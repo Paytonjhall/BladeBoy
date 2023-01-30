@@ -10,6 +10,8 @@ import Game.UserInput;
 import java.util.Random;
 
 public class Combat {
+    int recentHeroDamage = 0;
+    int recentEnemyDamage = 0;
     UserInput userInput = new UserInput();
     int protection = 0;
     Output output = new Output();
@@ -25,7 +27,9 @@ public class Combat {
 
     //Normal attack
     public Hero attack(){
-        enemy.takeDamage(calculateDamage(hero, enemy));
+        int damage = calculateDamage(hero, enemy);
+        recentHeroDamage = damage;
+        enemy.takeDamage(damage);
         sound.swordHitSound();
         hero = checkHealths();
         if(hero.finishedCombat) return hero;
@@ -37,7 +41,9 @@ public class Combat {
 
     private void EnemyTurn(){
         if(enemy.getHealth() > 0){
-            hero.takeDamage(calculateDamage(enemy, hero));
+            int damage = calculateDamage(enemy, hero);
+            hero.takeDamage(damage);
+            recentEnemyDamage = damage;
             hero = checkHealths();
             turn = true;
         }
@@ -197,5 +203,21 @@ public class Combat {
             }
         }
         return damage;
+    }
+
+    public int getRecentHeroDamage() {
+        return recentHeroDamage;
+    }
+
+    public void setRecentHeroDamage(int recentHeroDamage) {
+        this.recentHeroDamage = recentHeroDamage;
+    }
+
+    public int getRecentEnemyDamage() {
+        return recentEnemyDamage;
+    }
+
+    public void setRecentEnemyDamage(int recentEnemyDamage) {
+        this.recentEnemyDamage = recentEnemyDamage;
     }
 }
