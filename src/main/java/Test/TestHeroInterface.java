@@ -10,12 +10,8 @@ import Character.Town.PotionGenerator;
 import Character.Town.WeaponGenerator;
 import Game.AssetPath;
 import Game.UserInput;
-import view.GameView;
-import view.HeroInventory;
-import view.blacksmith;
-import view.artificiary;
-import view.armory;
-import view.oracle;
+import view.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +23,8 @@ public class TestHeroInterface {
         blacksmith bs = new blacksmith();
         armory ar = new armory();
         oracle or = new oracle();
+        DungeonClearedData dcd = new DungeonClearedData();
+        //ClearedDungeon cd = new ClearedDungeon(dcd);
         artificiary art = new artificiary();
         ArtifactGenerator artg = new ArtifactGenerator();
         AssetPath assetPath = new AssetPath();
@@ -66,6 +64,7 @@ public class TestHeroInterface {
         hero.setArmor(ag.generateArmor(hero.getLevel(),1).get(0));
         hero.setArtifact(artg.generateArtifact(hero.getLevel(),1).get(0));
         HeroInventory heroInventory = new HeroInventory();
+
         //hero.setWeapon(null);
         //hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
@@ -75,7 +74,8 @@ public class TestHeroInterface {
         //ar.visitArmory(hero);
         //or.visitOracle(hero);
         //art.visitArtificiary(hero);
-        hero = gameView.startNewDungeon(hero, 2);
+        gameView.enterTown(hero);
+        //hero = gameView.startNewDungeon(hero, 2);
         //gameView.loadDungeon();
         //gameView.loadBossFloor();
         //gameView.startCombat();

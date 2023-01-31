@@ -58,6 +58,25 @@ public class AssetPath {
     public String alonewall = "src/Assets/Dungeon/Tiles/alonewall.png";
     public String barrel = "src/Assets/Dungeon/Tiles/barrel.png";
     public String box = "src/Assets/Dungeon/Tiles/box.png";
+    public String UIScroll = "src/Assets/UI/scrollCleared.png";
+    public String stump1 = "src/Assets/Town/Tiles/stump.png";
+    public String stump2 = "src/Assets/Town/Tiles/stump2.png";
+    public String grass = "src/Assets/Town/Tiles/grass.png";
+    public String yellowGrass = "src/Assets/Town/Tiles/yellowGrass.png";
+    public String blueShroom = "src/Assets/Town/Tiles/blueShroom.png";
+    public String redShrooms = "src/Assets/Town/Tiles/redShrooms.png";
+    public String rock1 = "src/Assets/Town/Tiles/rock1.png";
+    public String rock2 = "src/Assets/Town/Tiles/rock2.png";
+    public String fence = "src/Assets/Town/Tiles/fence.png";
+    public String pinkFlowers = "src/Assets/Town/Tiles/pinkFlowers.png";
+    public String whiteFlowers = "src/Assets/Town/Tiles/whiteFlowers.png";
+    public String sign = "src/Assets/Town/Tiles/sign.png";
+    public String stoneSign = "src/Assets/Town/Tiles/stone_sign.png";
+    public String statue = "src/Assets/Town/Tiles/statue.png";
+    public String bush1 = "src/Assets/Town/Tiles/bush1.png";
+    public String bush2 = "src/Assets/Town/Tiles/bush2.png";
+    public String fern = "src/Assets/Town/Tiles/fern.png";
+    public String sprout = "src/Assets/Town/Tiles/sprout.png";
 
     public String enemyIcon(){
         return "src/Assets/Portraits/enemy"+ (int)(Math.random() * 3)+".png";

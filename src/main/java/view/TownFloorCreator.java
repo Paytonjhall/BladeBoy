@@ -14,6 +14,13 @@ public class TownFloorCreator implements MapInterface {
 
     public DungeonTile[][] createMap() {
 
+        map = new DungeonTile[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                map[i][j] = new DungeonTile();
+                map[i][j].setTownFloor();
+            }
+        }
         return map;
     }
 

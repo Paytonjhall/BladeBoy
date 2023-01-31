@@ -55,6 +55,7 @@ public class GameView {
     List<JLabel> torchTiles;
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
+    TownFloorCreator townFloorCreator;
     JTextArea displayPane;
     JScrollPane scrollPane;
     DungeonClearedData dungeonClearedData = new DungeonClearedData();
@@ -78,6 +79,12 @@ public class GameView {
             }
         }
         return null;
+    }
+
+    public Hero enterTown(Hero hero){
+        startGameView(hero);
+        loadTown();
+        return hero;
     }
 
 
@@ -435,6 +442,17 @@ public class GameView {
         cont.add(border);
     }
 
+    public void loadTown(){
+        cont = frame.getContentPane();
+        townFloorCreator = new TownFloorCreator();
+        dungeon = townFloorCreator.createMap();
+        for(int i = 0; i < dungeonFloorCreator.width; i++) {
+            for (int j = 0; j < dungeonFloorCreator.height; j++) {
+                cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon,  i * 100, j * 100, 100, 100));
+            }
+        }
+    }
+
     public void loadDungeon(){
         dungeonLabels = new JLabel[13][5];
         enemyTiles = new ArrayList<>();
@@ -618,10 +636,10 @@ public class GameView {
             if(chest.getX() == (x * 100) && chest.getY() == (y * 100)){
                 dungeonClearedData.addChestsOpened(1);
                 //I would like to replace the chest with a new tile, but right now the new tile looks funny.
-//                JLabel openedChest = labelCreator.createLabelWithoutHover(ap.openedChest, chest.getX(), chest.getY(), 200, 200);
-//                chest.setIcon(openedChest.getIcon());
-//                chest.repaint();
-                cont.remove(chest);
+                JLabel openedChest = labelCreator.createLabelWithoutHover(ap.openedChest, chest.getX(), chest.getY(), 100, 125);
+                chest.setIcon(openedChest.getIcon());
+                chest.repaint();
+                //cont.remove(chest);
                 if(dungeon[x][y].hasChest) {
                     sound.openChestSound();
                     Loot loot = chestLoot.generateLoot(hero.getLevel());

@@ -49,6 +49,11 @@ public class DungeonTile {
         icon = "src/Assets/Dungeon/Tiles/wall.png";
     }
 
+    public void setTownFloor(){
+        isWalkable = true;
+        icon = "src/Assets/Town/Tiles/grass.png";
+    }
+
     public void setVertEdge(){
         isEdge = true;
         isWall = true;
