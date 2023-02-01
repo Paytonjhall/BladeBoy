@@ -83,6 +83,9 @@ public class GameView {
 
     public Hero enterTown(Hero hero){
         startGameView(hero);
+        hero.inCombat = false;
+        hero.inDungeon = false;
+        hero.inTown = true;
         loadTown();
         return hero;
     }
@@ -454,6 +457,7 @@ public class GameView {
     }
 
     public void loadDungeon(){
+        hero.inTown = false;
         dungeonLabels = new JLabel[13][5];
         enemyTiles = new ArrayList<>();
         chestTiles = new ArrayList<>();
@@ -522,7 +526,8 @@ public class GameView {
 
     }
 
-    public void loadBossFloor(){
+    public void loadBossFloor () {
+        hero.inTown = false;
         enemyTiles = new ArrayList<>();
         chestTiles = new ArrayList<>();
         torchTiles = new ArrayList<>();

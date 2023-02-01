@@ -77,6 +77,13 @@ public class AssetPath {
     public String bush2 = "src/Assets/Town/Tiles/bush2.png";
     public String fern = "src/Assets/Town/Tiles/fern.png";
     public String sprout = "src/Assets/Town/Tiles/sprout.png";
+    public String waterHorizontal = "src/Assets/Town/Tiles/waterHorizontal.png";
+    public String waterVertical = "src/Assets/Town/Tiles/waterVertical.png";
+    public String waterIntersection = "src/Assets/Town/Tiles/waterIntersection.png";
+    public String storeHouse = "src/Assets/Town/Tiles/storeHouse.png";
+    public String horizontalPath = "src/Assets/Town/Tiles/horizontalPath.png";
+    public String verticalPath = "src/Assets/Town/Tiles/verticalPath.png";
+
 
     public String enemyIcon(){
         return "src/Assets/Portraits/enemy"+ (int)(Math.random() * 3)+".png";

@@ -51,7 +51,7 @@ public class DungeonTile {
 
     public void setTownFloor(){
         isWalkable = true;
-        icon = "src/Assets/Town/Tiles/grass.png";
+        icon = "src/Assets/Town/Tiles/emptyGrass.png";
     }
 
     public void setVertEdge(){

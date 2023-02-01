@@ -27,6 +27,7 @@ public class Hero {
     public boolean inDungeon = false;
     public boolean finishedCombat = false;
     public boolean inCombat = false;
+    public boolean inTown = false;
     public int x = 0;
     public int y = 0;
 
