@@ -157,9 +157,10 @@ public class GameView {
             updateEnemy();
         }
 
-        if(hero.inDungeon){
-            dungeonHero.setBounds(hero.x*100, hero.y*100, 100, 100);
-        }
+        if(hero.inDungeon) dungeonHero.setBounds(hero.x*100, hero.y*100, 100, 100);
+
+
+        if(hero.inTown) dungeonHero.setBounds(hero.x*100, hero.y*100, 100, 100);
 
         frame.invalidate();
         frame.validate();
@@ -181,27 +182,27 @@ public class GameView {
     public void keyInput(char e) {
         switch (e) {
             case 'i' -> {
-                if(hero.inDungeon && !hero.inCombat) openInventory();
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) openInventory();
                 else print("You can't open your inventory while in combat!");
             }
             case 'w' -> {
-                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y -1);
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) checkMove(hero.x, hero.y -1);
                 else print("You can't move in combat!");
             }
             case 'a' -> {
-                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x -1, hero.y);
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) checkMove(hero.x -1, hero.y);
                 else print("You can't move in combat!");
             }
             case 's' -> {
-                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x, hero.y +1);
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) checkMove(hero.x, hero.y +1);
                 else print("You can't move in combat!");
             }
             case 'd' -> {
-                if(hero.inDungeon && !hero.inCombat)checkMove(hero.x +1, hero.y);
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) checkMove(hero.x +1, hero.y);
                 else print("You can't move in combat!");
             }
             case 'e' -> {
-                if(hero.inDungeon && !hero.inCombat)unlockChest(hero.x, hero.y);
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) unlockChest(hero.x, hero.y);
             }
             case 'g' -> {
                 if(exit != null && hero.x == exit.x/100 && hero.y == exit.y/100) {
@@ -446,14 +447,24 @@ public class GameView {
     }
 
     public void loadTown(){
+        hero.inCombat = false;
+        hero.inTown = true;
         cont = frame.getContentPane();
         townFloorCreator = new TownFloorCreator();
         dungeon = townFloorCreator.createMap();
         for(int i = 0; i < dungeonFloorCreator.width; i++) {
             for (int j = 0; j < dungeonFloorCreator.height; j++) {
+                if(i == 0 && j ==0){
+                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                    cont.add(dungeonHero);
+                }
                 cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon,  i * 100, j * 100, 100, 100));
             }
         }
+        hero.x = 1;
+        hero.y = 1;
+
+        print("You have arrived at the town");
     }
 
     public void loadDungeon(){

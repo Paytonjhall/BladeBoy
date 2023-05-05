@@ -65,6 +65,7 @@ public class TestHeroInterface {
         hero.setArtifact(artg.generateArtifact(hero.getLevel(),1).get(0));
         HeroInventory heroInventory = new HeroInventory();
 
+
         //hero.setWeapon(null);
         //hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
@@ -74,6 +75,7 @@ public class TestHeroInterface {
         //ar.visitArmory(hero);
         //or.visitOracle(hero);
         //art.visitArtificiary(hero);
+
         gameView.enterTown(hero);
         //hero = gameView.startNewDungeon(hero, 2);
         //gameView.loadDungeon();
