@@ -66,6 +66,8 @@ public class TestHeroInterface {
         HeroInventory heroInventory = new HeroInventory();
 
 
+
+        //Settings for running tests
         //hero.setWeapon(null);
         //hero.setHealth(hero.getMaxHealth()/2);
         //bs.visitBlackSmith(hero);
