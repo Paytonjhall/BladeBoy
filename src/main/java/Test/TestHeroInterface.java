@@ -35,9 +35,11 @@ public class TestHeroInterface {
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                 new Artifact("Fortune Amulet", 1000, "A old amulet from your mother", "Fortune", 1.1625),
                 180, 500, 250, 8, 500, mystics);
-        hero.setIconString("Barbarian");
-        hero.setHeroClass(new Class("Barbarian", "Physical"));
-        WeaponGenerator wg = new WeaponGenerator(hero);
+        // hero.setIconString("Barbarian");
+        // hero.setHeroClass(new Class("Barbarian", "Physical"));
+         hero.setIconString("Mage");
+         hero.setHeroClass(new Class("Mage", "Magical"));
+         WeaponGenerator wg = new WeaponGenerator(hero);
 
 //        hero.addToBag(new Weapon("Incredible Iron Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Gold Sword", 1000, "An impressively sharp steel blade", 15));

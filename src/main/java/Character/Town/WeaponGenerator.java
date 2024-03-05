@@ -29,7 +29,7 @@ public class WeaponGenerator {
             Weapon weapon = new Weapon(generateWeaponName());
             if(weapon.getName().contains("sword") || weapon.getName().contains("Sword") || weapon.getName().contains("Glaive") || weapon.getName().contains("Rapier") || weapon.getName().contains("Scimitar") || weapon.getName().contains("Saber") || weapon.getName().contains("Claymore") || weapon.getName().contains("Zweihander")) weapon.setType("Sword");
             else if(weapon.getName().contains("dagger") || weapon.getName().contains("Dagger") || weapon.getName().contains("Knife") || weapon.getName().contains("Razor")) weapon.setType("Dagger");
-            else if(weapon.getName().contains("axe") || weapon.getName().contains("Axe") || weapon.getName().contains("Mace") || weapon.getName().contains("Flail") || weapon.getName().contains("Club") || weapon.getName().contains("Hammer") || weapon.getName().contains("Maul") || weapon.getName().contains("Morning Star") || weapon.getName().contains("Tomahawk")) weapon.setType("Axe");
+            else if(weapon.getName().contains("axe") || weapon.getName().contains("Axe") || weapon.getName().contains("Mace") || weapon.getName().contains("Flail") || weapon.getName().contains("Club") || weapon.getName().contains("Hammer") || weapon.getName().contains("Maul") || weapon.getName().contains("Morning Star") || weapon.getName().contains("Tomahawk") || weapon.getName().contains("Hatchet")) weapon.setType("Axe");
             else if(weapon.getName().contains("spear") || weapon.getName().contains("Spear") || weapon.getName().contains("Pike") || weapon.getName().contains("Halberd") || weapon.getName().contains("Trident") || weapon.getName().contains("Lance") || weapon.getName().contains("Guisarme") || weapon.getName().contains("Quarterstaff") || weapon.getName().contains("Scythe") || weapon.getName().contains("Javelin")) weapon.setType("Spear");
             else if(weapon.getName().contains("staff") || weapon.getName().contains("Staff") || weapon.getName().contains("Rod") || weapon.getName().contains("Wand") || weapon.getName().contains("Scepter") || weapon.getName().contains("Cane") || weapon.getName().contains("Pole") || weapon.getName().contains("Pike") || weapon.getName().contains("Lance") || weapon.getName().contains("Glaive") || weapon.getName().contains("Guisarme") || weapon.getName().contains("Quarterstaff")) weapon.setType("Staff");
             else weapon.setType(weapon.setRandomType());
@@ -51,9 +51,11 @@ public class WeaponGenerator {
 
     public String generateWeaponName(){
     Class heroClass = hero.getHeroClass();
+    System.out.println(heroClass.getClassType());
         return switch (heroClass.getClassType()) {
             case "Mage" -> generateAdj() + " " + staffNames[getRnd().nextInt(staffNames.length)];
             case "Barbarian" -> generateAdj() + " " + axeNames[getRnd().nextInt(axeNames.length)];
+            case "Knight" -> generateAdj() + " " + swordNames[getRnd().nextInt(swordNames.length)];
             default -> generateAdj() + " " + generateWeaponNoun();
         };
     }

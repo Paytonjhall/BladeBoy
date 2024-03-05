@@ -2,16 +2,15 @@ package Character;
 import Character.Abilities.Mystic;
 import Character.Equipment.*;
 import Dungeon.Loot;
-import Game.HeroSaveAdapter;
-import Game.Output;
-import Game.Sound;
-import Game.UserInput;
+import Game.*;
+
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Hero {
+    AssetPath ap;
     Armor armor;
     Weapon weapon;
     Artifact artifact;
@@ -45,6 +44,7 @@ public class Hero {
 
     public void setHeroClass(Class heroClass) {
         this.heroClass = heroClass;
+        setHeroIcon();
     }
 
     public List<SkillPoints> skillPoints = new ArrayList<>();
@@ -58,6 +58,7 @@ public class Hero {
 
     public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
         equipArmor(armor);
+        this.ap = new AssetPath();
         this.weapon = weapon;
         this.health = health;
         this.maxHealth = health;
@@ -81,6 +82,7 @@ public class Hero {
     }
 
     public Hero(HeroSaveAdapter newHero){
+        this.ap = new AssetPath();
         Bag = new ArrayList<ItemInterface>();
         this.armor = newHero.armor;
         this.weapon = newHero.weapon;
@@ -175,7 +177,7 @@ public class Hero {
     }
 
     public String getIconString() {
-        if (IconString == null) return "Knight";
+        if (IconString == null) setHeroIcon();
         return IconString;
     }
 
@@ -671,6 +673,22 @@ public class Hero {
             if(skillPoints.get(i).getLevel() == level){
                 skillPoints.get(i).setUsed(true);
             }
+        }
+    }
+
+    public void setHeroIcon () {
+        if (heroClass == null) {
+            setIconString("Knight");
+        } else {
+            setIconString(heroClass.getClassType());
+//            String iconPath = "";
+//            switch (heroClass.getClassType()) {
+//                case "Mage" -> iconPath = ap.mage;
+//                case "Knight" -> iconPath = ap.knight;
+//                case "Barbarian" -> iconPath = ap.barbarianIcon;
+//                case "Archer" -> iconPath = ap.getIcon("Punk");
+//            }
+//            setIconString(iconPath);
         }
     }
 

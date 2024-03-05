@@ -1,6 +1,10 @@
 package Character;
 
 public class Class {
+    // Classes:
+    // Barbarian: Barbarian: Physical dmg
+    // Mage: Magical dmg
+    // Knight:  Physical dmg
     String ClassType;
     String damageType;
 

@@ -17,6 +17,7 @@ public class LabelCreator {
     public JLabel createLabel(String path, String hover , int x, int y, int width, int height){
         JLabel label = new JLabel();
         label.setBounds(x, y, width, height);
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         Image dimg = getImage(path).getScaledInstance(label.getWidth(), label.getHeight(),
                 Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(dimg);

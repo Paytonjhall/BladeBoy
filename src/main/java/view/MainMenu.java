@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 
+
 import Character.Abilities.Mystic;
 import Character.Equipment.Armor;
 import Character.Equipment.Artifact;
@@ -33,14 +34,17 @@ public class MainMenu {
         exit.setBounds(50,160,210,30);
 
         new_game.addActionListener(e -> {
-            ArtifactGenerator artifactGenerator = new ArtifactGenerator();
-
-            NewGame newGame = new NewGame();
-            Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
-                    new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
-                    null,
-                    180, 500, 0, 8, 500, new ArrayList<Mystic>());
-            hero = gameView.startNewDungeon(hero, 2);
+            HeroMaker maker = new HeroMaker();
+            maker.makeHero();
+            System.exit(0);
+//            ArtifactGenerator artifactGenerator = new ArtifactGenerator();
+//
+//            NewGame newGame = new NewGame();
+//            Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
+//                    new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
+//                    null,
+//                    180, 500, 0, 8, 500, new ArrayList<Mystic>());
+//            hero = gameView.startNewDungeon(hero, 2);
             // newGame.start("Payton");
         });
 
