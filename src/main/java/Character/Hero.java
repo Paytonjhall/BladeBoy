@@ -7,6 +7,7 @@ import Game.Output;
 import Game.Sound;
 import Game.UserInput;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,21 @@ public class Hero {
     public boolean inTown = false;
     public int x = 0;
     public int y = 0;
+
+    String IconString = null;
+    Class heroClass;
+
+
+    public Class getHeroClass() {
+        if (heroClass == null) {
+            heroClass = new Class("Knight", "Physical");
+        }
+        return heroClass;
+    }
+
+    public void setHeroClass(Class heroClass) {
+        this.heroClass = heroClass;
+    }
 
     public List<SkillPoints> skillPoints = new ArrayList<>();
     List<Mystic> mystics = new ArrayList<>();
@@ -131,12 +147,14 @@ public class Hero {
         System.out.println();
     }
 
-    public void takeDamage(int damage){
+    public boolean takeDamage(int damage){
         health -= damage;
         if(health<=0){
             System.out.println("You have died");
             heroDeath();
+            return true;
         }
+        return false;
     }
 
     public void addGold(int gold){
@@ -154,6 +172,15 @@ public class Hero {
             levelUp();
             addXp(tempXp);
         }
+    }
+
+    public String getIconString() {
+        if (IconString == null) return "Knight";
+        return IconString;
+    }
+
+    public void setIconString(String iconString) {
+        IconString = iconString;
     }
 
     public void heal (int health){
@@ -227,7 +254,7 @@ public class Hero {
         input.sleep(1000);
         System.out.println("We will print your stats for you to see how you did.");
         input.sleep(1000);
-        System.out.println(toString());
+        System.out.println();
         // TODO: Delete save file
         System.exit(0);
     }
@@ -646,4 +673,6 @@ public class Hero {
             }
         }
     }
+
+
 }

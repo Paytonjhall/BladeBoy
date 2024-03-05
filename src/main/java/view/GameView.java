@@ -1,6 +1,12 @@
 package view;
 
+// Things to add:
+// Traps
+
 import Character.*;
+import Character.Town.Armory;
+import Character.Town.Artificiary;
+import Character.Town.Blacksmith;
 import Dungeon.ChestLoot;
 import Dungeon.Enemy;
 import Dungeon.EnemyGenerator;
@@ -52,6 +58,7 @@ public class GameView {
     Sound sound = new Sound();
     List<JLabel> enemyTiles;
     List<JLabel> chestTiles;
+    List<JLabel> shopTiles;
     List<JLabel> torchTiles;
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
@@ -60,6 +67,11 @@ public class GameView {
     JScrollPane scrollPane;
     DungeonClearedData dungeonClearedData = new DungeonClearedData();
     ClearedDungeon clearedDungeon;
+
+//    Blacksmith blacksmith;
+    blacksmith blacksmith;
+    Armory armory;
+    Artificiary artificiary;
 
     int heroLevel = 0;
     int floorCount = 1;
@@ -216,10 +228,14 @@ public class GameView {
                     else if(bossFloorCount < floorCount) {
                         hero.inDungeon = false;
                         clearedDungeon = new ClearedDungeon(dungeonClearedData);
+                        loadTown();
                     }
                     else loadDungeon();
                     updateKeyBindings();
                 }
+            }
+            case 't' -> {
+                if((hero.inDungeon || hero.inTown) && !hero.inCombat) shopKeeper(hero.x, hero.y);
             }
         }
     }
@@ -228,7 +244,7 @@ public class GameView {
         //panel = pc.getCombatPanel();
         hero.inCombat = true;
         combat = new Combat();
-        EnemyGenerator enemyGenerator = new EnemyGenerator(hero.getLevel());
+        EnemyGenerator enemyGenerator = new EnemyGenerator(hero);
         enemy = enemyGenerator.generateEnemy();
         combat.startFight(hero, enemy);
         loadEnemy();
@@ -240,7 +256,7 @@ public class GameView {
         //panel = pc.getCombatPanel();
         hero.inCombat = true;
         combat = new Combat();
-        EnemyGenerator enemyGenerator = new EnemyGenerator(hero.getLevel());
+        EnemyGenerator enemyGenerator = new EnemyGenerator(hero);
         enemy = enemyGenerator.generateBoss();
         combat.startFight(hero, enemy);
         loadEnemy();
@@ -343,6 +359,7 @@ public class GameView {
         heroIcon.getInputMap().put(KeyStroke.getKeyStroke("G"), "g");
         heroIcon.getInputMap().put(KeyStroke.getKeyStroke("I"), "i");
         heroIcon.getInputMap().put(KeyStroke.getKeyStroke("E"), "e");
+        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("T"), "t");
         heroIcon.getActionMap().put("w", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -373,6 +390,12 @@ public class GameView {
                 keyInput('g');
             }
         });
+        heroIcon.getActionMap().put("t", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyInput('t');
+            }
+        });
         heroIcon.getActionMap().put("i", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -395,10 +418,10 @@ public class GameView {
         scrollPane = new JScrollPane(displayPane);
         scrollPane.setBounds(15, 775, 1250, 175);
         border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
-        weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 35, 650, 75, 75);
-        armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().hoverString(), 145, 650, 75, 75);
-        artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 255, 650, 75, 75);
-        heroIcon = labelCreator.createLabel(ap.hero, "Level: " + hero.getLevel(), 35, 570, 75, 75);
+        if (hero.getWeapon() != null) weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 35, 650, 75, 75);
+        if (hero.getArmor() != null) armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().hoverString(), 145, 650, 75, 75);
+        if (hero.getArtifact() != null) artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 255, 650, 75, 75);
+        heroIcon = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Level: " + hero.getLevel(), 35, 570, 75, 75);
         loadKeyBindings();
         enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
         //gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
@@ -436,7 +459,7 @@ public class GameView {
         cont.add(scrollPane);
         cont.add(weapon);
         cont.add(armor);
-        cont.add(artifact);
+        if(hero.getArtifact() != null) cont.add(artifact);
         cont.add(healthBar);
         cont.add(XPBar);
         //cont.add(gold);
@@ -455,7 +478,7 @@ public class GameView {
         for(int i = 0; i < dungeonFloorCreator.width; i++) {
             for (int j = 0; j < dungeonFloorCreator.height; j++) {
                 if(i == 0 && j ==0){
-                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                    dungeonHero = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     cont.add(dungeonHero);
                 }
                 cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon,  i * 100, j * 100, 100, 100));
@@ -482,7 +505,7 @@ public class GameView {
             for(int j = 0; j < dungeonFloorCreator.height; j++) {
                 dungeonLabels[i][j] = labelCreator.createLabelWithoutHover(ap.blackTile, (i * 100), (j * 100), 100, 100);
                 if (dungeon[i][j] == entrance) {
-                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                    dungeonHero = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     hero.x = i;
                     hero.y = j;
                     cont.add(dungeonHero);
@@ -506,6 +529,10 @@ public class GameView {
                         JLabel torch = labelCreator.createLabelWithoutHover(ap.torch, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                         torchTiles.add(torch);
                         cont.add(torch);
+                    } else if (dungeon[i][j].isShop) {
+                        JLabel shop = labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                        torchTiles.add(shop);
+                        cont.add(shop);
                     } else if (dungeon[i][j].isExit) {
                         if(bossFloorCount-1 == floorCount){
                             //make boss door
@@ -519,7 +546,7 @@ public class GameView {
                     } else {
                         cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
-                    if (dungeon[i][j] == entrance || dungeon[i][j] == exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy || dungeon[i][j].hasTorch || dungeon[i][j].hasBoss) {
+                    if (dungeon[i][j] == entrance || dungeon[i][j] == exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy || dungeon[i][j].hasTorch || dungeon[i][j].hasBoss || dungeon[i][j].isShop) {
                         cont.add(labelCreator.createLabelWithoutHover(ap.baseTile, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
                     if (j == dungeonFloorCreator.height - 1)
@@ -537,7 +564,7 @@ public class GameView {
 
     }
 
-    public void loadBossFloor () {
+    public void loadBossFloor(){
         hero.inTown = false;
         enemyTiles = new ArrayList<>();
         chestTiles = new ArrayList<>();
@@ -550,7 +577,7 @@ public class GameView {
         for(int i = 0; i < dungeonFloorCreator.width; i++){
             for(int j = 0; j < dungeonFloorCreator.height; j++) {
                 if (dungeon[i][j] == entrance) {
-                    dungeonHero = labelCreator.createLabel(ap.hero, "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                    dungeonHero = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Hero", dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                     hero.x = i;
                     hero.y = j;
                     cont.add(dungeonHero);
@@ -574,7 +601,12 @@ public class GameView {
                         JLabel torch = labelCreator.createLabelWithoutHover(ap.torch, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
                         torchTiles.add(torch);
                         cont.add(torch);
-                    } else {
+                    } else if (dungeon[i][j].isShop) {
+                        JLabel shop = labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
+                        torchTiles.add(shop);
+                        cont.add(shop);
+                    }
+                    else {
                         cont.add(labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100));
                     }
                     if (dungeon[i][j] == entrance || dungeon[i][j] == exit || dungeon[i][j].hasChest || dungeon[i][j].hasEnemy || dungeon[i][j].hasTorch || dungeon[i][j].hasBoss || dungeon[i][j].hasBossChest) {
@@ -587,7 +619,7 @@ public class GameView {
         }
         // Don't have darkness in boss rooms.
         hero.inDungeon = true;
-        print("You are on floor: " + floorCount);
+        print("You are on the boss floor!");
     }
 
     public void checkMove(int x, int y){
@@ -658,7 +690,7 @@ public class GameView {
                 //cont.remove(chest);
                 if(dungeon[x][y].hasChest) {
                     sound.openChestSound();
-                    Loot loot = chestLoot.generateLoot(hero.getLevel());
+                    Loot loot = chestLoot.generateLoot(hero);
                     // Dialogue box to say what was in the chest!
                     print("You opened the chest. " + loot.getLoot());
                     hero.addLoot(loot);
@@ -668,7 +700,7 @@ public class GameView {
                 }
                 if(dungeon[x][y].hasBossChest){ //Make boss loot.
                     sound.openChestSound();
-                    Loot loot = chestLoot.generateBossLoot(hero.getLevel());
+                    Loot loot = chestLoot.generateBossLoot(hero);
                     // Dialogue box to say what was in the chest!
                     print("You opened the boss chest. " + loot.getLoot());
                     hero.addLoot(loot);
@@ -678,6 +710,26 @@ public class GameView {
                 }
             }
         }
+    }
+
+    public void shopKeeper (int x, int y) {
+        if (dungeon[x][y].isShop) {
+            System.out.println("SHOP");
+            if (dungeon[x][y].shopOwner == "Blacksmith") {
+                blacksmith = new blacksmith();
+                hero = blacksmith.visitBlackSmith(hero);
+            }
+            else if (dungeon[x][y].shopOwner == "Armory") {
+                armory = new Armory();
+                armory.visitArmory(hero);
+            }
+            else if (dungeon[x][y].shopOwner == "Artificiary") {
+                artificiary = new Artificiary();
+                artificiary.visitArtificiary(hero);
+            }
+        }
+        else System.out.println("NOT AT SHOP");
+
     }
 
     public void checkHeroLevel(){

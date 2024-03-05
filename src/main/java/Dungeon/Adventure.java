@@ -17,7 +17,7 @@ public class Adventure {
 
         System.out.println("You enter the dungeon: There are " + fights + " enemies in this dungeon!");
         for(int i = 0; i < fights; i++){
-            Enemy enemy = new EnemyGenerator(level).generateEnemy();
+            Enemy enemy = new EnemyGenerator(hero).generateEnemy();
             System.out.println("You encounter a " + enemy.getName());
             //combat.fight(hero, enemy);
         }

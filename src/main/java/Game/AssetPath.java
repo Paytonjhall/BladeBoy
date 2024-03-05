@@ -14,10 +14,10 @@ public class AssetPath {
     public String emptyPotion = "src/Assets/Potions/empty.png";
     public String backpack = "src/Assets/Other/Backpack.png";
     public String blacksmith = "src/Assets/Portraits/smith.png";
-    public String viking = "src/Assets/Portraits/viking.png";
+    public String barbarianWarLordIcon = "src/Assets/Portraits/barbarianWarLord.png";
     public String damageIcon="src/Assets/Weapons/Swords/damageIcon.png";
-    public String wizard = "src/Assets/Portraits/wizard.png";
-    public String hero = "src/Assets/Portraits/hero.png";
+    public String mage = "src/Assets/Portraits/Mage.png";
+    public String knight = "src/Assets/Portraits/knight.png";
     public String oracle = "src/Assets/Portraits/Oracle.png";
     public String skillpoint = "src/Assets/Other/skillpoint.png";
     public String forest = "src/Assets/Dungeon/forest.png";
@@ -44,7 +44,7 @@ public class AssetPath {
     public String monsterIcon = "src/Assets/Portraits/monster.png";
     public String boarIcon = "src/Assets/Portraits/boar.png";
     public String boarBossIcon = "src/Assets/Portraits/boarBoss.png";
-    public String barbarianIcon = "src/Assets/Portraits/barbarian.png";
+    public String barbarianIcon = "src/Assets/Portraits/Barbarian.png";
     public String batIcon = "src/Assets/Portraits/bat.png";
     public String blackTile = "src/Assets/Dungeon/Tiles/blackTile.png";
     public String horizontalEdge = "src/Assets/Dungeon/Tiles/horizontalEdge.png";
@@ -87,5 +87,9 @@ public class AssetPath {
 
     public String enemyIcon(){
         return "src/Assets/Portraits/enemy"+ (int)(Math.random() * 3)+".png";
+    }
+
+    public String getIcon (String name) {
+        return "src/Assets/Portraits/" + name + ".png";
     }
 }

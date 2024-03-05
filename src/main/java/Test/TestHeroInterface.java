@@ -10,6 +10,7 @@ import Character.Town.PotionGenerator;
 import Character.Town.WeaponGenerator;
 import Game.AssetPath;
 import Game.UserInput;
+import Character.Class;
 import view.*;
 
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import java.util.List;
 
 public class TestHeroInterface {
     public static void main(String[] args) throws Exception {
-        WeaponGenerator wg = new WeaponGenerator();
         ArmorGenerator ag = new ArmorGenerator();
         PotionGenerator pg = new PotionGenerator();
         blacksmith bs = new blacksmith();
@@ -35,6 +35,9 @@ public class TestHeroInterface {
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                 new Artifact("Fortune Amulet", 1000, "A old amulet from your mother", "Fortune", 1.1625),
                 180, 500, 250, 8, 500, mystics);
+        hero.setIconString("Barbarian");
+        hero.setHeroClass(new Class("Barbarian", "Physical"));
+        WeaponGenerator wg = new WeaponGenerator(hero);
 
 //        hero.addToBag(new Weapon("Incredible Iron Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Gold Sword", 1000, "An impressively sharp steel blade", 15));
@@ -70,16 +73,18 @@ public class TestHeroInterface {
         //Settings for running tests
         //hero.setWeapon(null);
         //hero.setHealth(hero.getMaxHealth()/2);
-        //bs.visitBlackSmith(hero);
+        // bs.visitBlackSmith(hero);
         //hero = gameView.startGameView(hero);
         //hero = heroInventory.openInventory(hero);
         //hero = art.visitArtificiary(hero);
         //ar.visitArmory(hero);
-        //or.visitOracle(hero);
+        //or.visitOracle(hero);w
         //art.visitArtificiary(hero);
 
-        gameView.enterTown(hero);
-        //hero = gameView.startNewDungeon(hero, 2);
+        //gameView.enterTown(hero);
+
+        hero = gameView.startNewDungeon(hero, 2); // TODO: THIS IS FOR TESTING GAME
+
         //gameView.loadDungeon();
         //gameView.loadBossFloor();
         //gameView.startCombat();

@@ -37,7 +37,7 @@ public class artificiary {
         container.add(heroGold);
         JLabel heroGoldText = lc.createText(hero.getGold() + "", 450, 10, 200, 100);
         container.add(heroGoldText);
-        JLabel wizardLabel = lc.createLabelWithoutHover(ap.wizard, 40, 20, 75, 75);
+        JLabel wizardLabel = lc.createLabelWithoutHover(ap.mage, 40, 20, 75, 75);
         container.add(wizardLabel);
         JLabel wizardText = lc.createText("Welcome to my shop, check out my stock:", 125, 20, 375, 75);
         container.add(wizardText);

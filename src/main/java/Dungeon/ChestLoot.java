@@ -1,5 +1,6 @@
 package Dungeon;
 import Character.Equipment.Armor;
+import Character.Hero;
 import Character.Equipment.Artifact;
 import Character.Equipment.Potion;
 import Character.Equipment.Weapon;
@@ -17,7 +18,7 @@ public class ChestLoot {
     //Item = 30%, weapon = 10%, armor = 10%, accessory = 10%
     //Items are returned inside loot object
     AssetPath ap = new AssetPath();
-    WeaponGenerator wg = new WeaponGenerator();
+    WeaponGenerator wg;
     ArmorGenerator ag = new ArmorGenerator();
     ArtifactGenerator artg = new ArtifactGenerator();
 
@@ -25,7 +26,9 @@ public class ChestLoot {
 
     }
 
-    public Loot generateLoot(int level) {
+    public Loot generateLoot(Hero hero) {
+        wg = new WeaponGenerator(hero);
+        int level = hero.getLevel();
         Weapon weapon = null;
         Armor armor = null;
         Artifact artifact = null;
@@ -70,7 +73,9 @@ public class ChestLoot {
         return new Loot(weapon, armor, artifact, potion, gold, loot);
     }
 
-    public Loot generateBossLoot(int level){
+    public Loot generateBossLoot(Hero hero){
+        wg = new WeaponGenerator(hero);
+        int level = hero.getLevel();
         Weapon weapon = null;
         Armor armor = null;
         Artifact artifact = null;

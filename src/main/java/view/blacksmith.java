@@ -60,6 +60,7 @@ public class blacksmith {
                     if(blacksmith.itemBuyable(hero, weapon)){
                         sound.buySound();
                         hero.setGold(hero.getGold() - weapon.getValue());
+                        hero.addToBag(weapon);
                         blacksmith.removeWeapon(weapon);
                         f.dispose();
                         visitBlackSmith(hero);

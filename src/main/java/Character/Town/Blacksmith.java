@@ -10,13 +10,14 @@ import java.util.List;
 public class Blacksmith {
     Output output = new Output();
     UserInput userInput = new UserInput();
-    WeaponGenerator wg = new WeaponGenerator();
+    WeaponGenerator wg;
     List<Weapon> weapons = new ArrayList<Weapon>();
     boolean resetAvailable = true;
     public Blacksmith() {
     }
 
     public Hero visitBlacksmith(Hero hero){
+        wg = new WeaponGenerator(hero);
         System.out.println("Welcome to the Blacksmith!");
         System.out.println("Here are todays deals:");
 
@@ -60,6 +61,7 @@ public class Blacksmith {
     }
 
     public List<Weapon> getItems(Hero hero){
+        if (wg == null) wg = new WeaponGenerator(hero);
         if(weapons.isEmpty()){
             weapons = wg.generateWeapons(hero.getLevel()/5, 5);
         }

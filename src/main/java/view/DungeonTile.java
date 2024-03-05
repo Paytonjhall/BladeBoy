@@ -18,6 +18,7 @@ public class DungeonTile {
     boolean hasBoss = false;
     boolean hasBossChest = false;
     boolean isShop = false;
+    String shopOwner = "";
     String icon;
     int x;
     int y;

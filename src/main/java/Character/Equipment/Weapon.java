@@ -61,6 +61,12 @@ public class Weapon implements ItemInterface {
         } else if (Objects.equals(type, "Spear")){ //Spear 12
             num = random.nextInt(11) + 1;
             iconPath = "src/Assets/Weapons/Spears/" + num + ".png";
+        } else if (Objects.equals(type, "Bow")){ //Bow 48
+            num = random.nextInt(47) + 1;
+            iconPath = "src/Assets/Weapons/Bows/" + num + ".png";
+        } else if (Objects.equals(type, "Staff")){ //Staff 20
+            num = random.nextInt(19) + 1;
+            iconPath = "src/Assets/Weapons/Staffs/" + num + ".png";
         }
     }
 

@@ -37,7 +37,7 @@ public class armory {
         container.add(heroGold);
         JLabel heroGoldText = lc.createText(hero.getGold() + "", 450, 10, 200, 100);
         container.add(heroGoldText);
-        JLabel blacksmithLabel = lc.createLabelWithoutHover(ap.viking, 40, 20, 75, 75);
+        JLabel blacksmithLabel = lc.createLabelWithoutHover(ap.barbarianIcon, 40, 20, 75, 75);
         container.add(blacksmithLabel);
         JLabel blacksmithText = lc.createText("Welcome to my shop, check out my stock:", 125, 20, 375, 75);
         container.add(blacksmithText);

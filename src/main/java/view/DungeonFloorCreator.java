@@ -3,10 +3,18 @@ package view;
 import Game.AssetPath;
 import view.Map.MapInterface;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
 public class DungeonFloorCreator implements MapInterface {
+    double shopOwnerGenerationChance = .012;
+
+    //String[] shopOwners = new String[]{"Blacksmith", "Armory", "Artifact"};
+    String[] shopOwners = new String[]{"Blacksmith"}; // Delete this one and use the one above
+//    boolean blacksmith = false;
+//    boolean armory = false;
+//    boolean artificiary = false;
     AssetPath ap = new AssetPath();
     LabelCreator labelCreator = new LabelCreator();
     int enemyCount = 0;
@@ -16,6 +24,23 @@ public class DungeonFloorCreator implements MapInterface {
     DungeonTile[][] map;
 
     public DungeonTile[][] createMap() {
+        ArrayList<String> loadNPCS = new ArrayList<>();
+        for (String owners: shopOwners) {
+            if (Math.random() >= shopOwnerGenerationChance){
+                System.out.println(Math.random());
+                System.out.println(Math.random());
+                System.out.println(Math.random());
+                System.out.println(Math.random());
+                System.out.println(Math.random());
+
+                loadNPCS.add(owners);
+//                shopOwners.
+//                if(Objects.equals(owners, "Blacksmith")) blacksmith = true;
+//                else if(Objects.equals(owners, "Armory")) armory = true;
+//                else if(Objects.equals(owners, "Artifact")) artificiary = true;
+            }
+        }
+
         Random random = new Random();
         enemyCount = random.nextInt(3) + 2;
         chestCount = random.nextInt(1) + 1;
@@ -45,9 +70,11 @@ public class DungeonFloorCreator implements MapInterface {
             }
         }
         if (completeFloor(0, 0, map, exitHeight)) {
+
             assignChests();
             assignEnemies();
             assignTorch();
+            assignNPCs(loadNPCS);
             System.out.println("Created floor");
             return fixWalls();
         }
@@ -192,6 +219,7 @@ public class DungeonFloorCreator implements MapInterface {
     }
 
     public void assignTorch() {
+
         for (int i = 0; i < torchCount; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
@@ -201,7 +229,23 @@ public class DungeonFloorCreator implements MapInterface {
                 i--;
             }
         }
+    }
 
+    public void assignNPCs(ArrayList<String> shopOwners) {
+        System.out.println("Assigning NPCs: " + shopOwners.size());
+        for (int i = 0; i < shopOwners.size(); i++) {
+            int x = random.nextInt(width);
+            int y = random.nextInt(height);
+            if (map[x][y].isWalkable && !map[x][y].isEntrance && !map[x][y].isExit && !map[x][y].hasChest && !map[x][y].hasEnemy && !map[x][y].hasTorch) {
+                map[x][y].isShop = true;
+                map[x][y].shopOwner = shopOwners.get(i);
+                if(Objects.equals(shopOwners.get(i), "Blacksmith")) map[x][y].setIcon(ap.blacksmith);
+                else if(Objects.equals(shopOwners.get(i), "Armory")) map[x][y].setIcon(ap.blacksmith);
+                else if(Objects.equals(shopOwners.get(i), "Artifact")) map[x][y].setIcon(ap.oracle);
+            } else {
+                i--;
+            }
+        }
     }
 
     public DungeonTile[][] fixWalls() {

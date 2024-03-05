@@ -6,13 +6,14 @@ import java.util.Random;
 
 import Character.Equipment.ItemInterface;
 import Character.Equipment.Weapon;
+import Character.*;
 import Character.Town.WeaponGenerator;
 import Game.AssetPath;
 
 // This enemy Generator class is to be used with the adventure class in the dungeon package.
 // It will create enemies based on the adventure count, not nesecarily based on the hero level.
 public class EnemyGenerator {
-    WeaponGenerator weaponGenerator = new WeaponGenerator();
+    WeaponGenerator weaponGenerator;
     AssetPath ap = new AssetPath();
     String[] monsterNames =	new String[]{"Goblin Soldier", "Goblin Archer", "Slime", "Golem", "Frog", "Wolf", "Bear", "Spider", "Monster", "Boar", "Bat"};
     String[] monsterAdjectives = new String[]{"Angry ", "Large ", "Evil ", "Vile ", "Demonic ", "Dubious ", "Devilish ", "Destructive ", "Wicked ", "Distasteful ", "Scaly ", "Looming ", "Ghastly ", "Horrific ", "Scary "};
@@ -21,11 +22,12 @@ public class EnemyGenerator {
     Random rnd = new Random();
     int level;
     String iconPath = "";
+    Hero hero;
 
     public EnemyGenerator(int level) {
         this.level = level;
     }
-
+    public EnemyGenerator(Hero hero) {this.level = hero.getLevel(); this.hero = hero; weaponGenerator = new WeaponGenerator(hero);}
 
     public Enemy generateEnemy(){
         int random = rnd.nextInt(10);
@@ -89,7 +91,7 @@ public class EnemyGenerator {
         else if(name.contains("Spider")) iconPath = ap.spiderIcon;
         else if(name.contains("Monster")) iconPath = ap.monsterIcon;
         else if(name.contains("Boar")) iconPath = ap.boarIcon;
-        else if(name.contains("Barbarian")) iconPath = ap.barbarianIcon;
+        else if(name.contains("Barbarian")) iconPath = ap.barbarianWarLordIcon;
         else if(name.contains("Bat")) iconPath = ap.batIcon;
         return name;
     }

@@ -42,7 +42,10 @@ public class Combat {
     private void EnemyTurn(){
         if(enemy.getHealth() > 0){
             int damage = calculateDamage(enemy, hero);
-            hero.takeDamage(damage);
+            if(hero.takeDamage(damage)) {
+                // hero had died, end game
+                System.exit(0);
+            }
             recentEnemyDamage = damage;
             hero = checkHealths();
             turn = true;
@@ -66,8 +69,13 @@ public class Combat {
 
     private int calculateDamage(Hero hero, Enemy enemy){
         Random random = new Random();
-        int damageRange =(int)(hero.weapon.getWeaponDamage()/2) +random.nextInt(hero.weapon.getWeaponDamage());
-        int damage = (int) (damageRange * ((1- enemy.getArmorRating()/1000)));
+        int damage = 0;
+        if (hero.weapon ==null) {
+            damage = 10 * ((int)(1 - enemy.getArmorRating() / 1000));
+        } else {
+            int damageRange = (int) (hero.weapon.getWeaponDamage() / 2) + random.nextInt(hero.weapon.getWeaponDamage());
+            damage = (int) (damageRange * ((1 - enemy.getArmorRating() / 1000)));
+        }
         damage += strength(hero);
         damage += crush(hero);
         if(critCheck(hero)) damage *= 2.5;
