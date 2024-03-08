@@ -134,7 +134,7 @@ public class HeroInventory {
         if(hero.getArmor() == null) {
             armor = lc.createLabel("src/Assets/Armor/emptyArmor.tif", "No armor equipped",50, 180, 100, 100);
         } else {
-            armor = lc.createLabel("src/Assets/Armor/platemail.png", hero.getArmor().hoverString(),50, 180, 100, 100);
+            armor = lc.createLabel("src/Assets/Armor/armor4.png", hero.getArmor().hoverString(),50, 180, 100, 100);
         }
             if(hero.getArmors() != null){
                 JComboBox bag = new JComboBox(hero.getArmors().toArray());

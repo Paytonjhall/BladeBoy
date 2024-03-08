@@ -34,6 +34,10 @@ public class Hero {
     String IconString = null;
     Class heroClass;
 
+    public boolean visitedBlacksmith;
+    public boolean visitedArmory;
+    public boolean visitedArtificiary;
+
 
     public Class getHeroClass() {
         if (heroClass == null) {
@@ -101,33 +105,6 @@ public class Hero {
         this.username = newHero.username;
         this.skillPoints = newHero.skillPoints;
         this.potionBag = newHero.potionBag;
-    }
-
-    public void heroOptions(){
-        boolean check = true;
-        while(check){
-            System.out.println("  [1]   Continue");
-            System.out.println("  [2]   Hero Status");
-            System.out.println("  [3]   Inventory");
-            System.out.println("  [4]   Potion Bag");
-            System.out.print("Hero: ");
-
-            int choice = input.getNumberInput();
-            switch (choice) {
-                case 1 -> {
-                    check=false;
-                    input.clear();
-                }
-                case 2 -> heroStatus();
-                case 3 -> organizeBag();
-                case 4 -> selectPotion();
-                default -> {
-                    System.out.println("Invalid input. Try again.");
-                    input.clear();
-                }
-            }
-        }
-
     }
 
     public void heroStatus() {
@@ -296,22 +273,6 @@ public class Hero {
         sound.drinkSound();
         potionBag.removePotion(potion);
 
-    }
-
-    public void selectPotion(){
-        if (!potionBag.havePotions()){
-            System.out.println("You have no potions");
-            return;
-        }
-        System.out.println("Select a potion to use");
-        potionBag.printPotions();
-        int choice = input.getNumberInput();
-        if (choice == 0) return;
-        if (choice > 3 || choice < 1){
-            System.out.println("Invalid input");
-            return;
-        }
-        usePotion(potionBag.getPotion(choice));
     }
 
     public void organizeBag() {

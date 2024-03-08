@@ -32,6 +32,9 @@ public class ArmorGenerator {
       else armor.setProtection((int) (getRnd().nextInt(4) + 4 * (wRank + wRank/3)));
       armor.setDescription("A Armor of rank " + wRank + " made at the blacksmith's shop.");
       armor.setValue((int)Math.abs(wRank * wRank * (wRank + wRank)* (getRnd().nextInt(18))) + (armoryValue * (getRnd().nextInt(10)+4)) + (armor.getHealthIncrease() * 11) + ( armor.getProtection() * 22));
+      int rand = getRnd().nextInt(6) + 1;
+      armor.setIconPath(armor.getIconPath() + rand + ".png");
+      System.out.println(armor.getIconPath());
       armors.add(armor);
     }
     return armors;

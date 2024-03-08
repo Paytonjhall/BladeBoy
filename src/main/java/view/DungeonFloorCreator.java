@@ -8,10 +8,11 @@ import java.util.Objects;
 import java.util.Random;
 
 public class DungeonFloorCreator implements MapInterface {
-    double shopOwnerGenerationChance = .012;
+    //double shopOwnerGenerationChance = .80;
+    double shopOwnerGenerationChance = .080;
 
-    //String[] shopOwners = new String[]{"Blacksmith", "Armory", "Artifact"};
-    String[] shopOwners = new String[]{"Blacksmith"}; // Delete this one and use the one above
+      String[] shopOwners = new String[]{"Blacksmith", "Armory", "Artifact"};
+//    String[] shopOwners = new String[]{"Blacksmith"}; // Delete this one and use the one above
 //    boolean blacksmith = false;
 //    boolean armory = false;
 //    boolean artificiary = false;
@@ -27,12 +28,6 @@ public class DungeonFloorCreator implements MapInterface {
         ArrayList<String> loadNPCS = new ArrayList<>();
         for (String owners: shopOwners) {
             if (Math.random() >= shopOwnerGenerationChance){
-                System.out.println(Math.random());
-                System.out.println(Math.random());
-                System.out.println(Math.random());
-                System.out.println(Math.random());
-                System.out.println(Math.random());
-
                 loadNPCS.add(owners);
 //                shopOwners.
 //                if(Objects.equals(owners, "Blacksmith")) blacksmith = true;

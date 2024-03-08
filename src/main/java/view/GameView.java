@@ -70,8 +70,10 @@ public class GameView {
 
 //    Blacksmith blacksmith;
     blacksmith blacksmith;
-    Armory armory;
-    Artificiary artificiary;
+//    Armory armory;
+    armory armory;
+//    Artificiary artificiary;
+    artificiary artificiary;
 
     int heroLevel = 0;
     int floorCount = 1;
@@ -102,8 +104,6 @@ public class GameView {
         return hero;
     }
 
-
-
     public Hero startGameView(Hero hero){
         this.hero = hero;
         heroLevel = hero.getLevel();
@@ -128,8 +128,8 @@ public class GameView {
             //weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 850, 75, 75);
         }
         if(armor != null){
-            labelCreator.update("src/Assets/Armor/platemail.png", armor, hero.getArmor().hoverString());
-            //armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().toString(), 145, 850, 75, 75);
+            labelCreator.update("src/Assets/Armor/armor4.png", armor, hero.getArmor().hoverString());
+            //armor = labelCreator.createLabel("src/Assets/Armor/armor4.png",hero.getArmor().toString(), 145, 850, 75, 75);
         }
         if(artifact != null){
             labelCreator.update(hero.getArtifact().getIconPath(), artifact, hero.getArtifact().hoverString());
@@ -419,7 +419,7 @@ public class GameView {
         scrollPane.setBounds(15, 775, 1250, 175);
         border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
         if (hero.getWeapon() != null) weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 35, 650, 75, 75);
-        if (hero.getArmor() != null) armor = labelCreator.createLabel("src/Assets/Armor/platemail.png",hero.getArmor().hoverString(), 145, 650, 75, 75);
+        if (hero.getArmor() != null) armor = labelCreator.createLabel("src/Assets/Armor/armor4.png",hero.getArmor().hoverString(), 145, 650, 75, 75);
         if (hero.getArtifact() != null) artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 255, 650, 75, 75);
         heroIcon = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Level: " + hero.getLevel(), 35, 570, 75, 75);
         loadKeyBindings();
@@ -531,7 +531,7 @@ public class GameView {
                         cont.add(torch);
                     } else if (dungeon[i][j].isShop) {
                         JLabel shop = labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
-                        torchTiles.add(shop);
+                        // shopTiles.add(shop);
                         cont.add(shop);
                     } else if (dungeon[i][j].isExit) {
                         if(bossFloorCount-1 == floorCount){
@@ -603,7 +603,7 @@ public class GameView {
                         cont.add(torch);
                     } else if (dungeon[i][j].isShop) {
                         JLabel shop = labelCreator.createLabelWithoutHover(dungeon[i][j].icon, dungeon[i][j].x, dungeon[i][j].y, 100, 100);
-                        torchTiles.add(shop);
+                        // shopTiles.add(shop);
                         cont.add(shop);
                     }
                     else {
@@ -714,18 +714,26 @@ public class GameView {
 
     public void shopKeeper (int x, int y) {
         if (dungeon[x][y].isShop) {
-            System.out.println("SHOP");
+            // System.out.println("SHOP");
             if (dungeon[x][y].shopOwner == "Blacksmith") {
                 blacksmith = new blacksmith();
                 hero = blacksmith.visitBlackSmith(hero);
+                hero.visitedBlacksmith = true;
+                print("You have no visited the blacksmith, he will now be available in town!");
             }
             else if (dungeon[x][y].shopOwner == "Armory") {
-                armory = new Armory();
+                armory = new armory();
                 armory.visitArmory(hero);
+                hero.visitedArmory = true;
+                print("You have no visited the Armory, he will now be available in town!");
+
             }
-            else if (dungeon[x][y].shopOwner == "Artificiary") {
-                artificiary = new Artificiary();
+            else if (dungeon[x][y].shopOwner == "Artifact") {
+                artificiary = new artificiary();
                 artificiary.visitArtificiary(hero);
+                hero.visitedArtificiary = true;
+                print("You have no visited the artificiary, he will now be available in town!");
+
             }
         }
         else System.out.println("NOT AT SHOP");

@@ -51,7 +51,7 @@ public class WeaponGenerator {
 
     public String generateWeaponName(){
     Class heroClass = hero.getHeroClass();
-    System.out.println(heroClass.getClassType());
+    // System.out.println(heroClass.getClassType());
         return switch (heroClass.getClassType()) {
             case "Mage" -> generateAdj() + " " + staffNames[getRnd().nextInt(staffNames.length)];
             case "Barbarian" -> generateAdj() + " " + axeNames[getRnd().nextInt(axeNames.length)];

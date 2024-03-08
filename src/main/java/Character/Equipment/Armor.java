@@ -9,7 +9,7 @@ public class Armor implements ItemInterface {
     double armorRating;
     int healthIncrease = 0;
     int protection = 0;
-    String iconPath = "src/Assets/Armor/breastplate.png";
+    String iconPath = "src/Assets/Armor/armor";
 
     public Armor(String name) {
         this.name=name;

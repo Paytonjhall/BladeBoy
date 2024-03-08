@@ -59,6 +59,7 @@ public class armory {
                     if (armory.itemBuyable(hero, armor)) {
                         sound.buySound();
                         hero.setGold(hero.getGold() - armor.getValue());
+                        hero.addToBag(armor);
                         armory.removeArmor(armor);
                         f.dispose();
                         visitArmory(hero);

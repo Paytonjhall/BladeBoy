@@ -59,6 +59,7 @@ public class artificiary {
                     if (artifactStore.itemBuyable(hero, artifact)) { //TODO: FIX THIS
                         sound.buySound();
                         hero.setGold(hero.getGold() - artifact.getValue());
+                        hero.addToBag(artifact);
                         artifactStore.removeArtifact(artifact);
                         f.dispose();
                         visitArtificiary(hero);
