@@ -1,6 +1,7 @@
 package view;
 
 import Character.Abilities.Mystic;
+import Character.Mystics.MysticInterface;
 import Character.Town.Oracle;
 import Game.AssetPath;
 
@@ -26,7 +27,7 @@ public class oracle {
     this.hero = hero;
     unspentSkillPoints = hero.getUnusedSkillPointsList();
     if (returner){
-      for(Mystic mystic : hero.getMystics()) System.out.println(mystic.toString());
+      for(MysticInterface mystic : hero.getMystics()) System.out.println(mystic.toString());
       return hero;
     }
     f = new JFrame("Oracle");
@@ -78,7 +79,7 @@ public class oracle {
           @Override
           public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
-            hero.addMystic(mystic);
+            // hero.addMystic(mystic);
             hero.useSkillPoint(unspentSkillPoints.get(0).getLevel());
             f.dispose();
             visitOracle(hero);

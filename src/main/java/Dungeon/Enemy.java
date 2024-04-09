@@ -37,6 +37,7 @@ public class Enemy {
     }
 
     public void takeDamage(int damage){
+        if(damage<= 0) damage = 0;
         health -= damage;
         if(health<=0){
             System.out.println(name + " has died");

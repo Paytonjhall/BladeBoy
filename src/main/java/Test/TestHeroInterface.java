@@ -4,6 +4,7 @@ import Character.Abilities.Mystic;
 import Character.Equipment.Armor;
 import Character.Equipment.Artifact;
 import Character.Equipment.Weapon;
+import Character.Mystics.*;
 import Character.Town.ArmorGenerator;
 import Character.Town.ArtifactGenerator;
 import Character.Town.PotionGenerator;
@@ -30,11 +31,11 @@ public class TestHeroInterface {
         AssetPath assetPath = new AssetPath();
         UserInput ui = new UserInput();
         GameView gameView = new GameView();
-        List<Mystic> mystics = new ArrayList<Mystic>();
+        List<MysticInterface> mystics = new ArrayList<MysticInterface>();
         Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                 new Artifact("Fortune Amulet", 1000, "A old amulet from your mother", "Fortune", 1.1625),
-                180, 500, 250, 8, 500, mystics);
+                180, 500, 250, 12, 500, mystics);
         // hero.setIconString("Barbarian");
         // hero.setHeroClass(new Class("Barbarian", "Physical"));
          hero.setIconString("Mage");
@@ -45,6 +46,14 @@ public class TestHeroInterface {
 //        hero.addToBag(new Weapon("Incredible Gold Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Diamond Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Copper Sword", 1000, "An impressively sharp steel blade", 15));
+        MageTomb tomb = new MageTomb();
+        hero.addMystic(tomb);
+        BloodAmulet bloodAmulet = new BloodAmulet();
+        hero.addMystic(bloodAmulet);
+        Daidem daidem = new Daidem();
+        hero.addMystic(daidem);
+        VenomOrb venomOrb = new VenomOrb();
+        hero.addMystic(venomOrb);
 
 
         // hero.addXp(30000);
@@ -85,7 +94,9 @@ public class TestHeroInterface {
 
         //gameView.enterTown(hero);
 
-        hero = gameView.startNewDungeon(hero, 2); // TODO: THIS IS FOR TESTING GAME
+
+
+        hero = gameView.startNewDungeon(hero, 3); // TODO: THIS IS FOR TESTING GAME
 
         //gameView.loadDungeon();
         //gameView.loadBossFloor();
@@ -93,7 +104,7 @@ public class TestHeroInterface {
         ui.wait(hero, gameView);
 
 
-        System.out.println(hero.getWeapon().toString());
+        //System.out.println(hero.getWeapon().toString());
 
     }
 }

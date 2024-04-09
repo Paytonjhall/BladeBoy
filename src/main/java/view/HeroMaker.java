@@ -1,12 +1,13 @@
 package view;
 
+import Character.Mystics.*;
 import Game.AssetPath;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import Character.Abilities.Mystic;
+
 import Character.Equipment.Armor;
 import Character.*;
 import Character.Equipment.Artifact;
@@ -50,7 +51,7 @@ public class HeroMaker {
             int counter = 0;
             int spacer = 135;
             int base = 40;
-            JLabel Archer = lc.createLabel(ap.getIcon("Punk"), "Archer", base + (counter * spacer), 40, 125, 125);
+            JLabel Archer = lc.createLabel(ap.archer, "Archer", base + (counter * spacer), 40, 125, 125);
             counter++;
             //    public JLabel createLabel(String path, String hover , int x, int y, int width, int height){
             JLabel Barbarian = lc.createLabel(ap.barbarianIcon, "Barbarian", base + (counter * spacer), 40, 125, 125);
@@ -129,20 +130,25 @@ public class HeroMaker {
             Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
                     new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                     null,
-                    180, 500, 0, 8, 500, new ArrayList<Mystic>());
+                    180, 500, 0, 8, 500, new ArrayList<MysticInterface>());
             String dmgType = "Physical";
             if (heroString[0] == "Mage") dmgType = "Magical";
             hero.setHeroClass(new Class(heroString[0], dmgType));
-//            String iconPath = "";
-//            switch (heroString[0] ) {
-//                case "Mage" -> iconPath = ap.mage;
-//                case "Knight" -> iconPath = ap.knight;
-//                case "Barbarian" -> iconPath = ap.barbarianIcon;
-//                case "Archer" -> iconPath = ap.getIcon("Punk");
-//            }
-//            hero.setIconString(iconPath);
+            // Assign Mystics Here:
+                if (heroString[0] == "Mage") {
+                    MageTomb tomb = new MageTomb();
+                    hero.addMystic(tomb);
+                } else if (heroString[0] == "Knight") {
+                    Pavise pavise = new Pavise();
+                    hero.addMystic(pavise);
+                } else if (heroString[0] == "Barbarian") {
+                    BloodAmulet bloodAmulet = new BloodAmulet();
+                    hero.addMystic(bloodAmulet);
+                } else if (heroString[0] == "Archer") {
+                    HuntingKnife huntingKnife = new HuntingKnife();
+                    hero.addMystic(huntingKnife);
+                }
             hero = gameView.startNewDungeon(hero, 2);
-            //     newGame.start("Payton");
             });
             JButton load_game = new JButton("Load Game");
             load_game.setBounds(50, 330, 210, 30);

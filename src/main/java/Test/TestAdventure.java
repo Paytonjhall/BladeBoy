@@ -5,6 +5,7 @@ import Character.Abilities.Mystic;
 import Character.Equipment.Armor;
 import Character.Equipment.Artifact;
 import Character.Equipment.Weapon;
+import Character.Mystics.MysticInterface;
 import Character.Town.Oracle;
 import Dungeon.Adventure;
 
@@ -14,8 +15,8 @@ import java.util.List;
 public class TestAdventure {
 
     public static void main(String[] args) {
-        List<Mystic> mystics = new ArrayList<Mystic>();
-        mystics.add(new Mystic("Strength", 1.5, "Passive", 1));
+        List<MysticInterface> mystics = new ArrayList<MysticInterface>();
+        // mystics.add(new Mystic("Strength", 1.5, "Passive", 1));
 //        mystics.add(new Mystic("Health", 10, "Passive", 1));
 //        mystics.add(new Mystic("Block", 2.1, "Passive", 1));
 //        mystics.add(new Mystic("Vamperism", 15, "type?", 4));

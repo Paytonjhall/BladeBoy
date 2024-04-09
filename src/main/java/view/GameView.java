@@ -4,6 +4,7 @@ package view;
 // Traps
 
 import Character.*;
+import Character.Mystics.MysticInterface;
 import Character.Town.Armory;
 import Character.Town.Artificiary;
 import Character.Town.Blacksmith;
@@ -60,6 +61,7 @@ public class GameView {
     List<JLabel> chestTiles;
     List<JLabel> shopTiles;
     List<JLabel> torchTiles;
+    List<JLabel> mysticIcons;
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
     TownFloorCreator townFloorCreator;
@@ -302,6 +304,7 @@ public class GameView {
     }
 
     public void loadEnemy(){
+        //TODO: Need to rethink all of this.
         cont.remove(enemyBorder);
         if(enemy != null && hero.inCombat) {
             attack = new JButton("Attack");
@@ -422,6 +425,16 @@ public class GameView {
         if (hero.getArmor() != null) armor = labelCreator.createLabel("src/Assets/Armor/armor4.png",hero.getArmor().hoverString(), 145, 650, 75, 75);
         if (hero.getArtifact() != null) artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 255, 650, 75, 75);
         heroIcon = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Level: " + hero.getLevel(), 35, 570, 75, 75);
+        // Load Hero Mystics
+        int mysticCounter = 30;
+        mysticIcons = new ArrayList<>();
+        for(MysticInterface mystics : hero.getMystics()) {
+            JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticCounter, 540, 30, 30);
+            mysticCounter += 30;
+            mysticIcons.add(mystic);
+            cont.add(mystic);
+        }
+
         loadKeyBindings();
         enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
         //gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
@@ -694,6 +707,9 @@ public class GameView {
                     // Dialogue box to say what was in the chest!
                     print("You opened the chest. " + loot.getLoot());
                     hero.addLoot(loot);
+                    for(MysticInterface mystic: hero.getMystics()) {
+                        hero = mystic.onChest(hero);
+                    }
                     dungeon[x][y].hasChest = false;
                     chestTiles.remove(chest);
                     break;
@@ -704,6 +720,9 @@ public class GameView {
                     // Dialogue box to say what was in the chest!
                     print("You opened the boss chest. " + loot.getLoot());
                     hero.addLoot(loot);
+                    for(MysticInterface mystic: hero.getMystics()) {
+                        hero = mystic.onChest(hero);
+                    }
                     dungeon[x][y].hasBossChest = false;
                     chestTiles.remove(chest);
                     break;
@@ -719,20 +738,20 @@ public class GameView {
                 blacksmith = new blacksmith();
                 hero = blacksmith.visitBlackSmith(hero);
                 hero.visitedBlacksmith = true;
-                print("You have no visited the blacksmith, he will now be available in town!");
+                print("You have now visited the blacksmith, he will now be available in town!");
             }
             else if (dungeon[x][y].shopOwner == "Armory") {
                 armory = new armory();
                 armory.visitArmory(hero);
                 hero.visitedArmory = true;
-                print("You have no visited the Armory, he will now be available in town!");
+                print("You have now visited the Armory, he will now be available in town!");
 
             }
             else if (dungeon[x][y].shopOwner == "Artifact") {
                 artificiary = new artificiary();
                 artificiary.visitArtificiary(hero);
                 hero.visitedArtificiary = true;
-                print("You have no visited the artificiary, he will now be available in town!");
+                print("You have now visited the artificiary, he will now be available in town!");
 
             }
         }
@@ -745,6 +764,9 @@ public class GameView {
             print("You have leveled up! You are now level " + hero.getLevel());
             heroLevel++;
             dungeonClearedData.addLevelsGained(1);
+            for(MysticInterface mystic: hero.getMystics()) {
+                hero = mystic.onLevelUp(hero);
+            }
             checkHeroLevel();
         }
     }

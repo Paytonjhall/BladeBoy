@@ -26,7 +26,7 @@ public class armory {
         List<Armor> armors = new ArrayList<>();
         this.hero = hero;
         if (returner) return hero;
-        f = new JFrame("BlackSmith");
+        f = new JFrame("Armorer");
         f.update(f.getGraphics());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
@@ -37,7 +37,7 @@ public class armory {
         container.add(heroGold);
         JLabel heroGoldText = lc.createText(hero.getGold() + "", 450, 10, 200, 100);
         container.add(heroGoldText);
-        JLabel blacksmithLabel = lc.createLabelWithoutHover(ap.barbarianIcon, 40, 20, 75, 75);
+        JLabel blacksmithLabel = lc.createLabelWithoutHover(ap.armorer, 40, 20, 75, 75);
         container.add(blacksmithLabel);
         JLabel blacksmithText = lc.createText("Welcome to my shop, check out my stock:", 125, 20, 375, 75);
         container.add(blacksmithText);

@@ -5,6 +5,7 @@ import java.util.List;
 import Character.*;
 import Character.Abilities.Mystic;
 import Character.Equipment.*;
+import Character.Mystics.MysticInterface;
 
 public class HeroSaveAdapter {
 
@@ -12,7 +13,7 @@ public class HeroSaveAdapter {
     public Weapon weapon;
     public Artifact artifact;
     public List<ItemInterface> Bag;
-    public List<Mystic> mystics;
+    public List<MysticInterface> mystics;
     public List<Weapon> weapons;
     public List<Armor> armors;
     public List<Artifact> artifacts;
@@ -47,7 +48,7 @@ public class HeroSaveAdapter {
         this.potionBag = hero.getPotionBag();
     }
 
-    public HeroSaveAdapter(Armor armor, Weapon weapon, Artifact artifact, List<ItemInterface> bag, List<Mystic> mystics, int health, int maxHealth, int xp, int level, int nextLevelXp, int gold, int dungeonCount, String username, List<Hero.SkillPoints> skillPoints, PotionBag potionBag) {
+    public HeroSaveAdapter(Armor armor, Weapon weapon, Artifact artifact, List<ItemInterface> bag, List<MysticInterface> mystics, int health, int maxHealth, int xp, int level, int nextLevelXp, int gold, int dungeonCount, String username, List<Hero.SkillPoints> skillPoints, PotionBag potionBag) {
         this.armor = armor;
         this.weapon = weapon;
         this.artifact = artifact;

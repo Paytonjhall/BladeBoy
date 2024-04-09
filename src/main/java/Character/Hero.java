@@ -3,6 +3,7 @@ import Character.Abilities.Mystic;
 import Character.Equipment.*;
 import Dungeon.Loot;
 import Game.*;
+import Character.Mystics.MysticInterface;
 
 
 import java.awt.*;
@@ -52,7 +53,7 @@ public class Hero {
     }
 
     public List<SkillPoints> skillPoints = new ArrayList<>();
-    List<Mystic> mystics = new ArrayList<>();
+    List<MysticInterface> mystics = new ArrayList<>();
     PotionBag potionBag = new PotionBag();
     UserInput input = new UserInput();
 
@@ -60,7 +61,7 @@ public class Hero {
     Sound sound = new Sound();
     public boolean wait = false;
 
-    public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<Mystic> mystics) {
+    public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<MysticInterface> mystics) {
         equipArmor(armor);
         this.ap = new AssetPath();
         this.weapon = weapon;
@@ -122,11 +123,12 @@ public class Hero {
         System.out.println("Armor: " + armor.getName());
         System.out.println("Artifact: " + artifact.getName());
         output.printPurple("Mystics: ");
-        for (Mystic mystic : mystics) {System.out.println(mystic.toString());}
+        for (MysticInterface mystic : mystics) {System.out.println(mystic.nameString());}
         System.out.println();
     }
 
     public boolean takeDamage(int damage){
+        if(damage <= 0) damage = 0;
         health -= damage;
         if(health<=0){
             System.out.println("You have died");
@@ -475,7 +477,7 @@ public class Hero {
         this.skillPoints = skillPoints;
     }
 
-    public void setMystics(List<Mystic> mystics) {
+    public void setMystics(List<MysticInterface> mystics) {
         this.mystics = mystics;
     }
 
@@ -491,11 +493,11 @@ public class Hero {
         potionBag.addPotion(potion);
     }
 
-    public List<Mystic> getMystics() {
+    public List<MysticInterface> getMystics() {
         return mystics;
     }
 
-    public void addMystic (Mystic mystic){
+    public void addMystic (MysticInterface mystic){
         mystics.add(mystic);
     }
 

@@ -59,12 +59,12 @@ public class Oracle {
         System.out.println("");
         int choice = userInput.getNumberInput();
         if(choice > 0 && choice <= mystics.size()){
-        hero.addMystic(mystics.get(choice-1));
-            System.out.println(" ---  You have chosen " + mystics.get(choice-1).toString() + " --- ");
-            if(Objects.equals(mystics.get(choice - 1).getBuff(), "Health")) {
-                hero.setMaxHealth(hero.getMaxHealth() + (int)mystics.get(choice - 1).getAmplifier());
-                hero.setHealth(hero.getMaxHealth());
-            }
+//        hero.addMystic(mystics.get(choice-1));
+//            System.out.println(" ---  You have chosen " + mystics.get(choice-1).toString() + " --- ");
+//            if(Objects.equals(mystics.get(choice - 1).getBuff(), "Health")) {
+//                hero.setMaxHealth(hero.getMaxHealth() + (int)mystics.get(choice - 1).getAmplifier());
+//                hero.setHealth(hero.getMaxHealth());
+//            }
         }
         else{
             System.out.println("Invalid input");

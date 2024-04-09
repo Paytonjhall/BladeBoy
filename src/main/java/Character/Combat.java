@@ -2,6 +2,7 @@ package Character;
 
 import Character.Abilities.Mystic;
 import Character.Equipment.ItemInterface;
+import Character.Mystics.MysticInterface;
 import Dungeon.Enemy;
 import Game.Output;
 import Game.Sound;
@@ -28,11 +29,19 @@ public class Combat {
     //Normal attack
     public Hero attack(){
         int damage = calculateDamage(hero, enemy);
+
         recentHeroDamage = damage;
         enemy.takeDamage(damage);
         sound.swordHitSound();
         hero = checkHealths();
-        if(hero.finishedCombat) return hero;
+        if(hero.finishedCombat) {
+
+            for(MysticInterface mystic: hero.getMystics()) {
+                hero = mystic.onKill(hero, enemy);
+            }
+
+            return hero;
+        }
         turn = false;
         EnemyTurn();
         return hero;
@@ -42,6 +51,11 @@ public class Combat {
     private void EnemyTurn(){
         if(enemy.getHealth() > 0){
             int damage = calculateDamage(enemy, hero);
+
+            for(MysticInterface mystic: hero.getMystics()) {
+                damage += mystic.onHit(hero, damage);
+            }
+
             if(hero.takeDamage(damage)) {
                 // hero had died, end game
                 System.exit(0);
@@ -76,13 +90,18 @@ public class Combat {
             int damageRange = (int) (hero.weapon.getWeaponDamage() / 2) + random.nextInt(hero.weapon.getWeaponDamage());
             damage = (int) (damageRange * ((1 - enemy.getArmorRating() / 1000)));
         }
-        damage += strength(hero);
-        damage += crush(hero);
-        if(critCheck(hero)) damage *= 2.5;
-        double lifeSteal = lifeSteal(hero);
-        if(lifeSteal > 0) {
-            System.out.print("Hero life steals "); output.printRed((int)((lifeSteal * damage)/100) + ""); System.out.println(" health");
-            hero.heal((int)((lifeSteal * damage)/100));
+        // TODO: This is all going to be done by mystics now.
+//        damage += strength(hero);
+//        damage += crush(hero);
+//        if(critCheck(hero)) damage *= 2.5;
+//        double lifeSteal = lifeSteal(hero);
+//        if(lifeSteal > 0) {
+//            System.out.print("Hero life steals "); output.printRed((int)((lifeSteal * damage)/100) + ""); System.out.println(" health");
+//            hero.heal((int)((lifeSteal * damage)/100));
+//        }
+
+        for(MysticInterface mystic : hero.getMystics()) {
+            damage += mystic.onAttack(hero, damage, enemy);
         }
         return damage;
     }
@@ -149,11 +168,11 @@ public class Combat {
         Random random = new Random();
         int baseCritChance = 5;
         int critChance = random.nextInt(100);
-        for(Mystic mystic : hero.getMystics()){
-            if(mystic.getBuff().equals("Critical")){
-                baseCritChance *= mystic.getAmplifier();
-            }
-        }
+//        for(Mystic mystic : hero.getMystics()){
+//            if(mystic.getBuff().equals("Critical")){
+//                baseCritChance *= mystic.getAmplifier();
+//            }
+//        }
 
         if(critChance <= baseCritChance){
             output.printPurple("Critical Hit!\n");
@@ -164,24 +183,24 @@ public class Combat {
 
     private double lifeSteal(Hero hero){
         double lifeSteal = 0;
-        for(Mystic mystic : hero.getMystics()){
-            if(mystic.getBuff().equals("Vamperism")){
-                lifeSteal += mystic.getAmplifier();
-
-            }
-        }
+//        for(Mystic mystic : hero.getMystics()){
+//            if(mystic.getBuff().equals("Vamperism")){
+//                lifeSteal += mystic.getAmplifier();
+//
+//            }
+//        }
         return lifeSteal;
     }
 
     private double strength(Hero hero){
         boolean check = false;
         double strength = 1;
-        for(Mystic mystic : hero.getMystics()){
-            if(mystic.getBuff().equals("Strength")){
-                strength += mystic.getAmplifier();
-                check = true;
-            }
-        }
+//        for(Mystic mystic : hero.getMystics()){
+//            if(mystic.getBuff().equals("Strength")){
+//                strength += mystic.getAmplifier();
+//                check = true;
+//            }
+//        }
         if(!check) return 1;
         return strength;
     }
@@ -190,11 +209,11 @@ public class Combat {
         Random random = new Random();
         int baseBlockChance = 5;
         int blockChance = random.nextInt(100);
-        for(Mystic mystic : hero.getMystics()){
-            if(mystic.getBuff().equals("Block")){
-                baseBlockChance *= mystic.getAmplifier();
-            }
-        }
+//        for(Mystic mystic : hero.getMystics()){
+//            if(mystic.getBuff().equals("Block")){
+//                baseBlockChance *= mystic.getAmplifier();
+//            }
+//        }
 
         if(blockChance <= baseBlockChance){
             return true;
@@ -205,11 +224,11 @@ public class Combat {
     private int crush(Hero hero){
         int damage = 0;
         double crushRatio = (double) hero.getHealth() / 100.00;
-        for(Mystic mystic : hero.getMystics()){
-            if(mystic.getBuff().equals("Crush")){
-                damage += (int) (mystic.getAmplifier() * crushRatio);
-            }
-        }
+//        for(Mystic mystic : hero.getMystics()){
+//            if(mystic.getBuff().equals("Crush")){
+//                damage += (int) (mystic.getAmplifier() * crushRatio);
+//            }
+//        }
         return damage;
     }
 

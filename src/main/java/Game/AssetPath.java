@@ -13,7 +13,10 @@ public class AssetPath {
     public String devilPotion = "src/Assets/Potions/devilPotion.png";
     public String emptyPotion = "src/Assets/Potions/empty.png";
     public String backpack = "src/Assets/Other/Backpack.png";
-    public String blacksmith = "src/Assets/Portraits/smith.png";
+    public String blacksmith = "src/Assets/Portraits/blacksmith.png";
+    public String armorer = "src/Assets/Portraits/armorer.png";
+    public String sage = "src/Assets/Portraits/sage.png";
+    public String archer = "src/Assets/Portraits/archer.png";
     public String barbarianWarLordIcon = "src/Assets/Portraits/barbarianWarLord.png";
     public String damageIcon="src/Assets/Weapons/Swords/damageIcon.png";
     public String mage = "src/Assets/Portraits/Mage.png";
@@ -85,6 +88,10 @@ public class AssetPath {
     public String verticalPath = "src/Assets/Town/Tiles/verticalPath.png";
 
 
+    // Mystics:
+
+
+
     public String enemyIcon(){
         return "src/Assets/Portraits/enemy"+ (int)(Math.random() * 3)+".png";
     }
@@ -92,4 +99,6 @@ public class AssetPath {
     public String getIcon (String name) {
         return "src/Assets/Portraits/" + name + ".png";
     }
+
+    public String getMystic (String name) {return "src/Assets/Mystics/" + name + ".png";}
 }

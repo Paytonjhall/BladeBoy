@@ -235,8 +235,8 @@ public class DungeonFloorCreator implements MapInterface {
                 map[x][y].isShop = true;
                 map[x][y].shopOwner = shopOwners.get(i);
                 if(Objects.equals(shopOwners.get(i), "Blacksmith")) map[x][y].setIcon(ap.blacksmith);
-                else if(Objects.equals(shopOwners.get(i), "Armory")) map[x][y].setIcon(ap.blacksmith);
-                else if(Objects.equals(shopOwners.get(i), "Artifact")) map[x][y].setIcon(ap.oracle);
+                else if(Objects.equals(shopOwners.get(i), "Armory")) map[x][y].setIcon(ap.armorer);
+                else if(Objects.equals(shopOwners.get(i), "Artifact")) map[x][y].setIcon(ap.sage);
             } else {
                 i--;
             }

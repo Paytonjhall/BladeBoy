@@ -4,6 +4,7 @@ import Character.Abilities.Mystic;
 import Character.Equipment.Armor;
 import Character.Equipment.Artifact;
 import Character.Equipment.Weapon;
+import Character.Mystics.MysticInterface;
 import Game.Load;
 import Game.Save;
 
@@ -14,7 +15,7 @@ public class FileTest {
 
 
     public static void main(String[] args) {
-        List<Mystic> mystics = new ArrayList<Mystic>();
+        List<MysticInterface> mystics = new ArrayList<MysticInterface>();
         Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                 new Artifact("Fortune Amulet", 1000, "A old amulet from your mother", "Fortune", 1.1625),
