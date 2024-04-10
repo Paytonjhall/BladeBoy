@@ -39,6 +39,8 @@ public class Hero {
     public boolean visitedArmory;
     public boolean visitedArtificiary;
 
+    public boolean awardingLoot = false;
+
 
     public Class getHeroClass() {
         if (heroClass == null) {
@@ -416,6 +418,9 @@ public class Hero {
             potionBag.addPotion(loot.getPotion());
         }
         gold += loot.getGold();
+        if(loot.getMystic() != null){
+            mystics.add(loot.getMystic());
+        }
     }
 
     //GETTERS AND SETTERS
@@ -498,7 +503,7 @@ public class Hero {
     }
 
     public void addMystic (MysticInterface mystic){
-        mystics.add(mystic);
+        if (mystic != null) mystics.add(mystic);
     }
 
     public int getGold() {

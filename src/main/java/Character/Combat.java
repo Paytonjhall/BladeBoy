@@ -35,11 +35,9 @@ public class Combat {
         sound.swordHitSound();
         hero = checkHealths();
         if(hero.finishedCombat) {
-
             for(MysticInterface mystic: hero.getMystics()) {
                 hero = mystic.onKill(hero, enemy);
             }
-
             return hero;
         }
         turn = false;
@@ -134,31 +132,16 @@ public class Combat {
 
     private Hero awardItems(Hero hero, Enemy enemy){
         hero.addXp(enemy.getXp());
-        if(enemy.getDrops() != null) {
-            System.out.println("Items Found:");
-            for (ItemInterface item : enemy.getDrops()) {
-                System.out.println(item.getName() + ": Description - " + item.getDescription() + " | Value - " + item.getValue());
-                hero.addToBag(item);
-            }
-        } else {
-            System.out.println("The " + enemy.getName() + " dropped no items.");
-        }
-        if(enemy.getGold()>0 && hero.getArtifact() != null && hero.getArtifact().getType().equals("Fortune")){
-            int extraGold = hero.getArtifact().artifactAmplify(enemy.getGold());
-            System.out.print("The " + enemy.getName() + " dropped ");
-            output.printYellow(enemy.getGold() + "");
-            System.out.print(" gold, but your artifact amplifies it to ");
-            output.printYellow(extraGold + "");
-            System.out.println(" gold."+ " (" + hero.getArtifact().getName() + ")");
-            hero.addGold(extraGold);
-        } else if (enemy.getGold()>0) {
-            hero.addGold(enemy.getGold());
-            System.out.print("The " + enemy.getName() + " dropped ");
-            output.printYellow(enemy.getGold() + "");
-            System.out.println(" gold!");
-        } else {
-                System.out.println("The " + enemy.getName() + " dropped no gold.");
-            }
+//        if(enemy.getDrops() != null) {
+//            System.out.println("Items Found:");
+//            for (ItemInterface item : enemy.getDrops()) {
+//                System.out.println(item.getName() + ": Description - " + item.getDescription() + " | Value - " + item.getValue());
+//                hero.addToBag(item);
+//            }
+//        } else {
+//            System.out.println("The " + enemy.getName() + " dropped no items.");
+//        }
+
         hero.inCombat = false;
         hero.finishedCombat = true;
         return hero;

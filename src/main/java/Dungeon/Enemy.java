@@ -1,7 +1,14 @@
 package Dungeon;
 
 import java.util.List;
+
+import Character.Abilities.Mystic;
+import Character.Equipment.Armor;
+import Character.Equipment.Artifact;
 import Character.Equipment.ItemInterface;
+import Character.Equipment.Weapon;
+import Character.Mystics.MysticInterface;
+
 public class Enemy {
     int health;
     int maxHealth;
@@ -131,5 +138,43 @@ public class Enemy {
             }
         }
         return string;
+    }
+
+    public Loot generateLoot(){
+        Weapon wea = null;
+        if (drops != null) {
+            for (ItemInterface item : drops) {
+                if (item instanceof Weapon) {
+                    wea = (Weapon) item;
+                }
+            }
+        }
+        Armor arm = null;
+        if (drops != null) {
+            for (ItemInterface item : drops) {
+                if (item instanceof Armor) {
+                    arm = (Armor) item;
+                }
+            }
+        }
+        Artifact art = null;
+        if (drops != null) {
+            for (ItemInterface item : drops) {
+                if (item instanceof Artifact) {
+                    art = (Artifact) item;
+                }
+            }
+        }
+
+        MysticInterface myst = null;
+        if (drops != null) {
+            for (ItemInterface item : drops) {
+                if (item instanceof Mystic) {
+                    myst = (MysticInterface) item;
+                }
+            }
+        }
+
+        return new Loot(wea, arm, art, null, gold, "You found " + gold + " gold!", myst);
     }
 }

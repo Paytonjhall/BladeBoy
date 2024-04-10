@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class DungeonFloorCreator implements MapInterface {
     //double shopOwnerGenerationChance = .80;
-    double shopOwnerGenerationChance = .080;
+    double shopOwnerGenerationChance = .80;
 
       String[] shopOwners = new String[]{"Blacksmith", "Armory", "Artifact"};
 //    String[] shopOwners = new String[]{"Blacksmith"}; // Delete this one and use the one above

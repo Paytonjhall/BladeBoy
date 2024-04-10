@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+
 public class HeroInventory {
     boolean returner =false;
     Hero hero;
@@ -34,7 +36,7 @@ public class HeroInventory {
         JFrame f=new JFrame("Inventory");
         f.update(f.getGraphics());
 
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
 
         f.setSize(500,500);
@@ -98,7 +100,7 @@ public class HeroInventory {
         //Make a new JFrame
         f=new JFrame("Inventory");
         f.update(f.getGraphics());
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // f.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
         f.setSize(500,725);
         f.setLayout(null);
@@ -134,7 +136,8 @@ public class HeroInventory {
         if(hero.getArmor() == null) {
             armor = lc.createLabel("src/Assets/Armor/emptyArmor.tif", "No armor equipped",50, 180, 100, 100);
         } else {
-            armor = lc.createLabel("src/Assets/Armor/armor4.png", hero.getArmor().hoverString(),50, 180, 100, 100);
+            //armor = lc.createLabel("src/Assets/Armor/armor4.png", hero.getArmor().hoverString(),50, 180, 100, 100);
+            armor = lc.createLabel(hero.getArmor().getIconPath(), hero.getArmor().hoverString(),50, 180, 100, 100);
         }
             if(hero.getArmors() != null){
                 JComboBox bag = new JComboBox(hero.getArmors().toArray());

@@ -52,8 +52,8 @@ public class TestHeroInterface {
         hero.addMystic(bloodAmulet);
         Daidem daidem = new Daidem();
         hero.addMystic(daidem);
-        VenomOrb venomOrb = new VenomOrb();
-        hero.addMystic(venomOrb);
+//        VenomOrb venomOrb = new VenomOrb();
+//        hero.addMystic(venomOrb);
 
 
         // hero.addXp(30000);
@@ -94,7 +94,12 @@ public class TestHeroInterface {
 
         //gameView.enterTown(hero);
 
-
+//        MysticGenerator mg = new MysticGenerator();
+//        hero.addMystic(mg.getNewMystic(mystics, "common"));
+//        hero.addMystic(mg.getNewMystic(mystics, "common"));
+//        hero.addMystic(mg.getNewMystic(mystics, "common"));
+//        hero.addMystic(mg.getNewMystic(mystics, "common"));
+//        hero.addMystic(mg.getNewMystic(mystics, "common"));
 
         hero = gameView.startNewDungeon(hero, 3); // TODO: THIS IS FOR TESTING GAME
 

@@ -5,9 +5,6 @@ package view;
 
 import Character.*;
 import Character.Mystics.MysticInterface;
-import Character.Town.Armory;
-import Character.Town.Artificiary;
-import Character.Town.Blacksmith;
 import Dungeon.ChestLoot;
 import Dungeon.Enemy;
 import Dungeon.EnemyGenerator;
@@ -18,7 +15,6 @@ import Game.Sound;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +58,7 @@ public class GameView {
     List<JLabel> shopTiles;
     List<JLabel> torchTiles;
     List<JLabel> mysticIcons;
+    int mysticCounter = 30;
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
     TownFloorCreator townFloorCreator;
@@ -124,13 +121,17 @@ public class GameView {
         frame.invalidate();
         frame.validate();
         frame.repaint();
+        if (hero.getMystics().size() > mysticIcons.size()) {
+            updateMystics();
+        }
+        // Consider adding Mystics update here.
 
         if(weapon != null){
             labelCreator.update(hero.getWeapon().getIconPath(), weapon, hero.getWeapon().hoverString());
             //weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().toString(), 35, 850, 75, 75);
         }
         if(armor != null){
-            labelCreator.update("src/Assets/Armor/armor4.png", armor, hero.getArmor().hoverString());
+            labelCreator.update(hero.getArmor().getIconPath(), armor, hero.getArmor().hoverString());
             //armor = labelCreator.createLabel("src/Assets/Armor/armor4.png",hero.getArmor().toString(), 145, 850, 75, 75);
         }
         if(artifact != null){
@@ -193,7 +194,13 @@ public class GameView {
         }
     }
 
-    public void keyInput(char e) {
+    public void openAwardScreen() {
+        // AwardModal awardModal = new AwardModal();
+
+
+    }
+
+    public void keyInput(char e) throws InterruptedException {
         switch (e) {
             case 'i' -> {
                 if((hero.inDungeon || hero.inTown) && !hero.inCombat) openInventory();
@@ -286,6 +293,8 @@ public class GameView {
         else {
             print("You defeated the " + enemy.getName() + "! Gained " + enemy.getXp() + " XP and " + enemy.getGold() + " gold.");
         }
+        awardModal am = new awardModal(hero, enemy.generateLoot());
+        hero = am.openLoot(hero, enemy.generateLoot(), enemy.getName() + " Loot");
         dungeonClearedData.addXpEarned(enemy.getXp());
         dungeonClearedData.addGoldEarned(enemy.getGold());
         cont.remove(enemyHealthBar);
@@ -355,62 +364,98 @@ public class GameView {
     }
 
     public void loadKeyBindings(){
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("W"), "w");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("A"), "a");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("S"), "s");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("D"), "d");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("G"), "g");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("I"), "i");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("E"), "e");
-        heroIcon.getInputMap().put(KeyStroke.getKeyStroke("T"), "t");
-        heroIcon.getActionMap().put("w", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('w');
-            }
-        });
-        heroIcon.getActionMap().put("a", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('a');
-            }
-        });
-        heroIcon.getActionMap().put("s", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('s');
-            }
-        });
-        heroIcon.getActionMap().put("d", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('d');
-            }
-        });
-        heroIcon.getActionMap().put("g", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('g');
-            }
-        });
-        heroIcon.getActionMap().put("t", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('t');
-            }
-        });
-        heroIcon.getActionMap().put("i", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('i');
-            }
-        });
-        heroIcon.getActionMap().put("e", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyInput('e');
-            }
-        });
+        try {
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("W"), "w");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("A"), "a");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("S"), "s");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("D"), "d");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("G"), "g");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("I"), "i");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("E"), "e");
+            heroIcon.getInputMap().put(KeyStroke.getKeyStroke("T"), "t");
+            heroIcon.getActionMap().put("w", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('w');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("a", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('a');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("s", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('s');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("d", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('d');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("g", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('g');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("t", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('t');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("i", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('i');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            heroIcon.getActionMap().put("e", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        keyInput('e');
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadInventory(){
@@ -419,16 +464,20 @@ public class GameView {
         cont.removeAll();
         displayPane = new JTextArea();
         scrollPane = new JScrollPane(displayPane);
+        scrollPane.getHorizontalScrollBar().setEnabled(false);
+        scrollPane.getVerticalScrollBar().setEnabled(true);
+        scrollPane.getViewport().getView().setEnabled(false);
         scrollPane.setBounds(15, 775, 1250, 175);
         border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
         if (hero.getWeapon() != null) weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 35, 650, 75, 75);
-        if (hero.getArmor() != null) armor = labelCreator.createLabel("src/Assets/Armor/armor4.png",hero.getArmor().hoverString(), 145, 650, 75, 75);
+        if (hero.getArmor() != null) armor = labelCreator.createLabel(hero.getArmor().getIconPath(),hero.getArmor().hoverString(), 145, 650, 75, 75);
         if (hero.getArtifact() != null) artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 255, 650, 75, 75);
         heroIcon = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Level: " + hero.getLevel(), 35, 570, 75, 75);
         // Load Hero Mystics
-        int mysticCounter = 30;
+        mysticCounter = 30;
         mysticIcons = new ArrayList<>();
         for(MysticInterface mystics : hero.getMystics()) {
+            mysticIcons.clear();
             JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticCounter, 540, 30, 30);
             mysticCounter += 30;
             mysticIcons.add(mystic);
@@ -692,7 +741,7 @@ public class GameView {
         }
     }
 
-    public void unlockChest(int x, int y){
+    public void unlockChest(int x, int y) throws InterruptedException {
         for(JLabel chest : chestTiles){
             if(chest.getX() == (x * 100) && chest.getY() == (y * 100)){
                 dungeonClearedData.addChestsOpened(1);
@@ -706,10 +755,19 @@ public class GameView {
                     Loot loot = chestLoot.generateLoot(hero);
                     // Dialogue box to say what was in the chest!
                     print("You opened the chest. " + loot.getLoot());
-                    hero.addLoot(loot);
-                    for(MysticInterface mystic: hero.getMystics()) {
-                        hero = mystic.onChest(hero);
-                    }
+                    awardModal am = new awardModal(hero, loot);
+                    // hero.awardingLoot = true;
+                    hero = am.openLoot(hero, loot, "Chest Loot");
+
+                    updateMystics();
+//                    for(MysticInterface mystic: hero.getMystics()) {
+//                        hero = mystic.onChest(hero);
+//                    }
+//                    hero.addLoot(loot);
+//                    if(loot.getMystic() != null) {
+//                        print("You got a mystic!: " + loot.getMystic().nameString());
+//                        addMysticToInventory(loot.getMystic());
+//                    }
                     dungeon[x][y].hasChest = false;
                     chestTiles.remove(chest);
                     break;
@@ -719,10 +777,19 @@ public class GameView {
                     Loot loot = chestLoot.generateBossLoot(hero);
                     // Dialogue box to say what was in the chest!
                     print("You opened the boss chest. " + loot.getLoot());
-                    hero.addLoot(loot);
-                    for(MysticInterface mystic: hero.getMystics()) {
-                        hero = mystic.onChest(hero);
-                    }
+                    awardModal am = new awardModal(hero, loot);
+                    // hero.awardingLoot = true;
+                    hero = am.openLoot(hero, loot, "Boss Chest Loot");
+
+                    updateMystics();
+//                    for(MysticInterface mystic: hero.getMystics()) {
+//                        hero = mystic.onChest(hero);
+//                    }
+                    // hero.addLoot(loot);
+//                    if(loot.getMystic() != null) {
+//                        print("You got a mystic!: " + loot.getMystic().nameString());
+//                        addMysticToInventory(loot.getMystic());
+//                    }
                     dungeon[x][y].hasBossChest = false;
                     chestTiles.remove(chest);
                     break;
@@ -733,7 +800,6 @@ public class GameView {
 
     public void shopKeeper (int x, int y) {
         if (dungeon[x][y].isShop) {
-            // System.out.println("SHOP");
             if (dungeon[x][y].shopOwner == "Blacksmith") {
                 blacksmith = new blacksmith();
                 hero = blacksmith.visitBlackSmith(hero);
@@ -777,5 +843,36 @@ public class GameView {
         String time = sdf.format(date);
         if(displayPane!= null) displayPane.setText(displayPane.getText() + '\n' + time + ": " + string);
         //displayPane.update(cont.getGraphics());
+    }
+
+    public void addMysticToInventory(MysticInterface mystic) {
+        cont.remove(border);
+        JLabel my = labelCreator.createLabel(ap.getMystic(mystic.IconName()), mystic.hoverTextString(), mysticCounter, 540, 30, 30);
+        mysticCounter += 30;
+        mysticIcons.add(my);
+        cont.add(my);
+        //Lol need to remove and reload border every time... oof
+        border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
+        cont.add(border);
+
+        //cont.update(cont.getGraphics());
+
+    }
+
+    public void updateMystics() {
+        cont.remove(border);
+        for(JLabel mystic : mysticIcons) {
+            cont.remove(mystic);
+        }
+        mysticIcons.clear();
+        mysticCounter = 30;
+        for(MysticInterface mystics : hero.getMystics()) {
+            JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticCounter, 540, 30, 30);
+            mysticCounter += 30;
+            mysticIcons.add(mystic);
+            cont.add(mystic);
+        }
+        border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
+        cont.add(border);
     }
 }

@@ -9,6 +9,7 @@ import Character.Town.ArtifactGenerator;
 import Character.Town.PotionGenerator;
 import Character.Town.WeaponGenerator;
 import Game.AssetPath;
+import Character.Mystics.*;
 
 public class ChestLoot {
     //This class produces the loot found in dungeon chests.
@@ -21,6 +22,8 @@ public class ChestLoot {
     WeaponGenerator wg;
     ArmorGenerator ag = new ArmorGenerator();
     ArtifactGenerator artg = new ArtifactGenerator();
+
+    MysticGenerator mg = new MysticGenerator();
 
     public ChestLoot(){
 
@@ -70,7 +73,12 @@ public class ChestLoot {
         } else {
             loot = "Error in ChestLoot.java";
         }
-        return new Loot(weapon, armor, artifact, potion, gold, loot);
+        roll = (int) (Math.random() * 100);
+        if (roll > 7){
+            MysticInterface mystic = mg.getNewMystic(hero.getMystics(), "common");
+            return new Loot(weapon, armor, artifact, potion, gold, loot, mystic);
+        }
+        return new Loot(weapon, armor, artifact, potion, gold, loot, null);
     }
 
     public Loot generateBossLoot(Hero hero){
@@ -97,7 +105,8 @@ public class ChestLoot {
         loot += "and " + gold + " gold, and ";
         potion = makeOtherPotion(level);
         loot += "a " + potion.getType() + "!";
-        return new Loot(weapon, armor, artifact, potion, gold, loot);
+        MysticInterface mystic = mg.getNewMystic(hero.getMystics(), "rare");
+        return new Loot(weapon, armor, artifact, potion, gold, loot, mystic);
     }
 
     public static boolean isBetween(int x, int lower, int upper) {
