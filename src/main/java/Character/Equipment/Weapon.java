@@ -62,8 +62,9 @@ public class Weapon implements ItemInterface {
             num = random.nextInt(11) + 1;
             iconPath = "src/Assets/Weapons/Spears/" + num + ".png";
         } else if (Objects.equals(type, "Bow")){ //Bow 48
-            num = random.nextInt(47) + 1;
-            iconPath = "src/Assets/Weapons/Bows/" + num + ".png";
+            num = random.nextInt(23) +1;
+            if (name.contains("Crossbow")) num += 24;
+            iconPath = "src/Assets/Weapons/Bows/Icon" + num + ".png";
         } else if (Objects.equals(type, "Staff")){ //Staff 20
             num = random.nextInt(19) + 1;
             iconPath = "src/Assets/Weapons/Staffs/" + num + ".png";

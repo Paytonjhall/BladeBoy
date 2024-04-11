@@ -92,6 +92,7 @@ public class awardModal  {
             return hero;
         }
         JFrame f = new JFrame("Loot");
+        f.setLocationRelativeTo(null);
         // f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
         f.setSize(580,300);
@@ -109,6 +110,7 @@ public class awardModal  {
         container.add(lootLabel);
         if(loot.getMystic()!=null) {
             JLabel mystic = lc.createLabel(ap.getMystic(loot.getMystic().IconName()), loot.getMystic().hoverTextString(), xstart, ystart, 100, 100);
+            JLabel mysticText = lc.createText(loot.getMystic().nameString(), xstart + 20, ystart + 55, 100, 100);
             mystic.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -119,11 +121,13 @@ public class awardModal  {
                 }
             });
             container.add(mystic);
+            container.add(mysticText);
 
             xstart += 125;
         }
         if(loot.getGold() > 0) {
             JLabel gold = lc.createLabel(ap.Gold, loot.getGold() + " gold", xstart, ystart, 100, 100);
+            JLabel goldText = lc.createText(loot.getGold() + " gold", xstart + 20, ystart + 55, 100, 100);
             gold.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -135,10 +139,12 @@ public class awardModal  {
                 }
             });
             container.add(gold);
+            container.add(goldText);
             xstart += 125;
         }
         if(loot.getWeapon() != null) {
             JLabel weapon = lc.createLabel(loot.getWeapon().getIconPath(), loot.getWeapon().hoverString(), xstart, ystart, 100, 100);
+            JLabel weaponText = lc.createText(loot.getWeapon().getName(), xstart + 20, ystart + 55, 100, 100);
             weapon.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -149,10 +155,12 @@ public class awardModal  {
                 }
             });
             container.add(weapon);
+            container.add(weaponText);
             xstart += 125;
         }
         if(loot.getArmor()!=null) {
             JLabel armor = lc.createLabel(loot.getArmor().getIconPath(), loot.getArmor().hoverString(), xstart, ystart, 100, 100);
+            JLabel armorText = lc.createText(loot.getArmor().getName(), xstart + 20, ystart + 55, 100, 100);
             armor.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -163,10 +171,12 @@ public class awardModal  {
                 }
             });
             container.add(armor);
+            container.add(armorText);
             xstart += 125;
         }
         if(loot.getArtifact()!=null) {
             JLabel artifact = lc.createLabel(loot.getArtifact().getIconPath(), loot.getArtifact().hoverString(), xstart, ystart, 100, 100);
+            JLabel artifactText = lc.createText(loot.getArtifact().getName(), xstart + 20, ystart + 55, 100, 100);
             artifact.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -177,10 +187,12 @@ public class awardModal  {
                 }
             });
             container.add(artifact);
+            container.add(artifactText);
             xstart += 125;
         }
         if(loot.getPotion()!=null) {
             JLabel potion = lc.createLabel(loot.getPotion().getIconPath(), loot.getPotion().toString(), xstart, ystart, 100, 100);
+            JLabel potionText = lc.createText(loot.getPotion().toString(), xstart + 20, ystart + 55, 100, 100);
             potion.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -191,11 +203,12 @@ public class awardModal  {
                 }
             });
             container.add(potion);
+            container.add(potionText);
             xstart += 125;
         }
 
         JButton continueButton = new JButton("Continue");
-        continueButton.setBounds(50, 210, 75, 35);
+        continueButton.setBounds(50, 210, 230, 35);
         continueButton.addActionListener(e -> {
             returner = true;
             f.dispose();
@@ -203,7 +216,7 @@ public class awardModal  {
         });
 
         JButton TakeAll = new JButton("Take All");
-        TakeAll.setBounds(150, 210, 75, 35);
+        TakeAll.setBounds(300, 210, 230, 35);
         TakeAll.addActionListener(e -> {
             afterhero.addLoot(loot);
             returner = true;

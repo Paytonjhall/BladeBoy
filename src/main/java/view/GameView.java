@@ -231,6 +231,9 @@ public class GameView {
                     dungeonClearedData.addFloorsCleared(1);
                     dungeonLabels = null;
                     floorCount++;
+                    for(MysticInterface mystics: hero.getMystics()) {
+                        if(mystics.onProgressFloor(hero) != null) hero = mystics.onProgressFloor(hero);
+                    }
                     sound.enterDoorSound();
                     loadInventory();
                     if(bossFloorCount>1 && floorCount == bossFloorCount)loadBossFloor();

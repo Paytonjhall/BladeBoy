@@ -102,7 +102,7 @@ public class HeroInventory {
         f.update(f.getGraphics());
         // f.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
-        f.setSize(500,725);
+        f.setSize(520,750);
         f.setLayout(null);
         Container container = f.getContentPane(); //Gets the content layer
 
@@ -245,6 +245,10 @@ public class HeroInventory {
         for(JLabel potion : potions){
             container.add(potion);
         }
+
+        JLabel background = lc.createLabelWithoutHover(ap.inventoryBackground,  10, 10, 500, 700);
+        container.add(background);
+
         f.setVisible(true); // Exhibit the frame
         return hero;
     }

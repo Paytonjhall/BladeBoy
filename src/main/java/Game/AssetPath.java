@@ -87,6 +87,8 @@ public class AssetPath {
     public String horizontalPath = "src/Assets/Town/Tiles/horizontalPath.png";
     public String verticalPath = "src/Assets/Town/Tiles/verticalPath.png";
 
+    public String inventoryBackground = "src/Assets/UI/inventoryBackground.png";
+
 
     // Mystics:
 

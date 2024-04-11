@@ -59,4 +59,9 @@ public class MageTomb extends MysticInterface {
     public Hero onKill(Hero hero, Enemy enemy) {
         return hero;
     }
+
+    @Override
+    public Hero onProgressFloor (Hero hero) {
+        return hero;
+    }
 }

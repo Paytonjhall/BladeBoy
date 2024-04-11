@@ -31,6 +31,11 @@ public class HuntingKnife extends MysticInterface{
     }
 
     @Override
+    public Hero onProgressFloor(Hero hero) {
+        return hero;
+    }
+
+    @Override
     public Hero onChest(Hero hero) {
         hero.heal(10);
         return hero;

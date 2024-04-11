@@ -14,5 +14,6 @@ public abstract class MysticInterface {
     public abstract Hero onLevelUp (Hero hero);
     public abstract Hero onChest (Hero hero);
     public abstract Hero onKill (Hero hero, Enemy enemy);
+    public abstract Hero onProgressFloor(Hero hero);
 
 }

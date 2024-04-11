@@ -14,6 +14,7 @@ public class WeaponGenerator {
     // Rank1 artifacts = 5, Rank2 artifacts = 10, Rank3 artifacts = 15
     // Value is equal
 
+    String[] bowNames = new String[]{"Bow", "Longbow", "Shortbow", "Crossbow", "Recurve Bow", "Compound Bow", "Composite Bow", "Reflex Bow", "Recurve Crossbow", "Compound Crossbow", "Composite Crossbow", "Reflex Crossbow"};
     String[] staffNames = new String[]{"Staff", "Rod", "Wand", "Scepter", "Cane", "Pole", "Pike", "Lance", "Glaive", "Guisarme", "Quarterstaff"};
     String[] axeNames = new String[]{"Axe", "Hatchet", "Tomahawk", "Battle Axe", "Hand Axe", "War Axe", "Great Axe"};
     String[] swordNames = new String[]{"Sword", "Blade", "Dirk","Axe", "Knife", "Razor","Battle Axe", "Hand Axe", "Rapier", "Edge", "Broadsword", "Knife", "Dagger", "Scimitar", "Longsword", "Shortsword", "Saber", "Cutlass", "Falchion", "Claymore", "Flamberge", "Zweihander", "Mace", "Morning Star", "War Hammer", "Club", "Flail", "Maul", "Spear", "Pike", "Halberd", "Trident", "Lance", "Javelin", "Glaive", "Guisarme", "Quarterstaff", "Bastard Sword", "Scythe", "War Scythe", "Great Sword", "Great Axe", "Great Mace", "Great Hammer"};
@@ -28,6 +29,7 @@ public class WeaponGenerator {
         for(int i = 0; i < count; i++){
             Weapon weapon = new Weapon(generateWeaponName());
             if(weapon.getName().contains("sword") || weapon.getName().contains("Sword") || weapon.getName().contains("Rapier") || weapon.getName().contains("Scimitar") || weapon.getName().contains("Saber") || weapon.getName().contains("Claymore") || weapon.getName().contains("Zweihander")) weapon.setType("Sword");
+            else if(weapon.getName().contains("Bow") || weapon.getName().contains("bow") || weapon.getName().contains("Crossbow") || weapon.getName().contains("crossbow")) weapon.setType("Bow");
             else if(weapon.getName().contains("dagger") || weapon.getName().contains("Dagger") || weapon.getName().contains("Knife") || weapon.getName().contains("Razor")) weapon.setType("Dagger");
             else if(weapon.getName().contains("axe") || weapon.getName().contains("Axe") || weapon.getName().contains("Mace") || weapon.getName().contains("Flail") || weapon.getName().contains("Club") || weapon.getName().contains("Hammer") || weapon.getName().contains("Maul") || weapon.getName().contains("Morning Star") || weapon.getName().contains("Tomahawk") || weapon.getName().contains("Hatchet")) weapon.setType("Axe");
             else if(weapon.getName().contains("spear") || weapon.getName().contains("Spear") || weapon.getName().contains("Pike") || weapon.getName().contains("Halberd") || weapon.getName().contains("Trident") || weapon.getName().contains("Lance") || weapon.getName().contains("Guisarme") || weapon.getName().contains("Quarterstaff") || weapon.getName().contains("Scythe") || weapon.getName().contains("Javelin")) weapon.setType("Spear");
@@ -56,16 +58,13 @@ public class WeaponGenerator {
             case "Mage" -> generateAdj() + " " + staffNames[getRnd().nextInt(staffNames.length)];
             case "Barbarian" -> generateAdj() + " " + axeNames[getRnd().nextInt(axeNames.length)];
             case "Knight" -> generateAdj() + " " + swordNames[getRnd().nextInt(swordNames.length)];
-            default -> generateAdj() + " " + generateWeaponNoun();
+            case "Archer" -> generateAdj() + " " + bowNames[getRnd().nextInt(bowNames.length)];
+            default -> generateAdj() + " " +  swordNames[getRnd().nextInt(swordNames.length)];
         };
     }
 
     public String generateAdj(){
         return adjNames[getRnd().nextInt(adjNames.length)];
-    }
-
-    public String generateWeaponNoun(){
-        return swordNames[getRnd().nextInt(swordNames.length)];
     }
 
     Random getRnd(){

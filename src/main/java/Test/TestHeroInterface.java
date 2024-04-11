@@ -38,8 +38,8 @@ public class TestHeroInterface {
                 180, 500, 250, 12, 500, mystics);
         // hero.setIconString("Barbarian");
         // hero.setHeroClass(new Class("Barbarian", "Physical"));
-         hero.setIconString("Mage");
-         hero.setHeroClass(new Class("Mage", "Magical"));
+         hero.setIconString("Archer");
+         hero.setHeroClass(new Class("Archer", "Physical"));
          WeaponGenerator wg = new WeaponGenerator(hero);
 
 //        hero.addToBag(new Weapon("Incredible Iron Sword", 1000, "An impressively sharp steel blade", 15));

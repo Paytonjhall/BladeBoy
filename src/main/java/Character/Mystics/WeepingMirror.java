@@ -30,6 +30,11 @@ public class WeepingMirror extends MysticInterface {
     }
 
     @Override
+    public Hero onProgressFloor(Hero hero) {
+        return hero;
+    }
+
+    @Override
     public Hero onChest(Hero hero) {
         return hero;
     }
