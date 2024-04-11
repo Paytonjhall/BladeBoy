@@ -46,6 +46,7 @@ public class GameView {
     JButton items;
     JLabel enemyIcon;
     JLabel enemyBorder;
+    JLabel enemyHealth;
     JProgressBar enemyHealthBar;
     Boolean inventoryOpen = false;
     Enemy enemy;
@@ -58,7 +59,10 @@ public class GameView {
     List<JLabel> shopTiles;
     List<JLabel> torchTiles;
     List<JLabel> mysticIcons;
-    int mysticCounter = 30;
+    int mysticX = 130;
+    int mysticY = 560;
+    int mysticSize = 25;
+
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
     TownFloorCreator townFloorCreator;
@@ -77,6 +81,13 @@ public class GameView {
     int heroLevel = 0;
     int floorCount = 1;
     int bossFloorCount = 0;
+
+    int heroInventoryIconX = 45;
+    int heroInventoryIconY = 552;
+
+    int enemyInventoryIconX = 1171;
+    int enemyInventoryIconY = 562;
+
     public GameView() {
     }
 
@@ -140,12 +151,12 @@ public class GameView {
         }
         if(healthBar != null){
             healthBar.setValue(hero.getHealth());
-            healthBar.setString("Health: " + hero.getHealth() + "/" + hero.getMaxHealth());
+            healthBar.setString(hero.getHealth() + "/" + hero.getMaxHealth());
             healthBar.setMaximum(hero.getMaxHealth());
         }
         if(XPBar != null){
             XPBar.setValue(hero.getXp());
-            XPBar.setString("XP: " + hero.getXp() + "/" + hero.getNextLevelXp());
+            XPBar.setString(hero.getXp() + "/" + hero.getNextLevelXp());
             XPBar.setMaximum(hero.getNextLevelXp());
         }
         if(gold != null){
@@ -158,6 +169,7 @@ public class GameView {
 
         if(enemyHealthBar != null && enemyHealthBar.getValue() == 0){
             cont.remove(enemyHealthBar);
+            cont.remove(enemyHealth);
         }
 
         if(hero.finishedCombat){
@@ -301,6 +313,7 @@ public class GameView {
         dungeonClearedData.addXpEarned(enemy.getXp());
         dungeonClearedData.addGoldEarned(enemy.getGold());
         cont.remove(enemyHealthBar);
+        cont.remove(enemyHealth);
         cont.remove(enemyIcon);
         if(attack!=null){
             attack.setVisible(false);
@@ -339,11 +352,11 @@ public class GameView {
             items.setBounds(650, 660, 100, 30);
             run = new JButton("Run");
             run.setBounds(650, 600, 100, 30);
-            enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
-            enemyIcon = labelCreator.createLabel(enemy.getIconPath(),enemy.getName() + "", 1135, 565, 75, 75);
-            enemyHealthBar = new JProgressBar(0, enemy.getHealth());
-            enemyHealthBar.setValue(enemy.getMaxHealth());
-            enemyHealthBar.setBounds(825, 575, 300, 25);
+            enemyBorder = labelCreator.createLabelWithoutHover(ap.enemyInventory, 800, 525, 475, 250);
+            enemyHealth = labelCreator.createLabelWithoutHover(ap.enemyHealthBar, 800, 525, 475, 250);
+
+            enemyIcon = labelCreator.createLabel(enemy.getIconPath(),enemy.getName() + "", enemyInventoryIconX, enemyInventoryIconY, 60, 60);
+            enemyHealthBar = labelCreator.createEnemyProgressBar(868, 597, 280, 25, enemy.getHealth(), enemy.getMaxHealth(), Color.RED.getRGB());
 
             print("You encountered a " + enemy.getName() + "!");
             cont.add(attack);
@@ -357,6 +370,7 @@ public class GameView {
             cont.add(enemyIcon);
             //cont.add(panel);
             cont.add(enemyHealthBar);
+            cont.add(enemyHealth);
             cont.add(enemyBorder);
 
         }
@@ -471,41 +485,49 @@ public class GameView {
         scrollPane.getVerticalScrollBar().setEnabled(true);
         scrollPane.getViewport().getView().setEnabled(false);
         scrollPane.setBounds(15, 775, 1250, 175);
-        border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
-        if (hero.getWeapon() != null) weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 35, 650, 75, 75);
-        if (hero.getArmor() != null) armor = labelCreator.createLabel(hero.getArmor().getIconPath(),hero.getArmor().hoverString(), 145, 650, 75, 75);
-        if (hero.getArtifact() != null) artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 255, 650, 75, 75);
-        heroIcon = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Level: " + hero.getLevel(), 35, 570, 75, 75);
+        border = labelCreator.createLabelWithoutHover(ap.heroInventory, 5, 525, 475, 250);
+        // Add mouse listener actions for weapon armor and artifact to switch to another item when clicked.
+        if (hero.getWeapon() != null) weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 131, 687, 40, 40);
+        if (hero.getArmor() != null) armor = labelCreator.createLabel(hero.getArmor().getIconPath(),hero.getArmor().hoverString(), 203, 687, 40, 40);
+        if (hero.getArtifact() != null) artifact = labelCreator.createLabel(hero.getArtifact().getIconPath(),hero.getArtifact().hoverString(), 276, 687, 40, 40);
+        heroIcon = labelCreator.createLabel(ap.getIcon(hero.getIconString()), "Level: " + hero.getLevel(), heroInventoryIconX, heroInventoryIconY, 70, 70);
         // Load Hero Mystics
-        mysticCounter = 30;
+        mysticX = 130;
         mysticIcons = new ArrayList<>();
         for(MysticInterface mystics : hero.getMystics()) {
             mysticIcons.clear();
-            JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticCounter, 540, 30, 30);
-            mysticCounter += 30;
+            JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticX, mysticY, mysticSize, mysticSize);
+            mysticX += 30;
             mysticIcons.add(mystic);
             cont.add(mystic);
         }
 
         loadKeyBindings();
-        enemyBorder = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 800, 525, 475, 250);
+        enemyBorder = labelCreator.createLabelWithoutHover(ap.enemyInventory, 800, 525, 475, 250);
+        enemyHealth = labelCreator.createLabelWithoutHover(ap.enemyHealthBar, 800, 525, 475, 250);
         //gold = labelCreator.createLabel(ap.Gold,hero.getGold()+"", 350, 570, 65, 65);
-        inventory = labelCreator.createLabel(ap.backpack, "Inventory", 350, 650, 75, 75);
-        healthBar = new JProgressBar(0, hero.getMaxHealth());
-        healthBar.setValue(hero.getHealth());
-        healthBar.setBounds(135, 575, 300, 25);
-        healthBar.setStringPainted(true);
-        healthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
-        healthBar.setForeground(Color.RED);
-        healthBar.setString("Health: " + hero.getHealth() + "/" + hero.getMaxHealth());
+        inventory = labelCreator.createLabel(ap.backpack, "Inventory", 390, 687, 45, 45);
+        inventory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                openInventory();
+            }
+        });
+        UIManager.put("ProgressBar.selectionBackground", Color.RED);
+        healthBar = labelCreator.createProgressBar(157, 597, 280, 25, hero.getHealth(), hero.getMaxHealth(), Color.RED.getRGB());
 
-        XPBar = new JProgressBar(0, hero.getNextLevelXp());
-        XPBar.setValue(hero.getXp());
-        XPBar.setBounds(135, 615, 300, 25);
-        XPBar.setStringPainted(true);
-        XPBar.setFont(new Font("MV Boli", Font.BOLD, 20));
-        XPBar.setForeground(Color.blue);
-        XPBar.setString("XP: " + hero.getXp() + "/" + hero.getNextLevelXp());
+        // Mana bar x = 157 and y = 625
+
+        UIManager.put("ProgressBar.selectionBackground", Color.GREEN);
+        XPBar = labelCreator.createProgressBar(157, 653, 280, 25, hero.getXp(), hero.getNextLevelXp(), Color.BLUE.getRGB());
+//        XPBar = new JProgressBar(0, hero.getNextLevelXp());
+//        XPBar.setValue(hero.getXp());
+//        XPBar.setBounds(157, 653, 280, 25);
+//        XPBar.setStringPainted(true);
+//        XPBar.setFont(new Font("MV Boli", Font.BOLD, 20));
+//        XPBar.setForeground(Color.blue);
+        XPBar.setString(hero.getXp() + "/" + hero.getNextLevelXp());
 
 
         attack = new JButton("Attack");
@@ -529,6 +551,7 @@ public class GameView {
         cont.add(XPBar);
         //cont.add(gold);
         cont.add(enemyBorder);
+        cont.add(enemyHealth);
         cont.add(heroIcon);
         cont.add(inventory);
         cont.add(border);
@@ -850,12 +873,12 @@ public class GameView {
 
     public void addMysticToInventory(MysticInterface mystic) {
         cont.remove(border);
-        JLabel my = labelCreator.createLabel(ap.getMystic(mystic.IconName()), mystic.hoverTextString(), mysticCounter, 540, 30, 30);
-        mysticCounter += 30;
+        JLabel my = labelCreator.createLabel(ap.getMystic(mystic.IconName()), mystic.hoverTextString(), mysticX, 540, 30, 30);
+        mysticX += 30;
         mysticIcons.add(my);
         cont.add(my);
         //Lol need to remove and reload border every time... oof
-        border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
+        border = labelCreator.createLabelWithoutHover(ap.heroInventory, 5, 525, 475, 250);
         cont.add(border);
 
         //cont.update(cont.getGraphics());
@@ -868,14 +891,14 @@ public class GameView {
             cont.remove(mystic);
         }
         mysticIcons.clear();
-        mysticCounter = 30;
+        mysticX = 130;
         for(MysticInterface mystics : hero.getMystics()) {
-            JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticCounter, 540, 30, 30);
-            mysticCounter += 30;
+            JLabel mystic = labelCreator.createLabel(ap.getMystic(mystics.IconName()), mystics.hoverTextString(), mysticX, mysticY, mysticSize, mysticSize);
+            mysticX += 30;
             mysticIcons.add(mystic);
             cont.add(mystic);
         }
-        border = labelCreator.createLabelWithoutHover("src/Assets/UI/itemBorder.png", 5, 525, 475, 250);
+        border = labelCreator.createLabelWithoutHover(ap.heroInventory, 5, 525, 475, 250);
         cont.add(border);
     }
 }

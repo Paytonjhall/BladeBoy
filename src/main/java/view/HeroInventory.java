@@ -29,6 +29,9 @@ public class HeroInventory {
     LabelCreator lc = new LabelCreator();
     Sound sound = new Sound();
 
+    int sizeX = 70;
+    int sizeY = 70;
+    int comboX = 190;
     public static void main(String[] args) {
         OpenInventory();
     }
@@ -107,16 +110,19 @@ public class HeroInventory {
         Container container = f.getContentPane(); //Gets the content layer
 
         // Weapon
+        int weaponx = 105;
+        int weapony = 190;
         JLabel weapon = new JLabel(); //JLabel Creation
          //Sets the location of the image
         if(hero.getWeapon() == null) {
-            weapon = lc.createLabel("src/Assets/Weapons/Swords/emptySword.tif", "No weapon equipped",50, 30, 100, 100);
+            weapon = lc.createLabel("src/Assets/Weapons/Swords/emptySword.tif", "No weapon equipped", weaponx, weapony, sizeX, sizeY);
+
         } else {
-            weapon = lc.createLabel(hero.getWeapon().getIconPath(), hero.getWeapon().hoverString(), 50, 30, 100, 100);
+            weapon = lc.createLabel(hero.getWeapon().getIconPath(), hero.getWeapon().hoverString(), weaponx, weapony, sizeX, sizeY);
         }
             if(hero.getWeapons() != null){
                 JComboBox bag = new JComboBox(hero.getWeapons().toArray());
-                bag.setBounds(170, 30, 300, 35);
+                bag.setBounds(comboX, weapony - 15, 285, 35);
                 container.add(bag);
                 bag.addActionListener(e -> {
                     hero.equipWeapon((Weapon) bag.getSelectedItem());
@@ -131,17 +137,20 @@ public class HeroInventory {
 
 
         // Armor
+        int armorX = 105;
+        int armorY = 305;
         JLabel armor = new JLabel(); //JLabel Creation
         armor.setBounds(50, 180, 100, 100); //Sets the location of the image
         if(hero.getArmor() == null) {
-            armor = lc.createLabel("src/Assets/Armor/emptyArmor.tif", "No armor equipped",50, 180, 100, 100);
+            armor = lc.createLabel("src/Assets/Armor/emptyArmor.tif", "No armor equipped", armorX, armorY, sizeX, sizeY);
         } else {
             //armor = lc.createLabel("src/Assets/Armor/armor4.png", hero.getArmor().hoverString(),50, 180, 100, 100);
-            armor = lc.createLabel(hero.getArmor().getIconPath(), hero.getArmor().hoverString(),50, 180, 100, 100);
+            armor = lc.createLabel(hero.getArmor().getIconPath(), hero.getArmor().hoverString(),armorX, armorY, sizeX, sizeY);
         }
             if(hero.getArmors() != null){
+
                 JComboBox bag = new JComboBox(hero.getArmors().toArray());
-                bag.setBounds(170, 180, 300, 35);
+                bag.setBounds(comboX, armorY - 15, 285, 35);
                 container.add(bag);
                 bag.addActionListener(e -> {
                     hero.equipArmor((Armor) bag.getSelectedItem());
@@ -156,16 +165,18 @@ public class HeroInventory {
 
 
         // Artifact
+        int artifactX = 105;
+        int artifactY = 415;
         JLabel artifact = new JLabel(); //JLabel Creation
         artifact.setBounds(50, 330, 100, 100); //Sets the location of the image
         if(hero.getArtifact() == null) {
-            artifact = lc.createLabel("src/Assets/Artifact/emptyArtifact.tif", "No artifact equipped",50, 330, 100, 100);
+            artifact = lc.createLabel("src/Assets/Artifact/emptyArtifact.tif", "No artifact equipped", artifactX, artifactY, sizeX, sizeY);
         } else {
-            artifact = lc.createLabel(hero.getArtifact().getIconPath(), hero.getArtifact().hoverString(),50, 330, 100, 100);
+            artifact = lc.createLabel(hero.getArtifact().getIconPath(), hero.getArtifact().hoverString(),artifactX, artifactY, sizeX, sizeY);
         }
             if(hero.getArtifacts() != null){
                 JComboBox bag = new JComboBox(hero.getArtifacts().toArray());
-                bag.setBounds(170, 330, 300, 35);
+                bag.setBounds(comboX, artifactY - 15, 285, 35);
                 container.add(bag);
                 bag.addActionListener(e -> {
                     hero.equipArtifact((Artifact) bag.getSelectedItem());
@@ -180,17 +191,20 @@ public class HeroInventory {
 
         // Gold
         JLabel gold = new JLabel(); //JLabel Creation
-        gold = lc.createLabel(ap.Gold, "Gold: " + hero.getGold(), 50, 480, 50, 50);
+        gold = lc.createLabel(ap.Gold, "Gold: " + hero.getGold(), 80, 520, 45, 45);
         JTextField goldAmount = new JTextField();
-        goldAmount.setBounds(170, 480, 50, 35);
+        goldAmount.setBounds(140, 525, 150, 35);
         goldAmount.setText(hero.getGold() + "");
         goldAmount.setEditable(false);
         // Potions
         List<JLabel> potions = new ArrayList<>();
+        int potionX = 387; // Gross number but lol
+        int potionY = 400;
         for(int i = 0; i < 3; i++){
+            potionY += 65;
             JLabel potion = new JLabel();
             Potion currentPotion = hero.getPotionBag().getPotion(i+1);
-            potion.setBounds(350, 400 + (i * 65), 50, 50);
+            potion.setBounds(potionX, potionY, 50, 50);
             if(currentPotion!=null) {
                 String name = hero.getPotionBag().getPotion(i+1).toString();
                 Image dimg5 = getImage(currentPotion.getIconPath()).getScaledInstance(potion.getWidth(), potion.getHeight(),
@@ -221,19 +235,32 @@ public class HeroInventory {
             }
             potions.add(potion);
         }
-        JButton back = new JButton("Close Inventory");
 
-        back.setBounds(50, 550, 150, 35);
-        back.addActionListener(e -> {
-            sound.closeBagSound();
-            returner = true;
-            f.dispose();
-            try {
-                openInventory(hero);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        JLabel back = lc.createLabel(ap.closeButton, "Close Inventory", 75, 600, 200, 50);
+        //JButton back = new JButton("Close Inventory");
+
+        //back.setBounds(75, 650, 150, 35);
+
+        back.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                sound.closeBagSound();
+                returner = true;
+                f.dispose();
+                //hero.wait = false;
             }
         });
+//        back.addActionListener(e -> {
+//            sound.closeBagSound();
+//            returner = true;
+//            f.dispose();
+//            try {
+//                openInventory(hero);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        });
 
         // ADD TO CONTAINER
         container.add(weapon); //Adds objects to the container

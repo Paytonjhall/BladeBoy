@@ -87,7 +87,21 @@ public class AssetPath {
     public String horizontalPath = "src/Assets/Town/Tiles/horizontalPath.png";
     public String verticalPath = "src/Assets/Town/Tiles/verticalPath.png";
 
-    public String inventoryBackground = "src/Assets/UI/inventoryBackground.png";
+    public String inventoryBackground = "src/Assets/UI/inventoryBorder.png";
+
+    public String closeButton = "src/Assets/UI/CloseButton.png";
+
+    public String attackButton = "src/Assets/UI/AttackButton.png";
+    public String takeAllButton = "src/Assets/UI/TakeAllButton.png";
+
+    public String continueButton = "src/Assets/UI/ContinueButton.png";
+
+    public String heroInventory = "src/Assets/UI/HeroMainView.png";
+    public String enemyInventory = "src/Assets/UI/EnemyMainView.png";
+
+    public String enemyHealthBar = "src/Assets/UI/EnemyHealthBar.png";
+
+    public String awardMenu = "src/Assets/UI/AwardMenu.png";
 
 
     // Mystics:
