@@ -22,7 +22,7 @@ public class Town {
         userInput.sleep(2000);
         printOptions();
         System.out.print("Where would you like to go: ");
-        getAction();
+        //getAction();
     }
 
     public Hero visitBlacksmith (Hero hero) {
@@ -64,28 +64,6 @@ public class Town {
         output.printBold("Save Game\n");
     }
 
-    public void getAction () {
-        int choice = -1;
-        while (choice != 6) {
-            choice = userInput.getNumberInput();
-            switch (choice) {
-                case 1 -> hero = visitBlacksmith(hero);
-                case 2 -> hero = visitArmory(hero);
-                case 3 -> hero = visitStore(hero);
-                case 4 -> hero = visitOracle(hero);
-                case 5 -> hero.organizeBag();
-                case 6 -> hero.heroStatus();
-                case 7 -> {
-                    hero = startAdventure(hero);
-                    returnToTown(hero);
-                }
-                case 8 -> saveGame(hero);
-                default -> System.out.println("Invalid input");
-            }
-
-        }
-    }
-
 
 
     public void resetTown(){
@@ -104,6 +82,6 @@ public class Town {
         userInput.sleep(2000);
         printOptions();
         System.out.print("Where would you like to go: ");
-        getAction();
+        //getAction();
     }
 }

@@ -1,8 +1,11 @@
 package Dungeon;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import Character.Abilities.Mystic;
+import Character.Combat.AttackObject;
 import Character.Equipment.Armor;
 import Character.Equipment.Artifact;
 import Character.Equipment.ItemInterface;
@@ -10,6 +13,12 @@ import Character.Equipment.Weapon;
 import Character.Mystics.MysticInterface;
 
 public class Enemy {
+
+    AttackObject attack = new AttackObject();
+    String aggression = "Passive";
+    int attackPattern = 0;
+    ArrayList<AttackObject> pattern = new ArrayList<>();
+    int block=0;
     int health;
     int maxHealth;
     int damage;
@@ -29,6 +38,7 @@ public class Enemy {
         this.xp = xp;
         this.drops = drops;
         this.gold = gold;
+        setAggression();
     }
 
     public Enemy(String name, int health, int damage, double armorRating, int xp, List<ItemInterface> drops, int gold, String iconPath) {
@@ -41,14 +51,59 @@ public class Enemy {
         this.drops = drops;
         this.gold = gold;
         this.iconPath = iconPath;
+        setAggression();
+    }
+
+    public void setAggression() {
+        // Generate number 1-3 to set aggression level
+        int random = (int) (Math.random() * 3 + 1);
+        if(random == 1){
+            aggression = "Passive";
+        } else if(random == 2){
+            aggression = "Neutral";
+        } else if(random == 3){
+            aggression = "Aggressive";
+        }
+
+        // Generate number 1-3 to set attack pattern
+        if (aggression.equals("Passive")) {
+            pattern.add(new AttackObject(0, damage/3, (int)(damage/1.5)));
+            pattern.add(new AttackObject(0, (int)(damage/2), (damage/2)));
+            pattern.add(new AttackObject(damage/2, (damage/2)));
+            pattern.add(new AttackObject(damage/3, (int)(damage/1.5), (int)(damage/1.5)));
+            pattern.add(new AttackObject(damage));
+        } else if (aggression.equals("Neutral")) {
+            pattern.add(new AttackObject(damage + (int)(damage/5)));
+            pattern.add(new AttackObject((int)(damage/1.5), (int)(damage/2)));
+            pattern.add(new AttackObject(damage, (int)(damage/4)));
+            pattern.add(new AttackObject(0, (damage/2), (int)(damage/2)));
+            pattern.add(new AttackObject(damage, (int)(damage/5)));
+        } else if (aggression.equals("Aggressive")) {
+            pattern.add(new AttackObject(damage + (int)(damage/3)));
+            pattern.add(new AttackObject(damage, (int)(damage/5)));
+            pattern.add(new AttackObject(damage/2, 0, (damage/2)));
+            pattern.add(new AttackObject(damage/2, (damage/5)));
+            pattern.add(new AttackObject(damage/3, (int)(damage/3), (int)(damage/3)));
+        }
+
+        generateAttack();
+    }
+
+    public AttackObject generateAttack(){
+        if(pattern == null) setAggression();
+        Random random = new Random();
+        attack = pattern.get(random.nextInt(pattern.size()));
+        return attack;
     }
 
     public void takeDamage(int damage){
+        damage-= block;
         if(damage<= 0) damage = 0;
         health -= damage;
         if(health<=0){
             System.out.println(name + " has died");
         }
+        block = 0;
     }
 
     public void heal(int health){
@@ -176,5 +231,21 @@ public class Enemy {
         }
 
         return new Loot(wea, arm, art, null, gold, "You found " + gold + " gold!", myst);
+    }
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
+    }
+
+    public AttackObject getAttack() {
+        return attack;
+    }
+
+    public void setAttack(AttackObject attack) {
+        this.attack = attack;
     }
 }

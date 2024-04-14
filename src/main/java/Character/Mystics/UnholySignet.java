@@ -1,6 +1,6 @@
 package Character.Mystics;
 import Character.Hero;
-import Character.Abilities.Mystic;
+import Character.Stats.Stats;
 import Dungeon.Enemy;
 
 public class UnholySignet extends MysticInterface {
@@ -26,9 +26,14 @@ public class UnholySignet extends MysticInterface {
     }
 
     @Override
+    public Stats passiveBuffs(Stats stats) {
+        return stats;
+    }
+
+    @Override
     public int onAttack(Hero hero, int damage, Enemy enemy) {
         count ++;
-        if (count == 5) {
+        if (count >= 5) {
             count = 0;
             return damage;
         }
@@ -57,6 +62,11 @@ public class UnholySignet extends MysticInterface {
 
     @Override
     public Hero onProgressFloor(Hero hero) {
+        return hero;
+    }
+
+    @Override
+    public Hero onPickUp(Hero hero) {
         return hero;
     }
 }

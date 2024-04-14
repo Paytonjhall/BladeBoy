@@ -1,6 +1,7 @@
 package view;
 
 import Character.Mystics.*;
+import Character.Stats.Stats;
 import Game.AssetPath;
 
 import javax.swing.*;
@@ -127,24 +128,35 @@ public class HeroMaker {
             ArtifactGenerator artifactGenerator = new ArtifactGenerator();
 
             NewGame newGame = new NewGame();
-            Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
+            Hero hero = new Hero(null, new Armor("Plated Leather Armor", 1000, "Plain", .35),
                     new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                     null,
                     180, 500, 0, 8, 500, new ArrayList<MysticInterface>());
+
+            hero.getArmor().setIconPath(ap.basicArmor);
             String dmgType = "Physical";
             if (heroString[0] == "Mage") dmgType = "Magical";
+
+                Stats knightStats= new Stats(8, 6, 3, 4, 12, 3);
+                Stats archerStats= new Stats(5, 5, 8, 5, 4, 8);
+                Stats mageStats= new Stats(3, 2, 5, 12, 3, 10);
+                Stats barbarianStats= new Stats(10, 12, 2, 3, 5, 3);
             hero.setHeroClass(new Class(heroString[0], dmgType));
             // Assign Mystics Here:
                 if (heroString[0] == "Mage") {
+                    hero.setStats(mageStats);
                     MageTomb tomb = new MageTomb();
                     hero.addMystic(tomb);
                 } else if (heroString[0] == "Knight") {
+                    hero.setStats(knightStats);
                     Pavise pavise = new Pavise();
                     hero.addMystic(pavise);
                 } else if (heroString[0] == "Barbarian") {
+                    hero.setStats(barbarianStats);
                     BloodAmulet bloodAmulet = new BloodAmulet();
                     hero.addMystic(bloodAmulet);
                 } else if (heroString[0] == "Archer") {
+                    hero.setStats(archerStats);
                     HuntingKnife huntingKnife = new HuntingKnife();
                     hero.addMystic(huntingKnife);
                 }

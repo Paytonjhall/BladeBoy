@@ -19,6 +19,8 @@ public class Artifact implements ItemInterface {
     String description;
     String type;
     String iconPath;
+
+
     double amplifier;
     double fortune = 1;
     double discount = 1;
@@ -57,26 +59,6 @@ public class Artifact implements ItemInterface {
         this.iconPath = iconPath;
     }
 
-    public int artifactAmplify(int value){
-        return (int)(value*amplifier);
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public double getAmplifier() {
-        return amplifier;
-    }
-
-    public void setAmplifier(double amplifier) {
-        this.amplifier = amplifier;
-    }
-
     @Override
     public void setName(String name) {
         this.name = name;
@@ -112,77 +94,6 @@ public class Artifact implements ItemInterface {
         return name  + " Type: " + type + " Amplifier: " + amplifier + ": Value: " + value;
     }
 
-    public double getFortune() {
-        return fortune;
-    }
-
-    public void setFortune(double fortune) {
-        this.fortune=fortune;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount=discount;
-    }
-
-    public double getLuck() {
-        return luck;
-    }
-
-    public void setLuck(double luck) {
-        this.luck=luck;
-    }
-
-    public double getStrength() {
-        return strength;
-    }
-
-    public void setStrength(double strength) {
-        this.strength=strength;
-    }
-
-    public double getDefense() {
-        return defense;
-    }
-
-    public void setDefense(double defense) {
-        this.defense=defense;
-    }
-
-    public double getHealth() {
-        return health;
-    }
-
-    public void setHealth(double health) {
-        this.health=health;
-    }
-
-    public double getVampire() {
-        return vampire;
-    }
-
-    public void setVampire(double vampire) {
-        this.vampire=vampire;
-    }
-
-    public double getConqueror() {
-        return conqueror;
-    }
-
-    public void setConqueror(double conqueror) {
-        this.conqueror=conqueror;
-    }
-
-    public double getLearner() {
-        return learner;
-    }
-
-    public void setLearner(double learner) {
-        this.learner=learner;
-    }
 
     @Override
     public String toString(){

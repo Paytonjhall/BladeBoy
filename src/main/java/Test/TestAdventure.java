@@ -20,7 +20,7 @@ public class TestAdventure {
 //        mystics.add(new Mystic("Health", 10, "Passive", 1));
 //        mystics.add(new Mystic("Block", 2.1, "Passive", 1));
 //        mystics.add(new Mystic("Vamperism", 15, "type?", 4));
-        Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
+        Hero hero = new Hero(null, new Armor("Plated Leather Armor", 1000, "Plain", .35),
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                 new Artifact("Fortune Amulet", 1000, "A old amulet from your mother", "Fortune", 1.1625),
                 180, 500, 0, 8, 500, mystics);

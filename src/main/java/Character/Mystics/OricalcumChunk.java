@@ -1,5 +1,6 @@
 package Character.Mystics;
 import Character.Hero;
+import Character.Stats.Stats;
 import Dungeon.Enemy;
 
 public class OricalcumChunk extends MysticInterface {
@@ -24,12 +25,22 @@ public class OricalcumChunk extends MysticInterface {
     }
 
     @Override
+    public Stats passiveBuffs(Stats stats) {
+        return stats;
+    }
+
+    @Override
     public Hero onKill(Hero hero, Enemy enemy) {
         return hero;
     }
 
     @Override
     public Hero onProgressFloor(Hero hero) {
+        return hero;
+    }
+
+    @Override
+    public Hero onPickUp(Hero hero) {
         return hero;
     }
 

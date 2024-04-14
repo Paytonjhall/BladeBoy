@@ -48,8 +48,8 @@ public class artificiary {
             JLabel artifactName = lc.createText(artifact.getName(), 175, 105 + i * 125, 250, 35);
             JLabel gold = lc.createLabel(ap.Gold, artifact.getValue() + "", 175, 135 + i * 125, 30, 30);
             JLabel goldText = lc.createText(artifact.getValue() + "", 215, 135 + i * 125, 200, 35);
-            JLabel artifactEffect = lc.createLabel(ap.damageIcon, artifact.getType() + " " + artifact.getAmplifier(), 175, 170 + i * 125, 30, 30);
-            JLabel artifactEffectText = lc.createText(artifact.getType() + " " + artifact.getAmplifier(), 215, 170 + i * 125, 200, 35);
+            JLabel artifactEffect = lc.createLabel(ap.damageIcon,  "TEMP", 175, 170 + i * 125, 30, 30);
+            JLabel artifactEffectText = lc.createText(" TEMP ", 215, 170 + i * 125, 200, 35);
             i++;
 
             label.addMouseListener(new MouseAdapter() {

@@ -5,6 +5,7 @@ import Character.Equipment.Armor;
 import Character.Equipment.Artifact;
 import Character.Equipment.Weapon;
 import Character.Mystics.*;
+import Character.Stats.Stats;
 import Character.Town.ArmorGenerator;
 import Character.Town.ArtifactGenerator;
 import Character.Town.PotionGenerator;
@@ -32,7 +33,7 @@ public class TestHeroInterface {
         UserInput ui = new UserInput();
         GameView gameView = new GameView();
         List<MysticInterface> mystics = new ArrayList<MysticInterface>();
-        Hero hero = new Hero(new Armor("Plated Leather Armor", 1000, "Plain", .35),
+        Hero hero = new Hero(null, new Armor("Plated Leather Armor", 1000, "Plain", .35),
                 new Weapon("Incredible Steel Sword", 1000, "An impressively sharp steel blade", 15),
                 new Artifact("Fortune Amulet", 1000, "A old amulet from your mother", "Fortune", 1.1625),
                 180, 500, 250, 12, 500, mystics);
@@ -41,17 +42,23 @@ public class TestHeroInterface {
          hero.setIconString("Archer");
          hero.setHeroClass(new Class("Archer", "Physical"));
          WeaponGenerator wg = new WeaponGenerator(hero);
+         hero.setStats(new Stats(20,20,25,38,40,100));
 
 //        hero.addToBag(new Weapon("Incredible Iron Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Gold Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Diamond Sword", 1000, "An impressively sharp steel blade", 15));
 //        hero.addToBag(new Weapon("Incredible Copper Sword", 1000, "An impressively sharp steel blade", 15));
+        System.out.println("Luck: " + hero.getStats().getLuck().value());
+        LuckyGoblet luckyGoblet = new LuckyGoblet();
+        hero.addMystic(luckyGoblet);
+        System.out.println("Luck: " + hero.getStats().getLuck().value());
         MageTomb tomb = new MageTomb();
         hero.addMystic(tomb);
         BloodAmulet bloodAmulet = new BloodAmulet();
         hero.addMystic(bloodAmulet);
         Daidem daidem = new Daidem();
         hero.addMystic(daidem);
+        hero.statPoints =   4;
 //        VenomOrb venomOrb = new VenomOrb();
 //        hero.addMystic(venomOrb);
 
@@ -100,6 +107,8 @@ public class TestHeroInterface {
 //        hero.addMystic(mg.getNewMystic(mystics, "common"));
 //        hero.addMystic(mg.getNewMystic(mystics, "common"));
 //        hero.addMystic(mg.getNewMystic(mystics, "common"));
+
+        hero.setHealth(80);
 
         hero = gameView.startNewDungeon(hero, 3); // TODO: THIS IS FOR TESTING GAME
 

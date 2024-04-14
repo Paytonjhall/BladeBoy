@@ -109,6 +109,11 @@ public class HeroInventory {
         f.setLayout(null);
         Container container = f.getContentPane(); //Gets the content layer
 
+
+        // Header:
+        JLabel header = lc.createHugeText("Inventory", 100, 38, 300, 50);
+        container.add(header);
+
         // Weapon
         int weaponx = 105;
         int weapony = 190;

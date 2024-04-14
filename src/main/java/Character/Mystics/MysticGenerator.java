@@ -10,10 +10,10 @@ public class MysticGenerator {
     ArrayList<MysticInterface> starterMystics = new ArrayList<MysticInterface>(List.of(new BloodAmulet(), new MageTomb(), new HuntingKnife(), new Pavise()));
 
     // Common Mystics
-    ArrayList<MysticInterface> commonMystics = new ArrayList<>(List.of(new BloodGem(), new OricalcumChunk(), new UnholySignet(), new VenomOrb()));
+    ArrayList<MysticInterface> commonMystics = new ArrayList<MysticInterface>(List.of(new BloodGem(), new OricalcumChunk(), new UnholySignet(), new VenomOrb(), new LuckyGoblet()));
 
     // Rare Mystics
-    ArrayList<MysticInterface> rareMystics = new ArrayList<>(List.of(new WeepingMirror(), new Daidem()));
+    ArrayList<MysticInterface> rareMystics = new ArrayList<MysticInterface>(List.of(new WeepingMirror(), new Daidem()));
 
     public MysticInterface getNewMystic(List<MysticInterface> mystics, String rarity) {
     List<MysticInterface> possibleMystics;

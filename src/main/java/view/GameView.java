@@ -4,7 +4,11 @@ package view;
 // Traps
 
 import Character.*;
+import Character.Abilities.AbilityInterface;
+import Character.Combat.AttackObject;
+import Character.Combat.Combat;
 import Character.Mystics.MysticInterface;
+import Character.Stats.Stats;
 import Dungeon.ChestLoot;
 import Dungeon.Enemy;
 import Dungeon.EnemyGenerator;
@@ -13,6 +17,9 @@ import Game.AssetPath;
 import Game.Sound;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
@@ -38,12 +45,34 @@ public class GameView {
     JLabel gold;
     JLabel inventory;
     JLabel heroIcon;
+    JLabel str;
+    JLabel strValue;
+
+    JLabel con;
+    JLabel conValue;
+    JLabel agi;
+    JLabel agiValue;
+
+    JLabel intel;
+    JLabel intelValue;
+
+    JLabel def;
+    JLabel defValue;
+
+    JLabel luck;
+    JLabel luckValue;
+
+
+    int statSize = 20;
+    int statStartY = 645;
+    int statStartX = 44;
     JProgressBar healthBar;
+    JProgressBar manaBar;
     JProgressBar XPBar;
-    JButton skills;
-    JButton attack;
-    JButton run;
-    JButton items;
+    JLabel abilities;
+    JLabel attack;
+    JLabel run;
+    JLabel items;
     JLabel enemyIcon;
     JLabel enemyBorder;
     JLabel enemyHealth;
@@ -59,14 +88,20 @@ public class GameView {
     List<JLabel> shopTiles;
     List<JLabel> torchTiles;
     List<JLabel> mysticIcons;
+    JLabel levelUpArrow;
     int mysticX = 130;
     int mysticY = 560;
     int mysticSize = 25;
 
+    int combatButtonW = 125;
+    int combatButtonH = 35;
+
+    JComboBox abilitySelector = new JComboBox();
+
     DungeonTile exit;
     DungeonFloorCreator dungeonFloorCreator;
     TownFloorCreator townFloorCreator;
-    JTextArea displayPane;
+    JTextPane displayPane;
     JScrollPane scrollPane;
     DungeonClearedData dungeonClearedData = new DungeonClearedData();
     ClearedDungeon clearedDungeon;
@@ -127,15 +162,57 @@ public class GameView {
         return hero;
     }
 
+    public void levelUp() {
+        LevelUpView levelUpView = new LevelUpView();
+        update(levelUpView.levelUp(hero));
+    }
+
     public void update(Hero hero){
         this.hero = hero;
+        if (hero.getAnnouncement() != "") {
+            print(hero.getAnnouncement());
+            hero.setAnnouncement("");
+        }
+        // System.out.println(hero.getStats().getConstitution().value()); // for testing
+        hero.calcHeroStatus();
         frame.invalidate();
         frame.validate();
         frame.repaint();
+        //System.out.println(hero.getStats().getConstitution().value() + " " + conValue.getText());
+        if( (conValue != null && hero.getStats().getConstitution().value() +"" != conValue.getText()) ||
+                strValue!= null && hero.getStats().getStrength().value() +"" != strValue.getText() ||
+                agiValue!= null && hero.getStats().getAgility().value() +"" != agiValue.getText() ||
+                defValue!= null && hero.getStats().getDefense().value() +"" != defValue.getText() ||
+                intelValue!= null && hero.getStats().getIntelligence().value() +"" != intelValue.getText() ||
+                luckValue!= null && hero.getStats().getLuck().value() +"" != luckValue.getText()) {
+            conValue.setText(hero.getStats().getConstitution().value() + "");
+            strValue.setText(hero.getStats().getStrength().value() + "");
+            agiValue.setText(hero.getStats().getAgility().value() + "");
+            defValue.setText(hero.getStats().getDefense().value() + "");
+            intelValue.setText(hero.getStats().getIntelligence().value() + "");
+            luckValue.setText(hero.getStats().getLuck().value() + "");
+        }
         if (hero.getMystics().size() > mysticIcons.size()) {
             updateMystics();
         }
         // Consider adding Mystics update here.
+
+        if(hero.statPoints>0 && !levelUpArrow.isVisible()) {
+            levelUpArrow.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // hero.statPoints = 0; // For testing
+                    super.mouseClicked(e);
+                    if (hero.statPoints>0) levelUp();
+
+
+                }
+            });
+            levelUpArrow.setVisible(true);
+
+        } else if (hero.statPoints == 0){
+            levelUpArrow.setVisible(false);
+        }
 
         if(weapon != null){
             labelCreator.update(hero.getWeapon().getIconPath(), weapon, hero.getWeapon().hoverString());
@@ -153,6 +230,11 @@ public class GameView {
             healthBar.setValue(hero.getHealth());
             healthBar.setString(hero.getHealth() + "/" + hero.getMaxHealth());
             healthBar.setMaximum(hero.getMaxHealth());
+        }
+        if(manaBar != null){
+            manaBar.setValue(hero.getMana());
+            manaBar.setString(hero.getMana() + "/" + hero.getMaxMana());
+            manaBar.setMaximum(hero.getMaxMana());
         }
         if(XPBar != null){
             XPBar.setValue(hero.getXp());
@@ -297,17 +379,8 @@ public class GameView {
     }
 
     public void endCombat(){
-        if(enemy.getDrops() != null && enemy.getDrops().size() > 0){
-            StringBuilder drops = new StringBuilder();
-            for(int i = 0; i < enemy.getDrops().size(); i++){
-                drops.append(enemy.getDrops().get(i).hoverString()).append(", ");
-            }
-            print("You defeated the " + enemy.getName() + "! Gained " + enemy.getXp() + " XP and " + enemy.getGold() + " gold.");
-            print(enemy.getName() + " dropped: " + drops);
-        }
-        else {
-            print("You defeated the " + enemy.getName() + "! Gained " + enemy.getXp() + " XP and " + enemy.getGold() + " gold.");
-        }
+        print("You defeated the " + enemy.getName() + "!");
+        print("You gained " + enemy.getXp() + " experience.");
         awardModal am = new awardModal(hero, enemy.generateLoot());
         hero = am.openLoot(hero, enemy.generateLoot(), enemy.getName() + " Loot");
         dungeonClearedData.addXpEarned(enemy.getXp());
@@ -321,7 +394,8 @@ public class GameView {
         }
         if(run!=null)run.setVisible(false);
         if(items!=null)items.setVisible(false);
-        if(skills!=null)skills.setVisible(false);
+        if(abilities !=null) abilities.setVisible(false);
+        if(abilitySelector != null) abilitySelector.setVisible(false);
         if(enemyHealthBar!=null)enemyHealthBar.setVisible(false);
         if(enemyIcon!=null)enemyIcon.setVisible(false);
         dungeonClearedData.addEnemiesKilled(1);
@@ -332,26 +406,56 @@ public class GameView {
         //TODO: Need to rethink all of this.
         cont.remove(enemyBorder);
         if(enemy != null && hero.inCombat) {
-            attack = new JButton("Attack");
-            attack.setBounds(500, 600, 100, 30);
+            attack = labelCreator.createLabel(ap.attackButton, "Attack", 500, 665, combatButtonW, combatButtonH);
+            // attack.setBounds(500, 600, 100, 30);
             attack.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     if(hero.inCombat){
-                        hero = combat.attack();
+                        hero = combat.attack(new AttackObject(hero.getBaseDamage()));
                         dungeonClearedData.addHeroDamage(combat.getRecentHeroDamage());
                         dungeonClearedData.addDamageTaken(combat.getRecentEnemyDamage());
                     }
                     update(hero);
                 }
             });
-            skills = new JButton("Skills");
-            skills.setBounds(500, 660, 100, 30);
-            items = new JButton("Item");
-            items.setBounds(650, 660, 100, 30);
-            run = new JButton("Run");
-            run.setBounds(650, 600, 100, 30);
+
+            if(hero.getAbilities().size()>0 && abilitySelector.getItemCount() != hero.getAbilities().size()) abilitySelector = labelCreator.createCustomComboBox(hero.getAbilities(), 500, 740, combatButtonW, combatButtonH, 25, 25);
+            abilitySelector.setVisible(true);
+
+
+            abilities = labelCreator.createLabel(ap.abilitiesButton, "Abilities", 500, 710, combatButtonW, combatButtonH);
+            abilities.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    if(hero.inCombat && hero.getAbilities().size() > 0){
+                        // Get selected ability.
+                        //Object obj = abilitySelector.getSelectedItem();
+                        AbilityInterface ability = hero.getAbilities().get(abilitySelector.getSelectedIndex());
+                        if (ability.canCast(hero)) {
+                            hero = ability.payAbility(hero);
+                            AttackObject attack = ability.useAbility(hero, enemy);
+                            hero = combat.attack(attack);
+                            dungeonClearedData.addHeroDamage(combat.getRecentHeroDamage());
+                            dungeonClearedData.addDamageTaken(combat.getRecentEnemyDamage());
+                            update(hero);
+                        } else {
+                            print("You cannot cast " + ability.getName() + " at this time!");
+                        }
+                        //if(abilitySelector.isVisible()) abilitySelector.setVisible(false);
+                        // else
+                            abilitySelector.setVisible(true);
+                    }
+                }
+            });
+
+            //abilities.setBounds(500, 660, 100, 30);
+            items = labelCreator.createLabel(ap.itemButton, "Items", 650, 710, combatButtonW, combatButtonH);
+            //items.setBounds(650, 660, 100, 30);
+            run = labelCreator.createLabel(ap.runButton, "Run", 650, 665, combatButtonW, combatButtonH);
+            // run.setBounds(650, 600, 100, 30);
             enemyBorder = labelCreator.createLabelWithoutHover(ap.enemyInventory, 800, 525, 475, 250);
             enemyHealth = labelCreator.createLabelWithoutHover(ap.enemyHealthBar, 800, 525, 475, 250);
 
@@ -360,11 +464,10 @@ public class GameView {
 
             print("You encountered a " + enemy.getName() + "!");
             cont.add(attack);
-            cont.add(skills);
+            cont.add(abilities);
+            cont.add(abilitySelector);
             cont.add(items);
             cont.add(run);
-
-            enemyHealthBar.setFont(new Font("MV Boli", Font.BOLD, 20));
             enemyHealthBar.setForeground(Color.RED);
             attack.setVisible(true);
             cont.add(enemyIcon);
@@ -479,13 +582,53 @@ public class GameView {
         heroIcon = null;
         cont = frame.getContentPane();
         cont.removeAll();
-        displayPane = new JTextArea();
+        displayPane = new JTextPane();
         scrollPane = new JScrollPane(displayPane);
         scrollPane.getHorizontalScrollBar().setEnabled(false);
         scrollPane.getVerticalScrollBar().setEnabled(true);
         scrollPane.getViewport().getView().setEnabled(false);
         scrollPane.setBounds(15, 775, 1250, 175);
         border = labelCreator.createLabelWithoutHover(ap.heroInventory, 5, 525, 475, 250);
+        int statY = statStartY;
+        int statX = statStartX + 35;
+        // Load Stats: const, str, dex, int, def, luck
+        Stats stats = hero.getStats();
+        con = labelCreator.createLabel(ap.getStat("Constitution"), stats.getConstitution().description(),statStartX, statY, statSize, statSize);
+        conValue = labelCreator.createText(stats.getConstitution().value() + "", statStartX + 20, statY, statSize, statSize); //TODO: Link up constitution
+        statY += 28;
+        str = labelCreator.createLabel(ap.getStat("Strength"), stats.getStrength().description(),statStartX, statY, statSize, statSize);
+        strValue = labelCreator.createText(stats.getStrength().value()+"", statStartX + 20, statY, statSize, statSize); //TODO: Link up strength
+        statY += 28;
+        agi = labelCreator.createLabel(ap.getStat("Agility"), stats.getAgility().description(),statStartX, statY, statSize, statSize);
+        agiValue = labelCreator.createText( stats.getAgility().value() + "", statStartX + 20, statY, statSize, statSize); //TODO: Link up dexterity
+        statY += 28;
+        statY = statStartY;
+        intel = labelCreator.createLabel(ap.getStat("Intelligence"), stats.getIntelligence().description(),statX, statY, statSize, statSize);
+        intelValue = labelCreator.createText(stats.getIntelligence().value()+ "", statX + 20, statY, statSize, statSize); //TODO: Link up intelligence
+        statY += 28;
+        def = labelCreator.createLabel(ap.getStat("Defense"), stats.getDefense().description(),statX, statY, statSize, statSize);
+        defValue = labelCreator.createText(stats.getDefense().value() + "", statX + 20, statY, statSize, statSize); //TODO: Link up defense
+        statY += 28;
+        luck = labelCreator.createLabel(ap.getStat("Luck"), stats.getIntelligence().description(),statX, statY, statSize, statSize);
+        luckValue = labelCreator.createText(stats.getLuck().value() + "", statX + 20, statY, statSize, statSize); //TODO: Link up luck
+
+        cont.add(str);
+        cont.add(strValue);
+        cont.add(con);
+        cont.add(conValue);
+        cont.add(agi);
+        cont.add(agiValue);
+        cont.add(intel);
+        cont.add(intelValue);
+        cont.add(def);
+        cont.add(defValue);
+        cont.add(luck);
+        cont.add(luckValue);
+
+        levelUpArrow = labelCreator.createLabel(ap.levelUpArrow, "Level Up!", 35, 595, 40, 40);
+        levelUpArrow.setVisible(false);
+        cont.add(levelUpArrow);
+
         // Add mouse listener actions for weapon armor and artifact to switch to another item when clicked.
         if (hero.getWeapon() != null) weapon = labelCreator.createLabel(hero.getWeapon().getIconPath(),hero.getWeapon().hoverString(), 131, 687, 40, 40);
         if (hero.getArmor() != null) armor = labelCreator.createLabel(hero.getArmor().getIconPath(),hero.getArmor().hoverString(), 203, 687, 40, 40);
@@ -501,6 +644,22 @@ public class GameView {
             mysticIcons.add(mystic);
             cont.add(mystic);
         }
+
+        //Load floor panel
+        JLabel dungeonFloor = labelCreator.createLabel(ap.dungeon, "Completed Dungeon Count" ,520, 565, 50, 50);
+        cont.add(dungeonFloor);
+        JLabel dungeonCount = labelCreator.createHugeText(hero.getDungeonCount() + "", 555, 565, 50, 50);
+        cont.add(dungeonCount);
+
+        JLabel floors = labelCreator.createLabel(ap.floor, "Current floor",650, 565, 50, 50);
+        cont.add(floors);
+        JLabel floorCountText = labelCreator.createHugeText(this.floorCount + "", 685, 565, 50, 50);
+        cont.add(floorCountText);
+
+
+
+        JLabel floorPanel = labelCreator.createLabelWithoutHover(ap.floorPanel , 480, 530, 320, 120);
+        cont.add(floorPanel);
 
         loadKeyBindings();
         enemyBorder = labelCreator.createLabelWithoutHover(ap.enemyInventory, 800, 525, 475, 250);
@@ -518,6 +677,8 @@ public class GameView {
         healthBar = labelCreator.createProgressBar(157, 597, 280, 25, hero.getHealth(), hero.getMaxHealth(), Color.RED.getRGB());
 
         // Mana bar x = 157 and y = 625
+        manaBar = labelCreator.createProgressBar(157, 625, 280, 25, hero.getMana(), hero.getMaxMana(), Color.BLUE.getRGB());
+
 
         UIManager.put("ProgressBar.selectionBackground", Color.GREEN);
         XPBar = labelCreator.createProgressBar(157, 653, 280, 25, hero.getXp(), hero.getNextLevelXp(), Color.BLUE.getRGB());
@@ -530,24 +691,29 @@ public class GameView {
         XPBar.setString(hero.getXp() + "/" + hero.getNextLevelXp());
 
 
-        attack = new JButton("Attack");
-        attack.setBounds(500, 600, 100, 30);
-        attack.addActionListener( e -> {
+        attack = labelCreator.createLabel(ap.attackButton, "Attack", 500, 660, combatButtonW, combatButtonH);
+        //attack.setBounds(500, 600, 100, 30);
+        attack.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
             if(hero.inCombat) {
-                hero = combat.attack();
+                hero = combat.attack(new AttackObject(hero.getBaseDamage()));
                 update(hero);
             }
-                });
+        }});
+
         displayPane.setEditable(false);
-        displayPane.setLineWrap(true);
-        displayPane.setWrapStyleWord(true);
-        displayPane.setFont(new Font("HelveticaNeue", Font.BOLD, 20));
+        //displayPane.setLineWrap(true);
+        ///displayPane.setWrapStyleWord(true);
+        displayPane.setFont(labelCreator.getPixel());
 
         cont.add(scrollPane);
         cont.add(weapon);
         cont.add(armor);
         if(hero.getArtifact() != null) cont.add(artifact);
         cont.add(healthBar);
+        cont.add(manaBar);
         cont.add(XPBar);
         //cont.add(gold);
         cont.add(enemyBorder);
@@ -859,6 +1025,7 @@ public class GameView {
             for(MysticInterface mystic: hero.getMystics()) {
                 hero = mystic.onLevelUp(hero);
             }
+            hero.calcHeroStatus();
             checkHeroLevel();
         }
     }
@@ -871,18 +1038,19 @@ public class GameView {
         //displayPane.update(cont.getGraphics());
     }
 
-    public void addMysticToInventory(MysticInterface mystic) {
-        cont.remove(border);
-        JLabel my = labelCreator.createLabel(ap.getMystic(mystic.IconName()), mystic.hoverTextString(), mysticX, 540, 30, 30);
-        mysticX += 30;
-        mysticIcons.add(my);
-        cont.add(my);
-        //Lol need to remove and reload border every time... oof
-        border = labelCreator.createLabelWithoutHover(ap.heroInventory, 5, 525, 475, 250);
-        cont.add(border);
-
-        //cont.update(cont.getGraphics());
-
+    public void print(String string, Color color) {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String time = sdf.format(date);
+        if(displayPane!= null) {
+            SimpleAttributeSet set = new SimpleAttributeSet();
+            StyleConstants.setForeground(set, color);
+            try {
+                displayPane.getDocument().insertString(displayPane.getDocument().getLength(), '\n' + time + ": " + string, set);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void updateMystics() {

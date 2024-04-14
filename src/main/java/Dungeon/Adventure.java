@@ -1,5 +1,6 @@
 package Dungeon;
 import Character.*;
+import Character.Combat.Combat;
 
 public class Adventure {
     Hero hero;

@@ -1,5 +1,6 @@
 package Character.Mystics;
 import Character.Hero;
+import Character.Stats.Stats;
 import Dungeon.Enemy;
 
 public class WeepingMirror extends MysticInterface {
@@ -25,12 +26,22 @@ public class WeepingMirror extends MysticInterface {
     }
 
     @Override
+    public Stats passiveBuffs(Stats stats) {
+        return stats;
+    }
+
+    @Override
     public Hero onKill(Hero hero, Enemy enemy) {
         return hero;
     }
 
     @Override
     public Hero onProgressFloor(Hero hero) {
+        return hero;
+    }
+
+    @Override
+    public Hero onPickUp(Hero hero) {
         return hero;
     }
 
@@ -48,7 +59,7 @@ public class WeepingMirror extends MysticInterface {
     public int onHit(Hero hero, int damage) {
         count ++;
         if(count >= 4 && damage > 0) {
-            System.out.println("Damage Blocked by Weeping Mirror");
+            System.out.println("Damage Blocked by Weeping Mirror: " + damage);
             count = 0;
             return -1 * damage;
         }

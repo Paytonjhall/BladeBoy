@@ -1,16 +1,20 @@
 package Character;
-import Character.Abilities.Mystic;
+import Character.Abilities.AbilityHelper;
+import Character.Abilities.AbilityInterface;
 import Character.Equipment.*;
+import Character.Stats.Stats;
 import Dungeon.Loot;
 import Game.*;
 import Character.Mystics.MysticInterface;
 
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Hero {
+
+    Stats stats;
+    AbilityHelper ah = new AbilityHelper();
     AssetPath ap;
     Armor armor;
     Weapon weapon;
@@ -18,15 +22,21 @@ public class Hero {
     List<ItemInterface> Bag;
     int health;
     int maxHealth;
+
+    int mana;
+    int maxMana;
     int xp;
     int level;
     int nextLevelXp;
     int gold;
     // public int skillPoints=0;
+
+    public int statPoints = 0;
     int dungeonCount = 0;
     String username = " ";
     public boolean inDungeon = false;
     public boolean finishedCombat = false;
+    public int floorCount = 1;
     public boolean inCombat = false;
     public boolean inTown = false;
     public int x = 0;
@@ -39,7 +49,14 @@ public class Hero {
     public boolean visitedArmory;
     public boolean visitedArtificiary;
 
+    public String announcement = "";
+    int block = 0;
+
+
+
     public boolean awardingLoot = false;
+
+    ArrayList<AbilityInterface> abilities = new ArrayList<>();
 
 
     public Class getHeroClass() {
@@ -63,7 +80,7 @@ public class Hero {
     Sound sound = new Sound();
     public boolean wait = false;
 
-    public Hero(Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<MysticInterface> mystics) {
+    public Hero(Stats stats, Armor armor, Weapon weapon, Artifact artifact, int health, int nextLevelXp, int xp, int level, int gold, List<MysticInterface> mystics) {
         equipArmor(armor);
         this.ap = new AssetPath();
         this.weapon = weapon;
@@ -74,11 +91,16 @@ public class Hero {
         this.level = level;
         this.nextLevelXp = nextLevelXp;
         this.gold = gold;
+        if(stats == null) stats = new Stats(10, 10, 10, 10, 10, 10);
+        else this.stats = stats;
+        this.mana = stats.getIntelligence().value() * 10;
+        this.maxMana = stats.getIntelligence().value() * 10;
         if(mystics != null) {
             this.mystics = mystics;
         } else {
             this.mystics = new ArrayList<>();
         }
+        abilities = ah.getAllUsableAbilities(this.stats);
     }
 
     //For testing purposes
@@ -88,6 +110,7 @@ public class Hero {
         }
     }
 
+    //OLD needs tweaking
     public Hero(HeroSaveAdapter newHero){
         this.ap = new AssetPath();
         Bag = new ArrayList<ItemInterface>();
@@ -110,26 +133,76 @@ public class Hero {
         this.potionBag = newHero.potionBag;
     }
 
-    public void heroStatus() {
-        input.clearScreen();
-        output.printCyan("Hero Status\n");
-        output.printRed("Health: ");
-        System.out.println(health + "/" + maxHealth);
-        output.printBlue("Level: ");
-        System.out.println(level);
-        output.printPurple("XP: ");
-        System.out.println(xp + "/" + nextLevelXp);
-        output.printYellow("Gold: ");
-        System.out.println(gold);
-        System.out.println("Weapon: " + weapon.getName());
-        System.out.println("Armor: " + armor.getName());
-        System.out.println("Artifact: " + artifact.getName());
-        output.printPurple("Mystics: ");
-        for (MysticInterface mystic : mystics) {System.out.println(mystic.nameString());}
-        System.out.println();
+    public void setStats(Stats stats) {
+        this.stats = stats;
+    }
+
+    public Stats getStats() {
+        return stats;
+    }
+
+    public void editStat(Stats.stat stat, int value) {
+        stats.setStat(stat, value);
+    }
+
+    public void addStat(Stats.stat stat, int value) {
+        stats.setStat(stat, stats.getStat(stat) + value);
+    }
+
+    public void subtractStat(Stats.stat stat, int value) {
+        stats.setStat(stat, stats.getStat(stat) - value);
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void useMana(int mana) {
+        this.mana -= mana;
+    }
+
+    public int getBaseDamage() {
+        int damage = weapon.getWeaponDamage();
+        damage *= Math.floor(stats.getStrength().effect());
+        return damage;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    public int getMaxMana() {
+        return maxMana;
+    }
+
+    public void setMaxMana(int maxMana) {
+        this.maxMana = maxMana;
+    }
+
+    public void calcHeroStatus() {
+        double curHealthPercent = (double) health / maxHealth;
+        double curManaPercent = (double) mana / maxMana;
+        health = 0;
+        mana = 0;
+
+        for(MysticInterface mystic : mystics) {
+            //mystic.onPickUp(this);
+            mystic.passiveBuffs(stats);
+        }
+        // Health
+        maxHealth = 10 * stats.getConstitution().value();
+        for(MysticInterface mystic : mystics) {
+            //if(mystic.nameString() == "Daidem") maxHealth += ((Daidem) mystic).totalHealthBonus;
+        }
+        abilities = ah.getAllUsableAbilities(this.stats);
+        health = (int) (maxHealth * curHealthPercent);
+        // Mana
+        maxMana = 10 * stats.getIntelligence().value();
+        mana = (int) (maxMana * curManaPercent);
     }
 
     public boolean takeDamage(int damage){
+        damage-=block;
         if(damage <= 0) damage = 0;
         health -= damage;
         if(health<=0){
@@ -137,6 +210,7 @@ public class Hero {
             heroDeath();
             return true;
         }
+        block = 0;
         return false;
     }
 
@@ -180,7 +254,8 @@ public class Hero {
         nextLevelXp = (int) (nextLevelXp * 1.25);
         System.out.println("You leveled up: " + level);
         System.out.println("You heal 25% of your health on level up, gain 10 hp, and are given a skill point!");
-        maxHealth += 10;
+        //maxHealth += 10;
+        statPoints+=2;
         heal((int)maxHealth/4);
     }
 
@@ -189,11 +264,6 @@ public class Hero {
             Bag = new ArrayList<ItemInterface>();
         }
         Bag.add(item);
-    }
-
-    public int getProtection(){
-        if(armor != null)return armor.getProtection();
-        else return 0;
     }
 
     public void equipWeapon(Weapon weapon){
@@ -256,8 +326,9 @@ public class Hero {
         return heroString;
     }
 
-    public void usePotion(Potion potion){
 
+    // Potions might need some tweaking.
+    public void usePotion(Potion potion){
         switch (potion.getType()) {
             case "Heal Potion" -> heal(potion.getEffect());
             case "XP Potion" -> addXp(potion.getEffect());
@@ -279,130 +350,6 @@ public class Hero {
 
     }
 
-    public void organizeBag() {
-        List<Weapon> weapons = new ArrayList<>();
-        List<Armor> armors = new ArrayList<>();
-        List<Artifact> artifacts = new ArrayList<>();
-        if (Bag == null || Bag.isEmpty()) {
-            System.out.println("Your bag is empty");
-            return;
-        }
-        for (ItemInterface itemInterface : Bag) {
-            if (itemInterface.getClass() == Weapon.class) {
-                weapons.add((Weapon) itemInterface);
-            } else if (itemInterface.getClass() == Armor.class) {
-                armors.add((Armor) itemInterface);
-            } else if (itemInterface.getClass() == Artifact.class) {
-                artifacts.add((Artifact) itemInterface);
-            }
-        }
-
-        System.out.println(("[0] Exit"));
-        System.out.println(("[1] Weapons"));
-        System.out.println(("[2] Armors"));
-        System.out.println(("[3] Artifacts"));
-        System.out.print("Hero: ");
-        int choice = input.getNumberInput();
-        switch (choice) {
-            case 1 -> {
-                System.out.println("Weapons: ");
-                System.out.print("Current Weapon: ");
-                if(weapon != null) {
-                    System.out.println(weapon.getName() + " - Damage: " + weapon.getWeaponDamage());
-                } else {
-                    System.out.println("None");
-                }
-                if (weapons.size() == 0 ){
-                    System.out.println("You have no weapons in your bag");
-                }
-                for (int i = 0; i < weapons.size(); i++) {
-                    System.out.println("[" + (i + 1) + "] " + weapons.get(i).getName() + " - Damage: " + weapons.get(i).getWeaponDamage());
-                }
-                System.out.println("[0] Exit");
-                System.out.print("Hero: ");
-                int weaponChoice = input.getNumberInput();
-                if (weaponChoice == 0) {
-                    organizeBag();
-                }
-                else if (weaponChoice > weapons.size()) {
-                    System.out.println("Invalid input. Try again.");
-                    input.clear();
-                    organizeBag();
-                }
-                else {
-                    equipWeapon(weapons.get(weaponChoice - 1));
-                    Bag.remove(weapons.get(weaponChoice - 1));
-                    System.out.println("You have equipped " + weapons.get(weaponChoice - 1).getName());
-                    organizeBag();
-                }
-
-            }
-            case 2 -> {
-                System.out.println("Armors: ");
-                System.out.print("Current Armor: ");
-                if(armor != null) {
-                    System.out.println(armor.getName() + " - Defense: " + armor.getArmorRating()*100 + "%");
-                } else {
-                    System.out.println("none");
-                }
-                if (armors.size() == 0) {
-                    System.out.println("You have no armors in your bag");
-                }
-                for (int i = 0; i < armors.size(); i++) {
-                    System.out.println("[" + (i + 1) + "] " + armors.get(i).getName() + " - Defense: " + armors.get(i).getArmorRating()*100 + "%" );
-                }
-                System.out.println("[0] Exit");
-                System.out.print("Hero: ");
-                int armorChoice = input.getNumberInput();
-                if (armorChoice == 0) {
-                    organizeBag();
-                } else if (armorChoice > armors.size()) {
-                    System.out.println("Invalid input. Try again.");
-                    input.clear();
-                    organizeBag();
-                } else {
-                    equipArmor(armors.get(armorChoice - 1));
-                    Bag.remove(armors.get(armorChoice - 1));
-                    System.out.println("You have equipped " + armors.get(armorChoice - 1).getName());
-                    organizeBag();
-                }
-            }
-            case 3 -> {
-                System.out.println("Artifacts: ");
-                System.out.print("Current Artifact: ");
-                if(artifact != null) {
-                    System.out.println(artifact.getName() + " - Effect: " + artifact.getType() + " : " + artifact.getAmplifier());
-                } else {
-                    System.out.println("none");
-                }
-                if (artifacts.size() == 0) {
-                    System.out.println("You have no artifacts");
-                }
-                for (int i = 0; i < artifacts.size(); i++) {
-                    System.out.println("[" + (i + 1) + "] " + artifacts.get(i).getName() + " - Effect: " + artifacts.get(i).getType() + " : " + artifacts.get(i).getAmplifier());
-                }
-                System.out.println("[0] Exit");
-                System.out.print("Hero: ");
-                int artifactChoice = input.getNumberInput();
-                if (artifactChoice == 0) {
-                    organizeBag();
-                } else if (artifactChoice > artifacts.size()) {
-                    System.out.println("Invalid input. Try again.");
-                    input.clear();
-                    organizeBag();
-                } else {
-                    equipArtifact(artifacts.get(artifactChoice - 1));
-                    Bag.remove(artifacts.get(artifactChoice - 1));
-                    System.out.println("You have equipped " + artifacts.get(artifactChoice - 1).getName());
-                    organizeBag();
-                }
-            }
-            case 0 -> {
-                return;
-            }
-        }
-    }
-
     public void addLoot(Loot loot){
         if(loot == null) return;
         if(loot.getWeapon() != null){
@@ -417,10 +364,10 @@ public class Hero {
         if(loot.getPotion() != null && potionBag.getPotionCount() < 3){
             potionBag.addPotion(loot.getPotion());
         }
-        gold += loot.getGold();
-        if(loot.getMystic() != null){
-            mystics.add(loot.getMystic());
+        if(loot.getMystic()!=null) {
+            addMystic(loot.getMystic());
         }
+        gold += loot.getGold();
     }
 
     //GETTERS AND SETTERS
@@ -503,7 +450,12 @@ public class Hero {
     }
 
     public void addMystic (MysticInterface mystic){
-        if (mystic != null) mystics.add(mystic);
+        if (mystic != null) {
+            System.out.println("Adding: " + mystic.nameString());
+            mystics.add(mystic);
+            mystic.onPickUp(this);
+            calcHeroStatus();
+        }
     }
 
     public int getGold() {
@@ -581,6 +533,14 @@ public class Hero {
         this.dungeonCount = dungeonCount;
     }
 
+    public String getAnnouncement() {
+        return announcement;
+    }
+
+    public void setAnnouncement(String announcement) {
+        this.announcement = announcement;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -620,12 +580,28 @@ public class Hero {
         }
     }
 
+    public ArrayList<AbilityInterface> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(ArrayList<AbilityInterface> abilities) {
+        this.abilities = abilities;
+    }
+
     public int getUnusedSkillPoints(){
         int count = 0;
         for(int i = 0; i < skillPoints.size(); i++){
             if(!skillPoints.get(i).isUsed()) count++;
         }
         return count;
+    }
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
     }
 
     public List<SkillPoints> getUnusedSkillPointsList(){
@@ -649,16 +625,6 @@ public class Hero {
             setIconString("Knight");
         } else {
             setIconString(heroClass.getClassType());
-//            String iconPath = "";
-//            switch (heroClass.getClassType()) {
-//                case "Mage" -> iconPath = ap.mage;
-//                case "Knight" -> iconPath = ap.knight;
-//                case "Barbarian" -> iconPath = ap.barbarianIcon;
-//                case "Archer" -> iconPath = ap.getIcon("Punk");
-//            }
-//            setIconString(iconPath);
         }
     }
-
-
 }

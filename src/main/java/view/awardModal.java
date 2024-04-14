@@ -63,6 +63,7 @@ public class awardModal  {
     private Hero onTakeAll(Hero hero, Loot loot, JDialog jd) {
         // add your code here
         afterhero.addLoot(loot);
+        loot = null;
         // Take all Loot
         jd.dispose();
         return afterhero;
@@ -86,7 +87,7 @@ public class awardModal  {
         if(returner) return hero;
         afterhero = hero;
 
-        if(!loot.isLoot()) {
+        if(loot == null || !loot.isLoot()) {
             // f.dispose();
             // hero.awardingLoot = false;
             return hero;
@@ -227,7 +228,7 @@ public class awardModal  {
                 afterhero.addLoot(loot);
                 returner = true;
                 f.dispose();
-                openLoot(afterhero, loot, title);
+                openLoot(afterhero, null, title);
             }
         });
 

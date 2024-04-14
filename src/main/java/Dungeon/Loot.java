@@ -76,6 +76,7 @@ public class Loot {
     }
 
     public MysticInterface getMystic() {
+
         return mystic;
     }
 

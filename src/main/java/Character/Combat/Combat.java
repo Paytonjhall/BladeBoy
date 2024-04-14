@@ -1,6 +1,6 @@
-package Character;
+package Character.Combat;
 
-import Character.Abilities.Mystic;
+import Character.*;
 import Character.Equipment.ItemInterface;
 import Character.Mystics.MysticInterface;
 import Dungeon.Enemy;
@@ -11,6 +11,8 @@ import Game.UserInput;
 import java.util.Random;
 
 public class Combat {
+    AttackObject heroRecentAttack = new AttackObject();
+    AttackObject enemyRecentAttack = new AttackObject();
     int recentHeroDamage = 0;
     int recentEnemyDamage = 0;
     UserInput userInput = new UserInput();
@@ -27,11 +29,50 @@ public class Combat {
     }
 
     //Normal attack
-    public Hero attack(){
-        int damage = calculateDamage(hero, enemy);
+    public Hero attack(AttackObject attack){
+        int damage = attack.getDamage();
 
+        // Check to see if landed Crit
+        if(attack.crit > 0) {
+            Random random = new Random();
+            int critChance = random.nextInt(100);
+            if(critChance <= attack.crit){
+                damage *= 2;
+                output.printPurple("Critical Hit!\n");
+                attack.setCritHit(true);
+            }
+        }
+
+        for(MysticInterface mystic : hero.getMystics()) {
+            damage += mystic.onAttack(hero, damage, enemy);
+        }
+        attack.setDamage(damage);
+
+        if (attack.physicalAttack) {
+            damage -= enemy.getBlock();
+        }
+
+        //damage = calculateDamage(hero, enemy);
+        heroRecentAttack = attack;
         recentHeroDamage = damage;
+
         enemy.takeDamage(damage);
+        enemy.setBlock(0);
+
+        if (attack.getLifeSteal() > 0) {
+            hero.heal((int) (damage*attack.getLifeSteal()));
+        }
+
+        if (attack.getBlock() > 0) {
+            hero.setBlock(attack.getBlock());
+        }
+
+        if (attack.getHeal() > 0) {
+            hero.heal(attack.getHeal());
+        }
+
+        // Not sure how to do buff yet. Add here
+
         sound.swordHitSound();
         hero = checkHealths();
         if(hero.finishedCombat) {
@@ -48,16 +89,38 @@ public class Combat {
 
     private void EnemyTurn(){
         if(enemy.getHealth() > 0){
-            int damage = calculateDamage(enemy, hero);
+            // int damage = calculateDamage(enemy, hero);
+            enemyRecentAttack = enemy.generateAttack();
+            int damage = enemyRecentAttack.getDamage();
+
+            // Check crit
+            if(enemyRecentAttack.getCrit() > 0) {
+                Random random = new Random();
+                int critChance = random.nextInt(100);
+                if(critChance <= enemyRecentAttack.getCrit()){
+                    damage *= 2;
+                    output.printPurple("Critical Hit!\n");
+                    enemyRecentAttack.setCritHit(true);
+                }
+            }
 
             for(MysticInterface mystic: hero.getMystics()) {
                 damage += mystic.onHit(hero, damage);
             }
 
-            if(hero.takeDamage(damage)) {
-                // hero had died, end game
-                System.exit(0);
+            if (enemyRecentAttack.physicalAttack) {
+                damage -= hero.getBlock();
             }
+
+            if(enemyRecentAttack.getLifeSteal() > 0) {
+                enemy.heal((int) (damage*enemyRecentAttack.getLifeSteal()));
+            }
+            if(enemyRecentAttack.getHeal()>0) {
+                enemy.heal(enemyRecentAttack.getHeal());
+            }
+
+            // Need to figure out buff
+
             recentEnemyDamage = damage;
             hero = checkHealths();
             turn = true;
@@ -82,10 +145,10 @@ public class Combat {
     private int calculateDamage(Hero hero, Enemy enemy){
         Random random = new Random();
         int damage = 0;
-        if (hero.weapon ==null) {
+        if (hero.getWeapon() ==null) {
             damage = 10 * ((int)(1 - enemy.getArmorRating() / 1000));
         } else {
-            int damageRange = (int) (hero.weapon.getWeaponDamage() / 2) + random.nextInt(hero.weapon.getWeaponDamage());
+            int damageRange = (int) (hero.getWeapon().getWeaponDamage() / 2) + random.nextInt(hero.getWeapon().getWeaponDamage());
             damage = (int) (damageRange * ((1 - enemy.getArmorRating() / 1000)));
         }
         // TODO: This is all going to be done by mystics now.
@@ -98,9 +161,7 @@ public class Combat {
 //            hero.heal((int)((lifeSteal * damage)/100));
 //        }
 
-        for(MysticInterface mystic : hero.getMystics()) {
-            damage += mystic.onAttack(hero, damage, enemy);
-        }
+
         return damage;
     }
 

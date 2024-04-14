@@ -1,5 +1,6 @@
 package Character.Mystics;
 import Character.Hero;
+import Character.Stats.Stats;
 import Dungeon.Enemy;
 import Game.Util;
 
@@ -26,6 +27,11 @@ public class MageTomb extends MysticInterface {
     @Override
     public String IconName() {
         return "MagesTomb";
+    }
+
+    @Override
+    public Stats passiveBuffs(Stats stats) {
+        return stats;
     }
 
     @Override
@@ -62,6 +68,11 @@ public class MageTomb extends MysticInterface {
 
     @Override
     public Hero onProgressFloor (Hero hero) {
+        return hero;
+    }
+
+    @Override
+    public Hero onPickUp(Hero hero) {
         return hero;
     }
 }

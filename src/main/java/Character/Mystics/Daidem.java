@@ -1,8 +1,13 @@
 package Character.Mystics;
 import Character.Hero;
+import Character.Stats.Constitution;
+import Character.Stats.Stats;
 import Dungeon.Enemy;
 
 public class Daidem extends MysticInterface {
+
+    public int count = 0;
+    public boolean used = false;
     @Override
     public String rarityString() {
         return "rare";
@@ -15,12 +20,19 @@ public class Daidem extends MysticInterface {
 
     @Override
     public String hoverTextString() {
-        return "Daidem - Hero gains 5 extra health when leveling up";
+        return "Daidem - Hero gains 10 extra health every 2 levels you have upon pick up.";
     }
 
     @Override
     public String IconName() {
         return "Daidem";
+    }
+
+    @Override
+    public Stats passiveBuffs(Stats stats) {
+
+
+        return stats;
     }
 
     @Override
@@ -34,13 +46,26 @@ public class Daidem extends MysticInterface {
     }
 
     @Override
+    public Hero onPickUp(Hero hero) {
+        if (!used) {
+            Stats stats = hero.getStats();
+            stats.getConstitution().addValue((int) Math.floor(count / 2));
+            stats.setConstitution(new Constitution(stats.getConstitution().value() + (int) Math.floor(hero.getLevel()/ 2)));
+            hero.setStats(stats);
+            System.out.println("Passive bonuses AFTER Daidem: " + stats.getConstitution().value());
+            used = true;
+        }
+        return hero;
+    }
+
+    @Override
     public Hero onChest(Hero hero) {
         return hero;
     }
 
     @Override
     public Hero onLevelUp(Hero hero) {
-        hero.setMaxHealth(hero.getMaxHealth() + 5);
+        count++;
         return hero;
     }
 

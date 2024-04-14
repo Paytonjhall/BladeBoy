@@ -1,6 +1,21 @@
 package Game;
 
+
+
+
+
 public class AssetPath {
+
+    public  final String ANSI_RESET = "\u001B[0m";
+    public  final String ANSI_BLACK = "\u001B[30m";
+    public  final String ANSI_RED = "\u001B[31m";
+    public  final String ANSI_GREEN = "\u001B[32m";
+    public  final String ANSI_YELLOW = "\u001B[33m";
+    public  final String ANSI_BLUE = "\u001B[34m";
+    public  final String ANSI_PURPLE = "\u001B[35m";
+    public final String ANSI_CYAN = "\u001B[36m";
+    public final String ANSI_WHITE = "\u001B[37m";
+
     public String Gold = "src/Assets/Loot/Gold.png";
     public String healthPotion = "src/Assets/Potions/heal.png";
     public String xpPotion = "src/Assets/Potions/xpPotion.png";
@@ -95,6 +110,9 @@ public class AssetPath {
     public String takeAllButton = "src/Assets/UI/TakeAllButton.png";
 
     public String continueButton = "src/Assets/UI/ContinueButton.png";
+    public String runButton = "src/Assets/UI/RunButton.png";
+    public String itemButton = "src/Assets/UI/ItemsButton.png";
+    public String abilitiesButton = "src/Assets/UI/AbilitiesButton.png";
 
     public String heroInventory = "src/Assets/UI/HeroMainView.png";
     public String enemyInventory = "src/Assets/UI/EnemyMainView.png";
@@ -102,6 +120,19 @@ public class AssetPath {
     public String enemyHealthBar = "src/Assets/UI/EnemyHealthBar.png";
 
     public String awardMenu = "src/Assets/UI/AwardMenu.png";
+
+    public String floorPanel = "src/Assets/UI/FloorPanel.png";
+    public String floor = "src/Assets/UI/Floor.png";
+    public String dungeon = "src/Assets/UI/Dungeon.png";
+
+
+    public String basicArmor = "src/Assets/Armor/armor1.png";
+
+    public String levelUpArrow = "src/Assets/UI/levelup.png";
+    public String levelUpView = "src/Assets/UI/levelUpView.png";
+    public String downArrow = "src/Assets/UI/downArrow.png";
+
+
 
 
     // Mystics:
@@ -117,4 +148,7 @@ public class AssetPath {
     }
 
     public String getMystic (String name) {return "src/Assets/Mystics/" + name + ".png";}
+
+    public String getStat (String name) {return "src/Assets/UI/" + name + ".png";}
+    public String getAbility (String name) {return "src/Assets/Abilities/" + name + ".png";}
 }
